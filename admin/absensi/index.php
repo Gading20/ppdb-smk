@@ -581,7 +581,8 @@ if (isset($_GET['delete'])) {
                                         <option value="">Semua Status</option>
                                         <?php foreach (['Pending', 'Approved', 'Rejected'] as $a): ?>
                                             <option value="<?= $a ?>" <?= $approval_filter === $a ? 'selected' : '' ?>>
-                                                <?= $a ?></option>
+                                                <?= $a ?>
+                                            </option>
                                         <?php endforeach; ?>
                                     </select>
                                     <?php if ($approval_filter): ?>
@@ -673,10 +674,10 @@ if (isset($_GET['delete'])) {
                                                     <span><?= htmlspecialchars($absensi['nama_lengkap']) ?></span>
                                                 </div>
                                             </td>
-                                            <td class="px-6 py-4"><?= $absensi['kelas'] ?> <?= $absensi['jurusan'] ?></td>
+                                            <td class="px-6 py-4"><?= $absensi['kelas'] ?>         <?= $absensi['jurusan'] ?></td>
                                             <td class="px-6 py-4"><?= date('d/m/Y', strtotime($absensi['tanggal'])) ?></td>
                                             <td class="px-6 py-4">
-                                                <?= $absensi['jam_masuk'] !== '00:00:00' ? date('H:i', strtotime($absensi['jam_masuk'])) : '-' ?>
+                                                <?= (!empty($absensi['jam_masuk']) && $absensi['jam_masuk'] !== '00:00:00') ? date('H:i', strtotime($absensi['jam_masuk'])) : '-' ?>
                                             </td>
                                             <td class="px-6 py-4">
                                                 <span

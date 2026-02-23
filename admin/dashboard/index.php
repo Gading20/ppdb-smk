@@ -54,9 +54,9 @@ $sql = "SELECT
 $stmt = $conn->query($sql);
 $pelanggaranBulanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$bulan_label  = array_column($pelanggaranBulanan, 'bulan');
+$bulan_label = array_column($pelanggaranBulanan, 'bulan');
 $bulan_jumlah = array_column($pelanggaranBulanan, 'jumlah');
-$bulan_poin   = array_column($pelanggaranBulanan, 'total_poin');
+$bulan_poin = array_column($pelanggaranBulanan, 'total_poin');
 
 // Top 5 siswa pelanggaran terbanyak
 $sql = "SELECT s.nama_lengkap, s.kelas, COUNT(p.id) as jumlah, SUM(p.poin) as total_poin
@@ -271,37 +271,53 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                 <span>Dashboard</span>
             </a>
             <li class="relative group">
-                <button class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                <button
+                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
                     <i class="fas fa-calendar-check"></i>
                     <span>Monitoring Siswa</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
-                    <li><a href="../absensi/index.php" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a></li>
-                    <li><a href="../absensi/pelanggaran.php" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a></li>
-                    <li><a href="../absensi/konseling.php" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a></li>
+                    <li><a href="../absensi/index.php"
+                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                    </li>
+                    <li><a href="../absensi/pelanggaran.php"
+                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                    </li>
+                    <li><a href="../absensi/konseling.php"
+                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
+                    </li>
                 </ul>
             </li>
 
-            <a href="../siswa/" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+            <a href="../siswa/"
+                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
                 <i class="fas fa-users"></i>
                 <span>Data Siswa</span>
             </a>
 
             <li class="relative group">
-                <button class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                <button
+                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
                     <i class="fas fa-file-alt"></i>
                     <span>Laporan</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
-                    <li><a href="../laporan/index.php" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a></li>
-                    <li><a href="../laporan/pelanggaran" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a></li>
-                    <li><a href="../laporan/konseling" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a></li>
+                    <li><a href="../laporan/index.php"
+                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                    </li>
+                    <li><a href="../laporan/pelanggaran"
+                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                    </li>
+                    <li><a href="../laporan/konseling"
+                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
+                    </li>
                 </ul>
             </li>
 
-            <a href="../profil/" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+            <a href="../profil/"
+                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
                 <i class="fas fa-user-cog"></i>
                 <span>Profil</span>
             </a>
@@ -317,13 +333,15 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                     </div>
                     <div class="flex items-center justify-between text-xs">
                         <span class="text-gray-400">Menunggu Persetujuan</span>
-                        <span class="font-medium <?= $pending > 0 ? 'text-yellow-400' : 'text-green-400' ?>"><?= $pending ?></span>
+                        <span
+                            class="font-medium <?= $pending > 0 ? 'text-yellow-400' : 'text-green-400' ?>"><?= $pending ?></span>
                     </div>
                 </div>
             </div>
 
             <div class="pt-2 mt-auto">
-                <a href="../logout.php" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors">
+                <a href="../logout.php"
+                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
                 </a>
@@ -335,9 +353,11 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
     <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
 
         <!-- Mobile Header -->
-        <div class="lg:hidden bg-gray-900/60 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-purple-900/30">
+        <div
+            class="lg:hidden bg-gray-900/60 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-purple-900/30">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-white p-2 -ml-2 rounded-lg hover:bg-gray-800/60" aria-label="Menu">
+                <button onclick="toggleSidebar()" class="text-white p-2 -ml-2 rounded-lg hover:bg-gray-800/60"
+                    aria-label="Menu">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
                 <img src="../../assets/default/logo-smk40.png" alt="SMKN 40" class="h-8 w-auto">
@@ -345,10 +365,12 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
             <div class="flex items-center gap-3">
                 <span id="current-time-mobile" class="text-sm font-medium hidden sm:block"></span>
                 <div class="relative">
-                    <button onclick="toggleNotifications()" class="p-2 rounded-lg hover:bg-gray-800/60" aria-label="Notifications">
+                    <button onclick="toggleNotifications()" class="p-2 rounded-lg hover:bg-gray-800/60"
+                        aria-label="Notifications">
                         <i class="fas fa-bell text-purple-500"></i>
                         <?php if (count($notifications) > 0): ?>
-                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center notification-counter">
+                            <span
+                                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center notification-counter">
                                 <?= count($notifications) ?>
                             </span>
                         <?php endif; ?>
@@ -370,29 +392,34 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="relative hidden lg:block">
-                            <button onclick="toggleNotifications()" class="px-4 py-2 rounded-lg glass-effect hover:bg-purple-500/10 transition-colors">
+                            <button onclick="toggleNotifications()"
+                                class="px-4 py-2 rounded-lg glass-effect hover:bg-purple-500/10 transition-colors">
                                 <i class="fas fa-bell text-purple-500"></i>
                                 <?php if (count($notifications) > 0): ?>
-                                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center notification-counter">
+                                    <span
+                                        class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center notification-counter">
                                         <?= count($notifications) ?>
                                     </span>
                                 <?php endif; ?>
                             </button>
                         </div>
                         <div class="hidden lg:flex items-center gap-3 px-4 py-2 rounded-lg glass-effect">
-                            <img src="../../<?= $_SESSION['admin_photo'] ?: '../../assets/default/photo-profile.png' ?>" alt="Admin" class="h-8 w-8 rounded-full object-cover">
+                            <img src="../../<?= $_SESSION['admin_photo'] ?: '../../assets/default/photo-profile.png' ?>"
+                                alt="Admin" class="h-8 w-8 rounded-full object-cover">
                             <span class="text-sm"><?= $_SESSION['admin_name'] ?></span>
                         </div>
                     </div>
                 </header>
 
                 <!-- Notification Panel -->
-                <div id="notificationPanel" class="hidden fixed lg:absolute right-0 mt-2 w-[95%] sm:w-96 glass-effect rounded-xl shadow-2xl z-50 notification-panel-mobile lg:w-96 lg:right-0 lg:top-auto">
+                <div id="notificationPanel"
+                    class="hidden fixed lg:absolute right-0 mt-2 w-[95%] sm:w-96 glass-effect rounded-xl shadow-2xl z-50 notification-panel-mobile lg:w-96 lg:right-0 lg:top-auto">
                     <div class="p-4 border-b border-purple-900/30 flex justify-between items-center">
                         <h3 class="font-semibold">Notifikasi Pending</h3>
                         <div class="notification-badge">
                             <?php if (count($notifications) > 0): ?>
-                                <span class="text-xs bg-red-500/10 text-red-500 px-2 py-1 rounded-full border border-red-500/20">
+                                <span
+                                    class="text-xs bg-red-500/10 text-red-500 px-2 py-1 rounded-full border border-red-500/20">
                                     <span class="notification-count"><?= count($notifications) ?></span> permintaan
                                 </span>
                             <?php endif; ?>
@@ -411,13 +438,16 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                                             <p class="font-medium"><?= htmlspecialchars($notif['nama_lengkap']) ?></p>
                                             <p class="text-sm text-gray-400 mt-0.5">
                                                 Mengajukan <?= strtolower($notif['status']) ?>
-                                                <span class="text-gray-500">• <?= date('H:i', strtotime($notif['created_at'])) ?></span>
+                                                <span class="text-gray-500">•
+                                                    <?= date('H:i', strtotime($notif['created_at'])) ?></span>
                                             </p>
                                             <?php if ($notif['keterangan']): ?>
-                                                <p class="text-sm text-gray-400 mt-1">"<?= htmlspecialchars($notif['keterangan']) ?>"</p>
+                                                <p class="text-sm text-gray-400 mt-1">
+                                                    "<?= htmlspecialchars($notif['keterangan']) ?>"</p>
                                             <?php endif; ?>
                                             <?php if ($notif['bukti_foto']): ?>
-                                                <img src="../../<?= $notif['bukti_foto'] ?>" class="mt-2 rounded-lg w-full h-32 object-cover" alt="Bukti">
+                                                <img src="../../<?= $notif['bukti_foto'] ?>"
+                                                    class="mt-2 rounded-lg w-full h-32 object-cover" alt="Bukti">
                                             <?php endif; ?>
                                             <div class="flex gap-2 mt-3">
                                                 <button onclick="handleAbsence(<?= $notif['id'] ?>, 'approve')"
@@ -446,199 +476,150 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6 mb-6 md:mb-8">
 
                     <!-- Hadir Card -->
-                    <div class="glass-effect rounded-xl p-4 md:p-6 hover:bg-purple-900/10 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-green-800/10 cursor-pointer" data-stat="hadir">
+                    <div class="glass-effect rounded-xl p-4 md:p-6 hover:bg-purple-900/10 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-green-800/10 cursor-pointer"
+                        data-stat="hadir">
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-gray-400 text-sm font-medium mb-1">Total Hadir</p>
                                 <h3 class="text-2xl font-bold stat-value"><?= $stats['hadir'] ?></h3>
                             </div>
-                            <div class="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-gradient-to-br from-green-500/30 to-green-700/30 flex items-center justify-center shadow-md">
+                            <div
+                                class="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-gradient-to-br from-green-500/30 to-green-700/30 flex items-center justify-center shadow-md">
                                 <i class="fas fa-check text-green-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="mt-3 md:mt-4 text-sm stat-change">
                             <?php if ($percentage_changes['hadir'] > 0): ?>
-                                <span class="flex items-center"><i class="fas fa-arrow-up text-green-400 mr-1"></i><span class="text-green-400">+<?= abs($percentage_changes['hadir']) ?>% dari kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-arrow-up text-green-400 mr-1"></i><span
+                                        class="text-green-400">+<?= abs($percentage_changes['hadir']) ?>% dari
+                                        kemarin</span></span>
                             <?php elseif ($percentage_changes['hadir'] < 0): ?>
-                                <span class="flex items-center"><i class="fas fa-arrow-down text-red-400 mr-1"></i><span class="text-red-400">-<?= abs($percentage_changes['hadir']) ?>% dari kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-arrow-down text-red-400 mr-1"></i><span
+                                        class="text-red-400">-<?= abs($percentage_changes['hadir']) ?>% dari
+                                        kemarin</span></span>
                             <?php else: ?>
-                                <span class="flex items-center"><i class="fas fa-minus text-gray-400 mr-1"></i><span class="text-gray-400">Sama dengan kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-minus text-gray-400 mr-1"></i><span
+                                        class="text-gray-400">Sama dengan kemarin</span></span>
                             <?php endif; ?>
                         </div>
                     </div>
 
                     <!-- Sakit Card -->
-                    <div class="glass-effect rounded-xl p-4 md:p-6 hover:bg-purple-900/10 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-yellow-800/10 cursor-pointer" data-stat="sakit">
+                    <div class="glass-effect rounded-xl p-4 md:p-6 hover:bg-purple-900/10 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-yellow-800/10 cursor-pointer"
+                        data-stat="sakit">
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-gray-400 text-sm font-medium mb-1">Total Sakit</p>
                                 <h3 class="text-2xl font-bold stat-value"><?= $stats['sakit'] ?></h3>
                             </div>
-                            <div class="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-gradient-to-br from-yellow-500/30 to-yellow-700/30 flex items-center justify-center shadow-md">
+                            <div
+                                class="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-gradient-to-br from-yellow-500/30 to-yellow-700/30 flex items-center justify-center shadow-md">
                                 <i class="fas fa-hospital text-yellow-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="mt-3 md:mt-4 text-sm stat-change">
                             <?php if ($percentage_changes['sakit'] > 0): ?>
-                                <span class="flex items-center"><i class="fas fa-arrow-up text-green-400 mr-1"></i><span class="text-green-400">+<?= abs($percentage_changes['sakit']) ?>% dari kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-arrow-up text-green-400 mr-1"></i><span
+                                        class="text-green-400">+<?= abs($percentage_changes['sakit']) ?>% dari
+                                        kemarin</span></span>
                             <?php elseif ($percentage_changes['sakit'] < 0): ?>
-                                <span class="flex items-center"><i class="fas fa-arrow-down text-red-400 mr-1"></i><span class="text-red-400">-<?= abs($percentage_changes['sakit']) ?>% dari kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-arrow-down text-red-400 mr-1"></i><span
+                                        class="text-red-400">-<?= abs($percentage_changes['sakit']) ?>% dari
+                                        kemarin</span></span>
                             <?php else: ?>
-                                <span class="flex items-center"><i class="fas fa-minus text-gray-400 mr-1"></i><span class="text-gray-400">Sama dengan kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-minus text-gray-400 mr-1"></i><span
+                                        class="text-gray-400">Sama dengan kemarin</span></span>
                             <?php endif; ?>
                         </div>
                     </div>
 
                     <!-- Izin Card -->
-                    <div class="glass-effect rounded-xl p-4 md:p-6 hover:bg-purple-900/10 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-purple-800/10 cursor-pointer" data-stat="izin">
+                    <div class="glass-effect rounded-xl p-4 md:p-6 hover:bg-purple-900/10 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-purple-800/10 cursor-pointer"
+                        data-stat="izin">
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-gray-400 text-sm font-medium mb-1">Total Izin</p>
                                 <h3 class="text-2xl font-bold stat-value"><?= $stats['izin'] ?></h3>
                             </div>
-                            <div class="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-gradient-to-br from-purple-500/30 to-purple-700/30 flex items-center justify-center shadow-md">
+                            <div
+                                class="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-gradient-to-br from-purple-500/30 to-purple-700/30 flex items-center justify-center shadow-md">
                                 <i class="fas fa-clipboard-list text-purple-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="mt-3 md:mt-4 text-sm stat-change">
                             <?php if ($percentage_changes['izin'] > 0): ?>
-                                <span class="flex items-center"><i class="fas fa-arrow-up text-green-400 mr-1"></i><span class="text-green-400">+<?= abs($percentage_changes['izin']) ?>% dari kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-arrow-up text-green-400 mr-1"></i><span
+                                        class="text-green-400">+<?= abs($percentage_changes['izin']) ?>% dari
+                                        kemarin</span></span>
                             <?php elseif ($percentage_changes['izin'] < 0): ?>
-                                <span class="flex items-center"><i class="fas fa-arrow-down text-red-400 mr-1"></i><span class="text-red-400">-<?= abs($percentage_changes['izin']) ?>% dari kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-arrow-down text-red-400 mr-1"></i><span
+                                        class="text-red-400">-<?= abs($percentage_changes['izin']) ?>% dari
+                                        kemarin</span></span>
                             <?php else: ?>
-                                <span class="flex items-center"><i class="fas fa-minus text-gray-400 mr-1"></i><span class="text-gray-400">Sama dengan kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-minus text-gray-400 mr-1"></i><span
+                                        class="text-gray-400">Sama dengan kemarin</span></span>
                             <?php endif; ?>
                         </div>
                     </div>
 
                     <!-- Terlambat Card -->
-                    <div class="glass-effect rounded-xl p-4 md:p-6 hover:bg-purple-900/10 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-orange-800/10 cursor-pointer" data-stat="terlambat">
+                    <div class="glass-effect rounded-xl p-4 md:p-6 hover:bg-purple-900/10 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-orange-800/10 cursor-pointer"
+                        data-stat="terlambat">
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-gray-400 text-sm font-medium mb-1">Total Terlambat</p>
                                 <h3 class="text-2xl font-bold stat-value"><?= $stats['terlambat'] ?></h3>
                             </div>
-                            <div class="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-gradient-to-br from-orange-500/30 to-orange-700/30 flex items-center justify-center shadow-md">
+                            <div
+                                class="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-gradient-to-br from-orange-500/30 to-orange-700/30 flex items-center justify-center shadow-md">
                                 <i class="fas fa-clock text-orange-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="mt-3 md:mt-4 text-sm stat-change">
                             <?php if ($percentage_changes['terlambat'] > 0): ?>
-                                <span class="flex items-center"><i class="fas fa-arrow-up text-green-400 mr-1"></i><span class="text-green-400">+<?= abs($percentage_changes['terlambat']) ?>% dari kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-arrow-up text-green-400 mr-1"></i><span
+                                        class="text-green-400">+<?= abs($percentage_changes['terlambat']) ?>% dari
+                                        kemarin</span></span>
                             <?php elseif ($percentage_changes['terlambat'] < 0): ?>
-                                <span class="flex items-center"><i class="fas fa-arrow-down text-red-400 mr-1"></i><span class="text-red-400">-<?= abs($percentage_changes['terlambat']) ?>% dari kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-arrow-down text-red-400 mr-1"></i><span
+                                        class="text-red-400">-<?= abs($percentage_changes['terlambat']) ?>% dari
+                                        kemarin</span></span>
                             <?php else: ?>
-                                <span class="flex items-center"><i class="fas fa-minus text-gray-400 mr-1"></i><span class="text-gray-400">Sama dengan kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-minus text-gray-400 mr-1"></i><span
+                                        class="text-gray-400">Sama dengan kemarin</span></span>
                             <?php endif; ?>
                         </div>
                     </div>
 
                     <!-- Alpha Card -->
-                    <div class="glass-effect rounded-xl p-4 md:p-6 hover:bg-purple-900/10 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-red-800/10 cursor-pointer" data-stat="alpha">
+                    <div class="glass-effect rounded-xl p-4 md:p-6 hover:bg-purple-900/10 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-red-800/10 cursor-pointer"
+                        data-stat="alpha">
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-gray-400 text-sm font-medium mb-1">Total Alpha</p>
                                 <h3 class="text-2xl font-bold stat-value"><?= $stats['alpha'] ?></h3>
                             </div>
-                            <div class="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-gradient-to-br from-red-500/30 to-red-700/30 flex items-center justify-center shadow-md">
+                            <div
+                                class="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-gradient-to-br from-red-500/30 to-red-700/30 flex items-center justify-center shadow-md">
                                 <i class="fas fa-user-times text-red-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="mt-3 md:mt-4 text-sm stat-change">
                             <?php if ($percentage_changes['alpha'] > 0): ?>
-                                <span class="flex items-center"><i class="fas fa-arrow-up text-green-400 mr-1"></i><span class="text-green-400">+<?= abs($percentage_changes['alpha']) ?>% dari kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-arrow-up text-green-400 mr-1"></i><span
+                                        class="text-green-400">+<?= abs($percentage_changes['alpha']) ?>% dari
+                                        kemarin</span></span>
                             <?php elseif ($percentage_changes['alpha'] < 0): ?>
-                                <span class="flex items-center"><i class="fas fa-arrow-down text-red-400 mr-1"></i><span class="text-red-400">-<?= abs($percentage_changes['alpha']) ?>% dari kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-arrow-down text-red-400 mr-1"></i><span
+                                        class="text-red-400">-<?= abs($percentage_changes['alpha']) ?>% dari
+                                        kemarin</span></span>
                             <?php else: ?>
-                                <span class="flex items-center"><i class="fas fa-minus text-gray-400 mr-1"></i><span class="text-gray-400">Sama dengan kemarin</span></span>
+                                <span class="flex items-center"><i class="fas fa-minus text-gray-400 mr-1"></i><span
+                                        class="text-gray-400">Sama dengan kemarin</span></span>
                             <?php endif; ?>
                         </div>
                     </div>
                 </div>
-
-                <!-- Charts & Activities Grid -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Weekly Attendance Chart -->
-                    <div class="glass-effect rounded-xl p-4 md:p-6 lg:col-span-2">
-                        <h3 class="text-lg font-semibold mb-3 md:mb-4">Statistik Kehadiran Mingguan</h3>
-                        <div class="relative h-[300px] md:h-[400px]">
-                            <canvas id="attendanceChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Recent Activities -->
-                    <div class="glass-effect rounded-xl overflow-hidden">
-                        <div class="bg-gradient-to-r from-purple-900/40 to-indigo-900/40 p-4 border-b border-gray-800/50">
-                            <h3 class="text-lg font-semibold flex items-center">
-                                <i class="fas fa-history text-purple-400 mr-2"></i>
-                                Aktivitas Terkini
-                            </h3>
-                        </div>
-                        <div class="divide-y divide-gray-800/50 max-h-[300px] md:max-h-[440px] overflow-y-auto custom-scrollbar">
-                            <?php foreach ($activities as $index => $activity): ?>
-                                <div class="p-4 hover:bg-purple-500/5 transition-colors">
-                                    <div class="flex gap-3">
-                                        <div class="shrink-0">
-                                            <div class="relative">
-                                                <img src="../../<?= $activity['user_photo'] ?>" alt="User"
-                                                    class="h-10 w-10 rounded-full object-cover border-2 border-purple-500/20 shadow-md">
-                                                <?php
-                                                $activityTypeIcons = [
-                                                    'login'    => 'fa-sign-in-alt bg-green-500/20 text-green-400',
-                                                    'logout'   => 'fa-sign-out-alt bg-orange-500/20 text-orange-400',
-                                                    'create'   => 'fa-plus bg-blue-500/20 text-blue-400',
-                                                    'update'   => 'fa-pen bg-yellow-500/20 text-yellow-400',
-                                                    'delete'   => 'fa-trash bg-red-500/20 text-red-400',
-                                                    'approval' => 'fa-check-circle bg-purple-500/20 text-purple-400',
-                                                ];
-                                                $iconClass = $activityTypeIcons[$activity['activity_type']] ?? 'fa-circle bg-gray-500/20 text-gray-400';
-                                                ?>
-                                                <span class="absolute -bottom-1 -right-1 rounded-full p-1 <?= explode(' ', $iconClass)[1] ?>">
-                                                    <i class="fas <?= explode(' ', $iconClass)[0] ?> text-xs <?= explode(' ', $iconClass)[2] ?>"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="flex items-start justify-between">
-                                                <p class="text-gray-200 text-sm pr-8"><?= htmlspecialchars($activity['description']) ?></p>
-                                                <?php if ($index === 0): ?>
-                                                    <span class="px-1.5 py-0.5 bg-purple-500/20 text-purple-400 text-xs rounded border border-purple-500/20 ml-2 shrink-0">Baru</span>
-                                                <?php endif; ?>
-                                            </div>
-                                            <div class="flex justify-between items-center mt-2">
-                                                <p class="text-purple-400 text-xs font-medium"><?= htmlspecialchars($activity['user_name']) ?></p>
-                                                <div class="flex items-center text-gray-500 text-xs">
-                                                    <i class="fas fa-clock mr-1 text-gray-500"></i>
-                                                    <?= $activity['time'] ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                            <?php if (empty($activities)): ?>
-                                <div class="p-8 text-center text-gray-400">
-                                    <i class="fas fa-history text-4xl mb-3 opacity-30"></i>
-                                    <p>Belum ada aktivitas</p>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Monthly Statistics -->
-                <div class="mt-6">
-                    <h3 class="text-lg font-semibold mb-4 flex items-center">
-                        <i class="fas fa-chart-bar text-purple-500 mr-2"></i>
-                        Statistik Bulanan
-                    </h3>
-                    <div class="glass-effect rounded-xl p-4 md:p-6">
-                        <div class="h-[250px] md:h-[300px] w-full relative">
-                            <canvas id="monthlyChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- ============================================================ -->
                 <!-- STATISTIK PELANGGARAN SISWA                                  -->
                 <!-- ============================================================ -->
@@ -650,7 +631,8 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
 
                     <!-- Summary Cards -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                        <div class="glass-effect rounded-xl p-6 shadow-lg border border-red-900/20 hover:border-red-500/30 transition-all">
+                        <div
+                            class="glass-effect rounded-xl p-6 shadow-lg border border-red-900/20 hover:border-red-500/30 transition-all">
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-gray-400 text-sm mb-1">Total Pelanggaran</p>
@@ -662,7 +644,8 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                                 </div>
                             </div>
                         </div>
-                        <div class="glass-effect rounded-xl p-6 shadow-lg border border-yellow-900/20 hover:border-yellow-500/30 transition-all">
+                        <div
+                            class="glass-effect rounded-xl p-6 shadow-lg border border-yellow-900/20 hover:border-yellow-500/30 transition-all">
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-gray-400 text-sm mb-1">Total Poin Pelanggaran</p>
@@ -726,7 +709,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                                             <?php
                                             $poin = $siswa['total_poin'];
                                             if ($poin >= 75) {
-                                                $kategori = ['Berat',  'red'];
+                                                $kategori = ['Berat', 'red'];
                                             } elseif ($poin >= 50) {
                                                 $kategori = ['Sedang', 'orange'];
                                             } else {
@@ -735,16 +718,24 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                                             ?>
                                             <tr class="hover:bg-white/5 transition-colors">
                                                 <td class="px-4 py-3 text-gray-400"><?= $i + 1 ?></td>
-                                                <td class="px-4 py-3 font-medium"><?= htmlspecialchars($siswa['nama_lengkap']) ?></td>
-                                                <td class="px-4 py-3 text-gray-400"><?= htmlspecialchars($siswa['kelas'] ?? '-') ?></td>
+                                                <td class="px-4 py-3 font-medium">
+                                                    <?= htmlspecialchars($siswa['nama_lengkap']) ?>
+                                                </td>
+                                                <td class="px-4 py-3 text-gray-400">
+                                                    <?= htmlspecialchars($siswa['kelas'] ?? '-') ?>
+                                                </td>
                                                 <td class="px-4 py-3 text-center">
-                                                    <span class="px-2 py-1 bg-red-500/10 text-red-400 rounded-full text-xs font-medium">
+                                                    <span
+                                                        class="px-2 py-1 bg-red-500/10 text-red-400 rounded-full text-xs font-medium">
                                                         <?= $siswa['jumlah'] ?>x
                                                     </span>
                                                 </td>
-                                                <td class="px-4 py-3 text-center font-bold text-yellow-400"><?= $siswa['total_poin'] ?></td>
+                                                <td class="px-4 py-3 text-center font-bold text-yellow-400">
+                                                    <?= $siswa['total_poin'] ?>
+                                                </td>
                                                 <td class="px-4 py-3">
-                                                    <span class="px-2 py-1 bg-<?= $kategori[1] ?>-500/10 text-<?= $kategori[1] ?>-400 border border-<?= $kategori[1] ?>-500/20 rounded-full text-xs">
+                                                    <span
+                                                        class="px-2 py-1 bg-<?= $kategori[1] ?>-500/10 text-<?= $kategori[1] ?>-400 border border-<?= $kategori[1] ?>-500/20 rounded-full text-xs">
                                                         <?= $kategori[0] ?>
                                                     </span>
                                                 </td>
@@ -764,7 +755,100 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                     </div>
                 </div>
                 <!-- END STATISTIK PELANGGARAN -->
+                <!-- Charts & Activities Grid -->
+                <div class="mt-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Weekly Attendance Chart -->
+                        <div class="glass-effect rounded-xl p-4 md:p-6 lg:col-span-2">
+                            <h3 class="text-lg font-semibold mb-3 md:mb-4">Statistik Kehadiran Mingguan</h3>
+                            <div class="relative h-[300px] md:h-[400px]">
+                                <canvas id="attendanceChart"></canvas>
+                            </div>
+                        </div>
 
+                        <!-- Recent Activities -->
+                        <div class="glass-effect rounded-xl overflow-hidden">
+                            <div
+                                class="bg-gradient-to-r from-purple-900/40 to-indigo-900/40 p-4 border-b border-gray-800/50">
+                                <h3 class="text-lg font-semibold flex items-center">
+                                    <i class="fas fa-history text-purple-400 mr-2"></i>
+                                    Aktivitas Terkini
+                                </h3>
+                            </div>
+                            <div
+                                class="divide-y divide-gray-800/50 max-h-[300px] md:max-h-[440px] overflow-y-auto custom-scrollbar">
+                                <?php foreach ($activities as $index => $activity): ?>
+                                    <div class="p-4 hover:bg-purple-500/5 transition-colors">
+                                        <div class="flex gap-3">
+                                            <div class="shrink-0">
+                                                <div class="relative">
+                                                    <img src="../../<?= $activity['user_photo'] ?>" alt="User"
+                                                        class="h-10 w-10 rounded-full object-cover border-2 border-purple-500/20 shadow-md">
+                                                    <?php
+                                                    $activityTypeIcons = [
+                                                        'login' => 'fa-sign-in-alt bg-green-500/20 text-green-400',
+                                                        'logout' => 'fa-sign-out-alt bg-orange-500/20 text-orange-400',
+                                                        'create' => 'fa-plus bg-blue-500/20 text-blue-400',
+                                                        'update' => 'fa-pen bg-yellow-500/20 text-yellow-400',
+                                                        'delete' => 'fa-trash bg-red-500/20 text-red-400',
+                                                        'approval' => 'fa-check-circle bg-purple-500/20 text-purple-400',
+                                                    ];
+                                                    $iconClass = $activityTypeIcons[$activity['activity_type']] ?? 'fa-circle bg-gray-500/20 text-gray-400';
+                                                    ?>
+                                                    <span
+                                                        class="absolute -bottom-1 -right-1 rounded-full p-1 <?= explode(' ', $iconClass)[1] ?>">
+                                                        <i
+                                                            class="fas <?= explode(' ', $iconClass)[0] ?> text-xs <?= explode(' ', $iconClass)[2] ?>"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="flex items-start justify-between">
+                                                    <p class="text-gray-200 text-sm pr-8">
+                                                        <?= htmlspecialchars($activity['description']) ?>
+                                                    </p>
+                                                    <?php if ($index === 0): ?>
+                                                        <span
+                                                            class="px-1.5 py-0.5 bg-purple-500/20 text-purple-400 text-xs rounded border border-purple-500/20 ml-2 shrink-0">Baru</span>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <div class="flex justify-between items-center mt-2">
+                                                    <p class="text-purple-400 text-xs font-medium">
+                                                        <?= htmlspecialchars($activity['user_name']) ?>
+                                                    </p>
+                                                    <div class="flex items-center text-gray-500 text-xs">
+                                                        <i class="fas fa-clock mr-1 text-gray-500"></i>
+                                                        <?= $activity['time'] ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                                <?php if (empty($activities)): ?>
+                                    <div class="p-8 text-center text-gray-400">
+                                        <i class="fas fa-history text-4xl mb-3 opacity-30"></i>
+                                        <p>Belum ada aktivitas</p>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Monthly Statistics -->
+                <div class="mt-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-chart-bar text-purple-500 mr-2"></i>
+                        Statistik Bulanan
+                    </h3>
+                    <div class="glass-effect rounded-xl p-4 md:p-6">
+                        <div class="h-[250px] md:h-[300px] w-full relative">
+                            <canvas id="monthlyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div><!-- end max-w-7xl -->
         </div><!-- end p-4 -->
     </main>
@@ -1006,7 +1090,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
         // ============================================================
         // PELANGGARAN: DOUGHNUT CHART (per Jenis)
         // ============================================================
-        (function() {
+        (function () {
             const canvas = document.getElementById('chartPelanggaranJenis');
             if (!canvas) return;
 
@@ -1059,7 +1143,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                             borderWidth: 1,
                             padding: 12,
                             callbacks: {
-                                label: function(ctx) {
+                                label: function (ctx) {
                                     const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
                                     const pct = ((ctx.parsed / total) * 100).toFixed(1);
                                     return ` ${ctx.parsed} kasus (${pct}%)`;
@@ -1074,7 +1158,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
         // ============================================================
         // PELANGGARAN: BAR + LINE CHART (Tren Bulanan)
         // ============================================================
-        (function() {
+        (function () {
             const canvas = document.getElementById('chartPelanggaranBulanan');
             if (!canvas) return;
 
@@ -1094,27 +1178,27 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                 data: {
                     labels: bulanLabel,
                     datasets: [{
-                            label: 'Jumlah Kasus',
-                            data: bulanJumlah,
-                            backgroundColor: 'rgba(239,68,68,0.2)',
-                            borderColor: '#EF4444',
-                            borderWidth: 2,
-                            borderRadius: 4,
-                            yAxisID: 'y'
-                        },
-                        {
-                            label: 'Total Poin',
-                            data: bulanPoin,
-                            type: 'line',
-                            backgroundColor: 'rgba(234,179,8,0.1)',
-                            borderColor: '#EAB308',
-                            borderWidth: 2,
-                            tension: 0.4,
-                            fill: true,
-                            pointBackgroundColor: '#EAB308',
-                            pointRadius: 4,
-                            yAxisID: 'y1'
-                        }
+                        label: 'Jumlah Kasus',
+                        data: bulanJumlah,
+                        backgroundColor: 'rgba(239,68,68,0.2)',
+                        borderColor: '#EF4444',
+                        borderWidth: 2,
+                        borderRadius: 4,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Total Poin',
+                        data: bulanPoin,
+                        type: 'line',
+                        backgroundColor: 'rgba(234,179,8,0.1)',
+                        borderColor: '#EAB308',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#EAB308',
+                        pointRadius: 4,
+                        yAxisID: 'y1'
+                    }
                     ]
                 },
                 options: {
@@ -1205,7 +1289,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
         // ============================================================
         // INIT
         // ============================================================
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             try {
                 initChart();
             } catch (e) {
@@ -1318,7 +1402,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
             }, 3000);
         }
 
-        document.addEventListener('click', function(event) {
+        document.addEventListener('click', function (event) {
             const panel = document.getElementById('notificationPanel');
             if (panel && !panel.classList.contains('hidden')) {
                 const bellBtns = document.querySelectorAll('button[onclick="toggleNotifications()"]');
@@ -1333,7 +1417,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
             }
         });
 
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 const notificationPanel = document.getElementById('notificationPanel');
                 if (notificationPanel && !notificationPanel.classList.contains('hidden')) {
