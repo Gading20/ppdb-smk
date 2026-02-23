@@ -166,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         )->execute(['admin_id' => $_SESSION['admin_id'], 'description' => $log_desc]);
 
         $conn->commit();
-        header("Location: index.php?created=true");
+        header("Location: pelanggaran.php?created=true");
         exit();
     } catch (Exception $e) {
         if ($conn->inTransaction())
