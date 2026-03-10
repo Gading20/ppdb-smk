@@ -523,13 +523,13 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
                     </li>
                     <li>
-                        <a href="../absensi/pelanggaran"
+                        <a href="../absensi/laporan_pelanggaran.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">
                             Pelanggaran
                         </a>
                     </li>
                     <li>
-                        <a href="../absensi/konseling"
+                        <a href="../absensi/konseling.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">
                             Konseling
                         </a>
@@ -557,13 +557,13 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
                     </li>
                     <li>
-                        <a href="../laporan/pelanggaran"
+                        <a href="../laporan/laporan_pelanggaran.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">
                             Pelanggaran
                         </a>
                     </li>
                     <li>
-                        <a href="../laporan/konseling"
+                        <a href="../laporan/laporan_konseling.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">
                             Konseling
                         </a>
@@ -620,10 +620,10 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                             class="px-3 py-2 sm:px-4 sm:py-2 bg-red-600 hover:bg-red-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
                             <i class="fas fa-file-pdf"></i> <span class="hidden sm:inline">Export PDF</span>
                         </a>
-                        <a href="export.php?format=excel<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
+                        <!-- <a href="export.php?format=excel<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
                             class="px-3 py-2 sm:px-4 sm:py-2 bg-green-600 hover:bg-green-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
                             <i class="fas fa-file-excel"></i> <span class="hidden sm:inline">Export Excel</span>
-                        </a>
+                        </a> -->
                     </div>
                 </header>
 

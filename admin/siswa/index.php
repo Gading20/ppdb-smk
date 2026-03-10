@@ -291,13 +291,13 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                         </a>
                     </li>
                     <li>
-                        <a href="../laporan/pelanggaran.php"
+                        <a href="../laporan/laporan_pelanggaran.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">
                             Pelanggaran
                         </a>
                     </li>
                     <li>
-                        <a href="../laporan/konseling"
+                        <a href="../laporan/laporan_konseling.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">
                             Konseling
                         </a>

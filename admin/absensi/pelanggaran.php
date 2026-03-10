@@ -349,7 +349,7 @@ elseif (isset($_GET['delete']) && $_GET['delete'] == 'error')
                     <li><a href="../laporan/index.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
                     </li>
-                    <li><a href="../laporan/pelanggaran"
+                    <li><a href="../laporan/laporan_pelanggaran.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
                     </li>
                     <li><a href="../laporan/konseling"

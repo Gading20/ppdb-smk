@@ -307,10 +307,10 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                     <li><a href="../laporan/index.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
                     </li>
-                    <li><a href="../laporan/pelanggaran"
+                    <li><a href="../laporan/laporan_pelanggaran.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
                     </li>
-                    <li><a href="../laporan/konseling"
+                    <li><a href="../laporan/laporan_konseling.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
                     </li>
                 </ul>
@@ -644,24 +644,6 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                                 </div>
                             </div>
                         </div>
-                        <div
-                            class="glass-effect rounded-xl p-6 shadow-lg border border-yellow-900/20 hover:border-yellow-500/30 transition-all">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-gray-400 text-sm mb-1">Total Poin Pelanggaran</p>
-                                    <h2 class="text-3xl font-bold text-yellow-400"><?= $total_poin ?? 0 ?></h2>
-                                    <p class="text-xs text-gray-500 mt-1">Akumulasi poin</p>
-                                </div>
-                                <div class="h-14 w-14 rounded-2xl bg-yellow-500/10 flex items-center justify-center">
-                                    <i class="fas fa-chart-line text-2xl text-yellow-500"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Charts Row -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-
                         <!-- Chart: Pelanggaran per Jenis (Doughnut) -->
                         <div class="glass-effect rounded-xl p-4 md:p-6">
                             <h4 class="text-sm font-semibold text-gray-300 mb-4 flex items-center gap-2">
@@ -671,18 +653,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                                 <canvas id="chartPelanggaranJenis"></canvas>
                             </div>
                         </div>
-
-                        <!-- Chart: Tren Bulanan (Bar + Line) -->
-                        <div class="glass-effect rounded-xl p-4 md:p-6">
-                            <h4 class="text-sm font-semibold text-gray-300 mb-4 flex items-center gap-2">
-                                <i class="fas fa-calendar-alt text-blue-400"></i> Tren Pelanggaran 6 Bulan Terakhir
-                            </h4>
-                            <div class="relative h-[260px]">
-                                <canvas id="chartPelanggaranBulanan"></canvas>
-                            </div>
-                        </div>
                     </div>
-
                     <!-- Top 5 Pelanggar Table -->
                     <div class="glass-effect rounded-xl overflow-hidden">
                         <div class="bg-gradient-to-r from-red-900/30 to-orange-900/30 p-4 border-b border-gray-800/50">
@@ -1090,7 +1061,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
         // ============================================================
         // PELANGGARAN: DOUGHNUT CHART (per Jenis)
         // ============================================================
-        (function () {
+        (function() {
             const canvas = document.getElementById('chartPelanggaranJenis');
             if (!canvas) return;
 
@@ -1143,7 +1114,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                             borderWidth: 1,
                             padding: 12,
                             callbacks: {
-                                label: function (ctx) {
+                                label: function(ctx) {
                                     const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
                                     const pct = ((ctx.parsed / total) * 100).toFixed(1);
                                     return ` ${ctx.parsed} kasus (${pct}%)`;
@@ -1158,7 +1129,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
         // ============================================================
         // PELANGGARAN: BAR + LINE CHART (Tren Bulanan)
         // ============================================================
-        (function () {
+        (function() {
             const canvas = document.getElementById('chartPelanggaranBulanan');
             if (!canvas) return;
 
@@ -1178,27 +1149,27 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                 data: {
                     labels: bulanLabel,
                     datasets: [{
-                        label: 'Jumlah Kasus',
-                        data: bulanJumlah,
-                        backgroundColor: 'rgba(239,68,68,0.2)',
-                        borderColor: '#EF4444',
-                        borderWidth: 2,
-                        borderRadius: 4,
-                        yAxisID: 'y'
-                    },
-                    {
-                        label: 'Total Poin',
-                        data: bulanPoin,
-                        type: 'line',
-                        backgroundColor: 'rgba(234,179,8,0.1)',
-                        borderColor: '#EAB308',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true,
-                        pointBackgroundColor: '#EAB308',
-                        pointRadius: 4,
-                        yAxisID: 'y1'
-                    }
+                            label: 'Jumlah Kasus',
+                            data: bulanJumlah,
+                            backgroundColor: 'rgba(239,68,68,0.2)',
+                            borderColor: '#EF4444',
+                            borderWidth: 2,
+                            borderRadius: 4,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Total Poin',
+                            data: bulanPoin,
+                            type: 'line',
+                            backgroundColor: 'rgba(234,179,8,0.1)',
+                            borderColor: '#EAB308',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#EAB308',
+                            pointRadius: 4,
+                            yAxisID: 'y1'
+                        }
                     ]
                 },
                 options: {
@@ -1289,7 +1260,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
         // ============================================================
         // INIT
         // ============================================================
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             try {
                 initChart();
             } catch (e) {
@@ -1402,7 +1373,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
             }, 3000);
         }
 
-        document.addEventListener('click', function (event) {
+        document.addEventListener('click', function(event) {
             const panel = document.getElementById('notificationPanel');
             if (panel && !panel.classList.contains('hidden')) {
                 const bellBtns = document.querySelectorAll('button[onclick="toggleNotifications()"]');
@@ -1417,7 +1388,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
             }
         });
 
-        document.addEventListener('keydown', function (e) {
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 const notificationPanel = document.getElementById('notificationPanel');
                 if (notificationPanel && !notificationPanel.classList.contains('hidden')) {
