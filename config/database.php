@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 // Database configuration
 $db_host = 'localhost';
 $db_name = 'absensi_siswa';

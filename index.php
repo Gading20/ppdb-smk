@@ -45,7 +45,7 @@
     <div class="container">
         <h1>Welcome to Web Absensi</h1>
         <p>This is the root directory of the Web Absensi project.</p>
-        <p>Explore the <a href="admin/">Admin</a> or <a href="siswa/">Siswa</a> sections.</p>
+        <p>Explore the <a href="admin/">Admin</a> or <a href="siswa/">Siswa</a> or <a href="kepsek/">Kepala Sekolah</a> or <a href="wali_kelas/">Wali Kelas</a> sections.</p>
     </div>
 </body>
 
