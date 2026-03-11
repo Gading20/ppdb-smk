@@ -4,7 +4,7 @@ require_once '../../config/database.php';
 
 // Guard: hanya kepsek yang boleh akses
 if (!isset($_SESSION['kepsek_id']) || $_SESSION['role'] !== 'kepsek') {
-    header("Location: ../../kepsek/login_kepsek.php");
+    header("Location: ../../kepsek/login.php");
     exit();
 }
 

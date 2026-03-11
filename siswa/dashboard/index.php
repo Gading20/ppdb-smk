@@ -1,9 +1,10 @@
 <?php
+session_start();
 require_once '../../config/database.php';
 
 // Check if student is logged in
 if (!isset($_SESSION['siswa_id'])) {
-    header("Location: ../login.php");
+    header("Location: ../../siswa/login.php");
     exit();
 }
 
