@@ -2,24 +2,30 @@
 session_start();
 require_once '../../config/database.php';
 
-// Guard: hanya kepsek yang boleh akses
-if (!isset($_SESSION['kepsek_id']) || $_SESSION['role'] !== 'kepsek') {
-    header("Location: ../../kepsek/login_kepsek.php");
+// Guard: hanya wali kelas
+if (!isset($_SESSION['walikelas_id'])) {
+    header("Location: ../../wali_kelas/login.php");
     exit();
 }
 
 $today     = date('Y-m-d');
 $yesterday = date('Y-m-d', strtotime('-1 day'));
 
-// ── Statistik absensi hari ini ──────────────────────────────────────────────
+// Kelas & jurusan dari session
+$kelas   = $_SESSION['walikelas_kelas'];
+$jurusan = $_SESSION['walikelas_jurusan'];
+
+// ── Statistik absensi hari ini (kelas sendiri) ─────────────────────────────
 $stats = ['hadir' => 0, 'sakit' => 0, 'izin' => 0, 'terlambat' => 0, 'alpha' => 0];
 
 $stmt = $conn->prepare(
-    "SELECT status, COUNT(*) as count FROM absensi
-     WHERE tanggal = :today AND approval_status = 'Approved'
-     GROUP BY status"
+    "SELECT a.status, COUNT(*) as count FROM absensi a
+     JOIN siswa s ON a.siswa_id = s.id
+     WHERE a.tanggal = :today AND a.approval_status = 'Approved'
+       AND s.kelas = :kelas AND s.jurusan = :jurusan
+     GROUP BY a.status"
 );
-$stmt->execute(['today' => $today]);
+$stmt->execute(['today' => $today, 'kelas' => $kelas, 'jurusan' => $jurusan]);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $stats[strtolower($row['status'])] = $row['count'];
 }
@@ -28,60 +34,68 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 $yesterday_stats = ['hadir' => 0, 'sakit' => 0, 'izin' => 0, 'terlambat' => 0, 'alpha' => 0];
 
 $stmt = $conn->prepare(
-    "SELECT status, COUNT(*) as count FROM absensi
-     WHERE tanggal = :yesterday AND approval_status = 'Approved'
-     GROUP BY status"
+    "SELECT a.status, COUNT(*) as count FROM absensi a
+     JOIN siswa s ON a.siswa_id = s.id
+     WHERE a.tanggal = :yesterday AND a.approval_status = 'Approved'
+       AND s.kelas = :kelas AND s.jurusan = :jurusan
+     GROUP BY a.status"
 );
-$stmt->execute(['yesterday' => $yesterday]);
+$stmt->execute(['yesterday' => $yesterday, 'kelas' => $kelas, 'jurusan' => $jurusan]);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $yesterday_stats[strtolower($row['status'])] = $row['count'];
 }
 
 $pct = [];
 foreach ($stats as $k => $v) {
-    if ($yesterday_stats[$k] > 0) {
-        $pct[$k] = round((($v - $yesterday_stats[$k]) / $yesterday_stats[$k]) * 100);
-    } else {
-        $pct[$k] = $v > 0 ? 100 : 0;
-    }
+    $pct[$k] = $yesterday_stats[$k] > 0
+        ? round((($v - $yesterday_stats[$k]) / $yesterday_stats[$k]) * 100)
+        : ($v > 0 ? 100 : 0);
 }
 
-// ── Total siswa ────────────────────────────────────────────────────────────
-$total_students = $conn->query("SELECT COUNT(*) FROM siswa")->fetchColumn();
+// ── Total siswa di kelas ini ───────────────────────────────────────────────
+$stmt = $conn->prepare("SELECT COUNT(*) FROM siswa WHERE kelas = :kelas AND jurusan = :jurusan");
+$stmt->execute(['kelas' => $kelas, 'jurusan' => $jurusan]);
+$total_students = $stmt->fetchColumn();
 
-// ── Data absensi hari ini (detail) ─────────────────────────────────────────
+// ── Absensi hari ini (detail kelas sendiri) ────────────────────────────────
 $stmt = $conn->prepare(
-    "SELECT a.*, s.nama_lengkap, s.kelas, s.nis, s.foto_profil
+    "SELECT a.*, s.nama_lengkap, s.kelas, s.jurusan, s.nis, s.foto_profil
      FROM absensi a
      JOIN siswa s ON a.siswa_id = s.id
-     WHERE a.tanggal = :today
+     WHERE a.tanggal = :today AND s.kelas = :kelas AND s.jurusan = :jurusan
      ORDER BY a.created_at DESC"
 );
-$stmt->execute(['today' => $today]);
+$stmt->execute(['today' => $today, 'kelas' => $kelas, 'jurusan' => $jurusan]);
 $absensi_hari_ini = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// ── Weekly stats ───────────────────────────────────────────────────────────
-$stmt = $conn->query(
-    "SELECT DATE(tanggal) as date,
-            MIN(DATE_FORMAT(tanggal,'%d %b')) as date_label,
-            status, COUNT(*) as count
-     FROM absensi
-     WHERE tanggal >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
-       AND approval_status = 'Approved'
-     GROUP BY DATE(tanggal), status
+// ── Weekly stats (kelas sendiri) ───────────────────────────────────────────
+$stmt = $conn->prepare(
+    "SELECT DATE(a.tanggal) as date,
+            MIN(DATE_FORMAT(a.tanggal,'%d %b')) as date_label,
+            a.status, COUNT(*) as count
+     FROM absensi a
+     JOIN siswa s ON a.siswa_id = s.id
+     WHERE a.tanggal >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+       AND a.approval_status = 'Approved'
+       AND s.kelas = :kelas AND s.jurusan = :jurusan
+     GROUP BY DATE(a.tanggal), a.status
      ORDER BY date ASC"
 );
+$stmt->execute(['kelas' => $kelas, 'jurusan' => $jurusan]);
 $weeklyStats = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// ── Top pelanggaran ────────────────────────────────────────────────────────
-$topPelanggar = $conn->query(
+// ── Top pelanggaran (kelas sendiri) ───────────────────────────────────────
+$stmt = $conn->prepare(
     "SELECT s.nama_lengkap, s.kelas, COUNT(p.id) as jumlah, SUM(p.poin) as total_poin
      FROM pelanggaran p
      JOIN siswa s ON p.siswa_id = s.id
+     WHERE s.kelas = :kelas AND s.jurusan = :jurusan
      GROUP BY p.siswa_id
      ORDER BY total_poin DESC
      LIMIT 5"
-)->fetchAll(PDO::FETCH_ASSOC);
+);
+$stmt->execute(['kelas' => $kelas, 'jurusan' => $jurusan]);
+$topPelanggar = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -89,7 +103,7 @@ $topPelanggar = $conn->query(
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Kepala Sekolah – SMK NURUL ULUM</title>
+    <title>Dashboard Wali Kelas – SMK NURUL ULUM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -107,13 +121,6 @@ $topPelanggar = $conn->query(
 
         body {
             background: linear-gradient(135deg, #0f172a 0%, #064e3b 100%);
-        }
-
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover,
-        input:-webkit-autofill:focus {
-            -webkit-text-fill-color: #fff;
-            -webkit-box-shadow: 0 0 0 1000px #1f2937 inset;
         }
 
         .custom-scrollbar::-webkit-scrollbar {
@@ -149,17 +156,16 @@ $topPelanggar = $conn->query(
 
 <body class="min-h-screen text-white bg-fixed">
 
-    <!-- Mobile overlay -->
     <div id="overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
-    <!-- ── SIDEBAR ───────────────────────────────────────────────────────────── -->
+    <!-- ── SIDEBAR ──────────────────────────────────────────────────────────── -->
     <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass border-r border-emerald-900/30 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0">
         <div class="flex items-center justify-between p-5 border-b border-emerald-900/30">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" class="h-10 w-auto" alt="Logo">
                 <div>
                     <p class="font-semibold text-sm leading-tight">SMK NURUL ULUM</p>
-                    <p class="text-xs text-emerald-400">Kepala Sekolah</p>
+                    <p class="text-xs text-emerald-400">Wali Kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?></p>
                 </div>
             </div>
             <button class="lg:hidden text-gray-400 hover:text-white" onclick="toggleSidebar()">
@@ -172,13 +178,12 @@ $topPelanggar = $conn->query(
                 <i class="fas fa-home text-emerald-400"></i><span>Dashboard</span>
             </a>
 
-            <!-- Monitoring Siswa (accordion) -->
-            <div x-data="{open:true}" class="group">
+            <div>
                 <button onclick="toggleMenu(this)"
                     class="flex items-center gap-3 w-full p-3 rounded-lg text-gray-300 hover:bg-emerald-500/10 transition-colors">
                     <i class="fas fa-calendar-check text-emerald-400"></i>
                     <span>Monitoring Siswa</span>
-                    <i class="fas fa-chevron-down ml-auto text-xs transition-transform duration-200 rotate-icon"></i>
+                    <i class="fas fa-chevron-down ml-auto text-xs rotate-icon"></i>
                 </button>
                 <ul class="ml-8 mt-1 sub-menu space-y-1">
                     <li><a href="presensi.php" class="block p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Presensi</a></li>
@@ -191,8 +196,9 @@ $topPelanggar = $conn->query(
 
             <!-- Info Cepat -->
             <div class="px-3 py-2">
-                <p class="text-xs text-gray-500 uppercase tracking-wider mb-3">Info Cepat</p>
+                <p class="text-xs text-gray-500 uppercase tracking-wider mb-3">Info Kelas</p>
                 <div class="space-y-2 text-xs">
+                    <div class="flex justify-between"><span class="text-gray-400">Kelas</span><span class="font-semibold text-emerald-300"><?= htmlspecialchars($kelas . ' ' . $jurusan) ?></span></div>
                     <div class="flex justify-between"><span class="text-gray-400">Total Siswa</span><span class="font-semibold"><?= $total_students ?></span></div>
                     <div class="flex justify-between"><span class="text-gray-400">Hadir Hari Ini</span><span class="font-semibold text-emerald-400"><?= $stats['hadir'] ?></span></div>
                     <div class="flex justify-between"><span class="text-gray-400">Alpha Hari Ini</span><span class="font-semibold text-red-400"><?= $stats['alpha'] ?></span></div>
@@ -201,14 +207,14 @@ $topPelanggar = $conn->query(
 
             <hr class="border-gray-700/40 my-3">
 
-            <a href="../../kepsek/logout.php"
+            <a href="../../wali_kelas/logout.php"
                 class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors">
                 <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>
         </nav>
     </aside>
 
-    <!-- ── MAIN ──────────────────────────────────────────────────────────────── -->
+    <!-- ── MAIN ─────────────────────────────────────────────────────────────── -->
     <main class="lg:ml-64 min-h-screen">
 
         <!-- Mobile topbar -->
@@ -217,9 +223,9 @@ $topPelanggar = $conn->query(
                 <button onclick="toggleSidebar()" class="text-white p-2 -ml-2 rounded-lg hover:bg-gray-800/50">
                     <i class="fas fa-bars"></i>
                 </button>
-                <span class="text-sm font-medium">Dashboard Kepsek</span>
+                <span class="text-sm font-medium">Dashboard Wali Kelas</span>
             </div>
-            <img src="../../<?= $_SESSION['kepsek_photo'] ?: 'assets/default/photo-profile.png' ?>"
+            <img src="../../<?= $_SESSION['walikelas_photo'] ?: 'assets/default/photo-profile.png' ?>"
                 class="h-8 w-8 rounded-full object-cover border border-emerald-500/50" alt="Foto">
         </div>
 
@@ -229,19 +235,21 @@ $topPelanggar = $conn->query(
                 <!-- Header -->
                 <header class="flex flex-wrap justify-between items-center mb-8 fade-up">
                     <div>
-                        <h1 class="text-2xl font-bold">Selamat Datang, <?= htmlspecialchars($_SESSION['kepsek_name']) ?> 👋</h1>
+                        <h1 class="text-2xl font-bold">Selamat Datang, <?= htmlspecialchars($_SESSION['walikelas_name']) ?> 👋</h1>
                         <p class="text-gray-400 text-sm mt-1">
+                            <i class="fas fa-chalkboard text-emerald-400 mr-1"></i>
+                            Wali Kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?> &nbsp;|&nbsp;
                             <i class="fas fa-calendar-alt text-emerald-400 mr-1"></i>
                             <?= date('l, d F Y') ?> &nbsp;|&nbsp;
                             <span id="clock" class="text-emerald-300 font-medium"></span>
                         </p>
                     </div>
                     <div class="hidden lg:flex items-center gap-3 px-4 py-2 glass rounded-xl mt-3 lg:mt-0">
-                        <img src="../../<?= $_SESSION['kepsek_photo'] ?: 'assets/default/photo-profile.png' ?>"
+                        <img src="../../<?= $_SESSION['walikelas_photo'] ?: 'assets/default/photo-profile.png' ?>"
                             class="h-9 w-9 rounded-full object-cover border border-emerald-500/50" alt="Foto">
                         <div class="text-sm">
-                            <p class="font-medium"><?= htmlspecialchars($_SESSION['kepsek_name']) ?></p>
-                            <p class="text-emerald-400 text-xs">Kepala Sekolah</p>
+                            <p class="font-medium"><?= htmlspecialchars($_SESSION['walikelas_name']) ?></p>
+                            <p class="text-emerald-400 text-xs">Wali Kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?></p>
                         </div>
                     </div>
                 </header>
@@ -284,7 +292,9 @@ $topPelanggar = $conn->query(
                     <!-- Weekly Chart -->
                     <div class="glass rounded-xl p-5 lg:col-span-2 fade-up" style="animation-delay:.15s">
                         <h3 class="font-semibold mb-4 flex items-center gap-2">
-                            <i class="fas fa-chart-line text-emerald-400"></i> Statistik Kehadiran Mingguan
+                            <i class="fas fa-chart-line text-emerald-400"></i>
+                            Statistik Kehadiran Mingguan
+                            <span class="text-xs text-gray-500 font-normal ml-1">– Kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?></span>
                         </h3>
                         <div class="relative h-72">
                             <canvas id="weeklyChart"></canvas>
@@ -295,7 +305,9 @@ $topPelanggar = $conn->query(
                     <div class="glass rounded-xl overflow-hidden fade-up" style="animation-delay:.2s">
                         <div class="bg-gradient-to-r from-red-900/30 to-orange-900/20 px-5 py-4 border-b border-gray-800/50">
                             <h3 class="font-semibold flex items-center gap-2 text-sm">
-                                <i class="fas fa-exclamation-triangle text-red-400"></i> Top 5 Pelanggaran
+                                <i class="fas fa-exclamation-triangle text-red-400"></i>
+                                Top 5 Pelanggaran
+                                <span class="text-xs text-gray-500 font-normal">– Kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?></span>
                             </h3>
                         </div>
                         <div class="divide-y divide-gray-800/50">
@@ -333,15 +345,14 @@ $topPelanggar = $conn->query(
                     <div class="bg-gradient-to-r from-emerald-900/30 to-teal-900/20 px-5 py-4 border-b border-gray-800/50 flex flex-wrap justify-between items-center gap-3">
                         <h3 class="font-semibold flex items-center gap-2">
                             <i class="fas fa-clipboard-list text-emerald-400"></i>
-                            Data Absensi Hari Ini
+                            Absensi Kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?> Hari Ini
                             <span class="text-xs text-gray-400 font-normal">(<?= date('d F Y') ?>)</span>
                         </h3>
-                        <!-- Filter -->
                         <div class="flex gap-2 flex-wrap">
                             <?php foreach (['Semua', 'Hadir', 'Sakit', 'Izin', 'Terlambat', 'Alpha'] as $f): ?>
                                 <button onclick="filterTable('<?= $f ?>')"
                                     class="filter-btn text-xs px-3 py-1.5 rounded-full border transition-colors
-                     <?= $f === 'Semua' ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300' : 'border-gray-700 text-gray-400 hover:border-emerald-500/40 hover:text-white' ?>"
+                                    <?= $f === 'Semua' ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300' : 'border-gray-700 text-gray-400 hover:border-emerald-500/40 hover:text-white' ?>"
                                     data-filter="<?= $f ?>">
                                     <?= $f ?>
                                 </button>
@@ -355,7 +366,6 @@ $topPelanggar = $conn->query(
                                 <tr class="text-gray-500 text-xs uppercase border-b border-gray-800/50 bg-gray-900/30">
                                     <th class="px-4 py-3 text-left">Siswa</th>
                                     <th class="px-4 py-3 text-left">NIS</th>
-                                    <th class="px-4 py-3 text-left">Kelas</th>
                                     <th class="px-4 py-3 text-left">Jam Masuk</th>
                                     <th class="px-4 py-3 text-center">Status</th>
                                     <th class="px-4 py-3 text-center">Approval</th>
@@ -387,8 +397,9 @@ $topPelanggar = $conn->query(
                                                 </div>
                                             </td>
                                             <td class="px-4 py-3 text-gray-400"><?= htmlspecialchars($row['nis']) ?></td>
-                                            <td class="px-4 py-3 text-gray-400"><?= htmlspecialchars($row['kelas']) ?></td>
-                                            <td class="px-4 py-3 text-gray-300"><?= $row['jam_masuk'] ?? '-' ?></td>
+                                            <td class="px-4 py-3 text-gray-300">
+                                                <?= (!empty($row['jam_masuk']) && $row['jam_masuk'] !== '00:00:00') ? date('H:i', strtotime($row['jam_masuk'])) : '-' ?>
+                                            </td>
                                             <td class="px-4 py-3 text-center">
                                                 <span class="px-2 py-1 rounded-full text-xs font-medium bg-<?= $statusColor ?>-500/10 text-<?= $statusColor ?>-400 border border-<?= $statusColor ?>-500/20">
                                                     <?= htmlspecialchars($row['status']) ?>
@@ -406,9 +417,9 @@ $topPelanggar = $conn->query(
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="7" class="px-4 py-12 text-center text-gray-500">
+                                        <td colspan="6" class="px-4 py-12 text-center text-gray-500">
                                             <i class="fas fa-inbox text-3xl mb-3 block opacity-40"></i>
-                                            Belum ada data absensi hari ini
+                                            Belum ada data absensi kelas ini hari ini
                                         </td>
                                     </tr>
                                 <?php endif; ?>
@@ -417,11 +428,10 @@ $topPelanggar = $conn->query(
                     </div>
                 </div>
 
-            </div><!-- /max-w -->
-        </div><!-- /p-5 -->
+            </div>
+        </div>
     </main>
 
-    <!-- ── SCRIPTS ───────────────────────────────────────────────────────────── -->
     <script>
         // Clock
         function tick() {
@@ -437,21 +447,22 @@ $topPelanggar = $conn->query(
 
         // Sidebar
         function toggleSidebar() {
-            const s = document.getElementById('sidebar');
-            const o = document.getElementById('overlay');
-            s.classList.toggle('-translate-x-full');
-            o.classList.toggle('hidden');
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+            document.getElementById('overlay').classList.toggle('hidden');
         }
 
-        // Accordion sub-menu
+        // Accordion
         function toggleMenu(btn) {
             const ul = btn.nextElementSibling;
             const ico = btn.querySelector('.rotate-icon');
             ul.classList.toggle('hidden');
             ico.style.transform = ul.classList.contains('hidden') ? '' : 'rotate(180deg)';
         }
-        // open by default
-        document.querySelectorAll('.sub-menu').forEach(ul => ul.classList.remove('hidden'));
+        document.querySelectorAll('.sub-menu').forEach(ul => {
+            ul.classList.remove('hidden');
+            const ico = ul.previousElementSibling.querySelector('.rotate-icon');
+            if (ico) ico.style.transform = 'rotate(180deg)';
+        });
 
         // Filter table
         function filterTable(status) {
@@ -471,11 +482,7 @@ $topPelanggar = $conn->query(
         // Weekly Chart
         (function() {
             const raw = <?= json_encode($weeklyStats) ?>;
-            const dateMap = {};
-            raw.forEach(r => {
-                dateMap[r.date_label] = dateMap[r.date_label] || {};
-            });
-            const dates = Object.keys(dateMap).sort();
+            const dateLabels = [...new Set(raw.map(r => r.date_label))].sort();
             const statuses = {
                 'Hadir': '#10B981',
                 'Sakit': '#EAB308',
@@ -485,7 +492,7 @@ $topPelanggar = $conn->query(
             };
             const datasets = Object.entries(statuses).map(([s, c]) => ({
                 label: s,
-                data: dates.map(d => {
+                data: dateLabels.map(d => {
                     const m = raw.find(r => r.date_label === d && r.status === s);
                     return m ? +m.count : 0;
                 }),
@@ -497,10 +504,11 @@ $topPelanggar = $conn->query(
                 pointRadius: 4,
                 pointHoverRadius: 6
             }));
+
             new Chart(document.getElementById('weeklyChart').getContext('2d'), {
                 type: 'line',
                 data: {
-                    labels: dates.length ? dates : ['—'],
+                    labels: dateLabels.length ? dateLabels : ['—'],
                     datasets
                 },
                 options: {

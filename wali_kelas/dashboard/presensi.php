@@ -2,17 +2,19 @@
 session_start();
 require_once '../../config/database.php';
 
-// Guard: hanya kepsek
-if (!isset($_SESSION['kepsek_id']) || $_SESSION['role'] !== 'kepsek') {
-    header("Location: ../../kepsek/login.php");
+// Guard: hanya wali kelas
+if (!isset($_SESSION['walikelas_id'])) {
+    header("Location: ../../wali_kelas/login.php");
     exit();
 }
+
+// Kelas & jurusan dari session (tidak bisa diubah user)
+$kelas   = $_SESSION['walikelas_kelas'];
+$jurusan = $_SESSION['walikelas_jurusan'];
 
 // ── Filter ─────────────────────────────────────────────────────────────────
 $date_filter     = $_GET['date']     ?? date('Y-m-d');
 $status_filter   = $_GET['status']   ?? '';
-$kelas_filter    = $_GET['kelas']    ?? '';
-$jurusan_filter  = $_GET['jurusan']  ?? '';
 $approval_filter = $_GET['approval'] ?? '';
 $search          = $_GET['search']   ?? '';
 
@@ -21,25 +23,18 @@ $items_per_page = 10;
 $page   = max(1, (int)($_GET['page'] ?? 1));
 $offset = ($page - 1) * $items_per_page;
 
-// ── Base SQL ───────────────────────────────────────────────────────────────
-$base = "FROM absensi a JOIN siswa s ON a.siswa_id = s.id WHERE 1=1";
-$params = [];
+// ── Base SQL (selalu filter kelas sendiri) ─────────────────────────────────
+$base = "FROM absensi a JOIN siswa s ON a.siswa_id = s.id
+         WHERE s.kelas = :kelas AND s.jurusan = :jurusan";
+$params = ['kelas' => $kelas, 'jurusan' => $jurusan];
 
 if ($date_filter) {
     $base .= " AND a.tanggal = :date";
-    $params['date']    = $date_filter;
+    $params['date'] = $date_filter;
 }
 if ($status_filter) {
     $base .= " AND a.status = :status";
-    $params['status']  = $status_filter;
-}
-if ($kelas_filter) {
-    $base .= " AND s.kelas = :kelas";
-    $params['kelas']   = $kelas_filter;
-}
-if ($jurusan_filter) {
-    $base .= " AND s.jurusan = :jurusan";
-    $params['jurusan'] = $jurusan_filter;
+    $params['status'] = $status_filter;
 }
 if ($approval_filter) {
     $base .= " AND a.approval_status = :approval";
@@ -78,19 +73,25 @@ $stmt->bindValue(':limit',  $items_per_page, PDO::PARAM_INT);
 $stmt->execute();
 $absensi_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// ── Stat cards ─────────────────────────────────────────────────────────────
+// ── Stat cards (kelas sendiri, hari ini) ───────────────────────────────────
 $today = date('Y-m-d');
 $status_counts = ['Hadir' => 0, 'Sakit' => 0, 'Izin' => 0, 'Terlambat' => 0, 'Alpha' => 0];
-$sc = $conn->prepare("SELECT status, COUNT(*) as c FROM absensi WHERE tanggal=:t AND approval_status='Approved' GROUP BY status");
-$sc->execute(['t' => $today]);
+$sc = $conn->prepare(
+    "SELECT a.status, COUNT(*) as c FROM absensi a
+     JOIN siswa s ON a.siswa_id = s.id
+     WHERE a.tanggal = :t AND a.approval_status = 'Approved'
+       AND s.kelas = :kelas AND s.jurusan = :jurusan
+     GROUP BY a.status"
+);
+$sc->execute(['t' => $today, 'kelas' => $kelas, 'jurusan' => $jurusan]);
 foreach ($sc->fetchAll(PDO::FETCH_ASSOC) as $r) $status_counts[$r['status']] = $r['c'];
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 function buildSortUrl($col)
 {
     $p = $_GET;
-    $p['sort'] = $col;
-    $p['order'] = (isset($_GET['sort']) && $_GET['sort'] === $col && ($_GET['order'] ?? '') == 'ASC') ? 'DESC' : 'ASC';
+    $p['sort']  = $col;
+    $p['order'] = (isset($_GET['sort']) && $_GET['sort'] === $col && ($_GET['order'] ?? '') === 'ASC') ? 'DESC' : 'ASC';
     return '?' . http_build_query($p);
 }
 function sortIcon($col, $sc, $so)
@@ -111,7 +112,7 @@ function pageUrl($pg)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Presensi – Kepala Sekolah</title>
+    <title>Data Presensi – Wali Kelas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
@@ -218,14 +219,14 @@ function pageUrl($pg)
 
     <div id="overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
-    <!-- ── SIDEBAR ───────────────────────────────────────────────────────────── -->
+    <!-- ── SIDEBAR ──────────────────────────────────────────────────────────── -->
     <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass border-r border-emerald-900/30 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0">
         <div class="flex items-center justify-between p-5 border-b border-emerald-900/30">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" class="h-10 w-auto" alt="Logo">
                 <div>
                     <p class="font-semibold text-sm">SMK NURUL ULUM</p>
-                    <p class="text-xs text-emerald-400">Kepala Sekolah</p>
+                    <p class="text-xs text-emerald-400">Wali Kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?></p>
                 </div>
             </div>
             <button class="lg:hidden text-gray-400 hover:text-white" onclick="toggleSidebar()">
@@ -240,7 +241,7 @@ function pageUrl($pg)
                 <button onclick="toggleMenu(this)" class="flex items-center gap-3 w-full p-3 rounded-lg text-gray-300 hover:bg-emerald-500/10 transition-colors">
                     <i class="fas fa-calendar-check text-emerald-400"></i>
                     <span>Monitoring Siswa</span>
-                    <i class="fas fa-chevron-down ml-auto text-xs transition-transform rotate-icon" style="transform:rotate(180deg)"></i>
+                    <i class="fas fa-chevron-down ml-auto text-xs rotate-icon" style="transform:rotate(180deg)"></i>
                 </button>
                 <ul class="ml-8 mt-1 space-y-1 sub-menu">
                     <li><a href="presensi.php" class="block p-2 text-emerald-400 bg-emerald-500/10 rounded-lg text-sm font-medium">Presensi</a></li>
@@ -248,23 +249,27 @@ function pageUrl($pg)
                     <li><a href="konseling.php" class="block p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Konseling</a></li>
                 </ul>
             </div>
+            <a href="siswa.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-emerald-500/10 transition-colors">
+                <i class="fas fa-users text-emerald-400"></i><span>Data Siswa</span>
+            </a>
             <hr class="border-gray-700/40 my-3">
-            <a href="../../kepsek/logout.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors">
+            <a href="../../wali_kelas/logout.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors">
                 <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>
         </nav>
     </aside>
 
-    <!-- ── MAIN ──────────────────────────────────────────────────────────────── -->
+    <!-- ── MAIN ─────────────────────────────────────────────────────────────── -->
     <main class="lg:ml-64 min-h-screen">
 
         <!-- Mobile topbar -->
         <div class="lg:hidden sticky top-0 z-30 glass px-4 py-3 flex items-center justify-between border-b border-emerald-900/30">
             <div class="flex items-center gap-3">
                 <button onclick="toggleSidebar()" class="text-white p-2 -ml-2 rounded-lg hover:bg-gray-800/50"><i class="fas fa-bars"></i></button>
-                <span class="text-sm font-medium">Data Presensi</span>
+                <span class="text-sm font-medium">Presensi Kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?></span>
             </div>
-            <img src="../../<?= $_SESSION['kepsek_photo'] ?: 'assets/default/photo-profile.png' ?>" class="h-8 w-8 rounded-full object-cover border border-emerald-500/50" alt="">
+            <img src="../../<?= $_SESSION['walikelas_photo'] ?: 'assets/default/photo-profile.png' ?>"
+                class="h-8 w-8 rounded-full object-cover border border-emerald-500/50" alt="">
         </div>
 
         <div class="p-5 md:p-8">
@@ -274,11 +279,11 @@ function pageUrl($pg)
                 <header class="flex flex-wrap justify-between items-center mb-6 fade-up">
                     <div>
                         <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">
-                            <i class="fas fa-clipboard-list text-emerald-400"></i> Data Presensi Siswa
+                            <i class="fas fa-clipboard-list text-emerald-400"></i>
+                            Data Presensi Kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?>
                         </h1>
                         <p class="text-gray-400 text-sm mt-1">Monitoring kehadiran siswa – hanya lihat</p>
                     </div>
-                    <!-- Badge read-only -->
                     <span class="mt-3 lg:mt-0 flex items-center gap-2 px-4 py-2 glass rounded-xl text-xs text-emerald-300 border border-emerald-500/30">
                         <i class="fas fa-eye"></i> Mode Lihat Saja
                     </span>
@@ -288,11 +293,11 @@ function pageUrl($pg)
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-6 fade-up" style="animation-delay:.05s">
                     <?php
                     $cards = [
-                        ['Hadir', 'emerald', 'fa-check'],
-                        ['Sakit', 'yellow', 'fa-hospital'],
-                        ['Izin', 'blue', 'fa-clipboard'],
-                        ['Terlambat', 'orange', 'fa-clock'],
-                        ['Alpha', 'red', 'fa-user-times']
+                        ['Hadir',     'emerald', 'fa-check'],
+                        ['Sakit',     'yellow',  'fa-hospital'],
+                        ['Izin',      'blue',    'fa-clipboard'],
+                        ['Terlambat', 'orange',  'fa-clock'],
+                        ['Alpha',     'red',     'fa-user-times'],
                     ];
                     foreach ($cards as [$lbl, $col, $ico]): ?>
                         <div class="glass rounded-xl p-4 flex items-center gap-3">
@@ -310,8 +315,10 @@ function pageUrl($pg)
                 <!-- Filter -->
                 <div class="glass rounded-xl p-5 mb-6 fade-up" style="animation-delay:.1s">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-medium flex items-center gap-2"><i class="fas fa-filter text-emerald-400 text-sm"></i> Filter & Pencarian</h3>
-                        <?php if (!empty(array_filter([$search, $status_filter, $kelas_filter, $jurusan_filter, $approval_filter])) || isset($_GET['date'])): ?>
+                        <h3 class="font-medium flex items-center gap-2">
+                            <i class="fas fa-filter text-emerald-400 text-sm"></i> Filter & Pencarian
+                        </h3>
+                        <?php if (!empty(array_filter([$search, $status_filter, $approval_filter])) || isset($_GET['date'])): ?>
                             <a href="presensi.php" class="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
                                 <i class="fas fa-times-circle"></i> Reset
                             </a>
@@ -320,7 +327,7 @@ function pageUrl($pg)
                     <form method="GET" id="filterForm">
                         <input type="hidden" name="sort" value="<?= htmlspecialchars($sort_col) ?>">
                         <input type="hidden" name="order" value="<?= htmlspecialchars($sort_order) ?>">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
                             <!-- Tanggal -->
                             <div>
@@ -340,28 +347,6 @@ function pageUrl($pg)
                                 </select>
                             </div>
 
-                            <!-- Kelas -->
-                            <div>
-                                <label class="text-xs text-gray-400 mb-1 block">Kelas</label>
-                                <select name="kelas" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
-                                    <option value="">Semua Kelas</option>
-                                    <?php foreach (['10', '11', '12'] as $k): ?>
-                                        <option value="<?= $k ?>" <?= $kelas_filter === $k ? 'selected' : '' ?>><?= $k ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-
-                            <!-- Jurusan -->
-                            <div>
-                                <label class="text-xs text-gray-400 mb-1 block">Jurusan</label>
-                                <select name="jurusan" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
-                                    <option value="">Semua Jurusan</option>
-                                    <?php foreach (['RPL', 'DKV', 'AK', 'BR', 'MP'] as $j): ?>
-                                        <option value="<?= $j ?>" <?= $jurusan_filter === $j ? 'selected' : '' ?>><?= $j ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-
                             <!-- Approval -->
                             <div>
                                 <label class="text-xs text-gray-400 mb-1 block">Status Approval</label>
@@ -377,7 +362,8 @@ function pageUrl($pg)
                             <div>
                                 <label class="text-xs text-gray-400 mb-1 block">Cari Siswa</label>
                                 <div class="relative">
-                                    <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Nama atau NIS..."
+                                    <input type="text" name="search" value="<?= htmlspecialchars($search) ?>"
+                                        placeholder="Nama atau NIS..."
                                         class="w-full bg-gray-800 border border-gray-700 rounded-lg pl-9 pr-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
                                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
                                 </div>
@@ -401,7 +387,6 @@ function pageUrl($pg)
                                     <tr class="bg-gray-800/50 text-gray-400 text-xs uppercase">
                                         <th class="px-5 py-3 text-left"><a href="<?= buildSortUrl('nis') ?>" class="flex items-center gap-1 hover:text-white">NIS <?= sortIcon('nis', $sort_col, $sort_order) ?></a></th>
                                         <th class="px-5 py-3 text-left"><a href="<?= buildSortUrl('nama_lengkap') ?>" class="flex items-center gap-1 hover:text-white">Nama <?= sortIcon('nama_lengkap', $sort_col, $sort_order) ?></a></th>
-                                        <th class="px-5 py-3 text-left"><a href="<?= buildSortUrl('kelas') ?>" class="flex items-center gap-1 hover:text-white">Kelas <?= sortIcon('kelas', $sort_col, $sort_order) ?></a></th>
                                         <th class="px-5 py-3 text-left"><a href="<?= buildSortUrl('tanggal') ?>" class="flex items-center gap-1 hover:text-white">Tanggal <?= sortIcon('tanggal', $sort_col, $sort_order) ?></a></th>
                                         <th class="px-5 py-3 text-left"><a href="<?= buildSortUrl('jam_masuk') ?>" class="flex items-center gap-1 hover:text-white">Jam <?= sortIcon('jam_masuk', $sort_col, $sort_order) ?></a></th>
                                         <th class="px-5 py-3 text-left"><a href="<?= buildSortUrl('status') ?>" class="flex items-center gap-1 hover:text-white">Status <?= sortIcon('status', $sort_col, $sort_order) ?></a></th>
@@ -423,7 +408,6 @@ function pageUrl($pg)
                                                     <span class="font-medium"><?= htmlspecialchars($row['nama_lengkap']) ?></span>
                                                 </div>
                                             </td>
-                                            <td class="px-5 py-3 text-gray-400"><?= htmlspecialchars($row['kelas']) ?> <?= htmlspecialchars($row['jurusan']) ?></td>
                                             <td class="px-5 py-3 text-gray-300"><?= date('d/m/Y', strtotime($row['tanggal'])) ?></td>
                                             <td class="px-5 py-3 text-gray-300">
                                                 <?= (!empty($row['jam_masuk']) && $row['jam_masuk'] !== '00:00:00') ? date('H:i', strtotime($row['jam_masuk'])) : '-' ?>
@@ -477,8 +461,8 @@ function pageUrl($pg)
                     <?php else: ?>
                         <div class="py-16 text-center text-gray-500">
                             <i class="fas fa-calendar-day text-4xl mb-4 block opacity-30"></i>
-                            <p>Tidak ada data absensi yang ditemukan</p>
-                            <?php if (!empty($_GET)): ?>
+                            <p>Tidak ada data absensi kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?> yang ditemukan</p>
+                            <?php if (!empty(array_filter([$search, $status_filter, $approval_filter])) || isset($_GET['date'])): ?>
                                 <a href="presensi.php" class="mt-3 inline-block text-emerald-400 hover:text-emerald-300 text-sm">
                                     <i class="fas fa-arrow-left mr-1"></i> Reset Filter
                                 </a>
@@ -503,7 +487,8 @@ function pageUrl($pg)
             ul.classList.toggle('hidden');
             ico.style.transform = ul.classList.contains('hidden') ? '' : 'rotate(180deg)';
         }
-        // auto-submit filter on select change
+
+        // Auto-submit on select/date change
         document.querySelectorAll('#filterForm select, #filterForm input[type="date"]')
             .forEach(el => el.addEventListener('change', () => document.getElementById('filterForm').submit()));
     </script>
