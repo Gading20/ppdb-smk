@@ -617,14 +617,10 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                         </p>
                     </div>
                     <div class="flex gap-3">
-                        <a href="export.php?format=pdf<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
+                        <a href="export_absensi.php?format=pdf<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
                             class="px-3 py-2 sm:px-4 sm:py-2 bg-red-600 hover:bg-red-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
                             <i class="fas fa-file-pdf"></i> <span class="hidden sm:inline">Export PDF</span>
                         </a>
-                        <!-- <a href="export.php?format=excel<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
-                            class="px-3 py-2 sm:px-4 sm:py-2 bg-green-600 hover:bg-green-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
-                            <i class="fas fa-file-excel"></i> <span class="hidden sm:inline">Export Excel</span>
-                        </a> -->
                     </div>
                 </header>
 
@@ -936,7 +932,7 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 text-sm">
-                                                <?= $data['kelas'] ?>         <?= $data['jurusan'] ?>
+                                                <?= $data['kelas'] ?> <?= $data['jurusan'] ?>
                                             </td>
                                             <td class="px-6 py-4 text-sm">
                                                 <?= $data['jam_masuk'] !== '00:00:00' ? date('H:i', strtotime($data['jam_masuk'])) : '-' ?>
@@ -1032,13 +1028,9 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <!-- Mobile action buttons - Fixed at bottom -->
                 <div class="fixed bottom-4 right-4 lg:hidden flex flex-col gap-2">
-                    <a href="export.php?format=excel<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
+                    <a href="export_absensi.php?format=excel<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
                         class="flex items-center justify-center w-12 h-12 bg-green-600 hover:bg-green-700 rounded-full shadow-lg transition-colors">
                         <i class="fas fa-file-excel text-lg"></i>
-                    </a>
-                    <a href="export.php?format=pdf<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
-                        class="flex items-center justify-center w-12 h-12 bg-red-600 hover:bg-red-700 rounded-full shadow-lg transition-colors">
-                        <i class="fas fa-file-pdf text-lg"></i>
                     </a>
                 </div>
             </div>
@@ -1047,7 +1039,7 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="<?= str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) ?>assets/js/diome.js"></script>
     <script>
         // Initialize charts with responsive options
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             // Responsive chart options
             const chartResponsiveOptions = {
                 responsive: true,
@@ -1181,7 +1173,7 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
             });
 
             // Update charts on resize
-            window.addEventListener('resize', function () {
+            window.addEventListener('resize', function() {
                 // Destroy and recreate charts when window size changes
                 Chart.instances.forEach(instance => {
                     instance.destroy();
@@ -1244,7 +1236,7 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
         updateMobileTime(); // Initial call
 
         // Make sure sidebar closes when pressing escape key
-        document.addEventListener('keydown', function (e) {
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 // Close sidebar on mobile
                 if (window.innerWidth < 1024) {
@@ -1266,7 +1258,7 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
         setMobileHeight();
 
         // Optimize filter form for smaller screens
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             // Better touch targets for mobile
             if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
                 document.querySelectorAll('select, input, button').forEach(el => {
@@ -1278,7 +1270,7 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
             const selectFilters = document.querySelectorAll('select[name="kelas"], select[name="jurusan"], select[name="status"], select[name="siswa_id"]');
             if (window.innerWidth < 768) {
                 selectFilters.forEach(select => {
-                    select.addEventListener('change', function () {
+                    select.addEventListener('change', function() {
                         // Only auto-submit if the user has explicitly changed a value
                         if (this.dataset.changed) {
                             document.getElementById('filterForm').submit();
