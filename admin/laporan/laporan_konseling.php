@@ -417,7 +417,7 @@ $jenis_colors = [
                         <a href="export_konseling.php?format=pdf<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
                             class="px-3 py-2 sm:px-4 sm:py-2 bg-red-600 hover:bg-red-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
                             <i class="fas fa-file-pdf"></i>
-                            <span class="hidden sm:inline">Export PDF</span>
+                            <span class="hidden sm:inline">Cetak PDF</span>
                         </a>
                         <a href="export_absensi.php?format=excel<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
                             class="px-3 py-2 sm:px-4 sm:py-2 bg-green-600 hover:bg-green-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
@@ -571,134 +571,7 @@ $jenis_colors = [
                     </form>
                 </div>
 
-                <!-- ── SUMMARY + CHARTS ── -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-
-                    <!-- Summary Cards -->
-                    <div class="glass-effect rounded-xl p-4 sm:p-6 flex flex-col gap-4">
-                        <h3 class="font-semibold text-lg">Ringkasan</h3>
-
-                        <div class="flex justify-between items-center p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-purple-500 rounded-full mr-3"></div><span>Akademik</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-xl font-bold"><?= $jenis_counts['Akademik'] ?></span>
-                                <?php if ($total_konseling > 0): ?><span class="text-xs text-gray-400 block"><?= round(($jenis_counts['Akademik'] / $total_konseling) * 100, 1) ?>%</span><?php endif; ?>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-blue-500 rounded-full mr-3"></div><span>Pribadi</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-xl font-bold"><?= $jenis_counts['Pribadi'] ?></span>
-                                <?php if ($total_konseling > 0): ?><span class="text-xs text-gray-400 block"><?= round(($jenis_counts['Pribadi'] / $total_konseling) * 100, 1) ?>%</span><?php endif; ?>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div><span>Sosial</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-xl font-bold"><?= $jenis_counts['Sosial'] ?></span>
-                                <?php if ($total_konseling > 0): ?><span class="text-xs text-gray-400 block"><?= round(($jenis_counts['Sosial'] / $total_konseling) * 100, 1) ?>%</span><?php endif; ?>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center p-3 bg-orange-500/10 border border-orange-500/30 rounded-lg">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-orange-500 rounded-full mr-3"></div><span>Karir</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-xl font-bold"><?= $jenis_counts['Karir'] ?></span>
-                                <?php if ($total_konseling > 0): ?><span class="text-xs text-gray-400 block"><?= round(($jenis_counts['Karir'] / $total_konseling) * 100, 1) ?>%</span><?php endif; ?>
-                            </div>
-                        </div>
-
-                        <div class="border-t border-gray-700 pt-3">
-                            <p class="text-xs text-gray-400 uppercase tracking-wider mb-2">Status Sesi</p>
-                            <div class="flex flex-col gap-2">
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-400">Dijadwalkan</span>
-                                    <span class="font-semibold"><?= $status_counts['Dijadwalkan'] ?></span>
-                                </div>
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-400">Berlangsung</span>
-                                    <span class="font-semibold text-blue-400"><?= $status_counts['Berlangsung'] ?></span>
-                                </div>
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-400">Selesai</span>
-                                    <span class="font-semibold text-green-400"><?= $status_counts['Selesai'] ?></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="border-t border-gray-700 pt-3 flex justify-between items-center">
-                            <span class="font-semibold">Total Sesi</span>
-                            <span class="text-xl font-bold"><?= $total_konseling ?></span>
-                        </div>
-                    </div>
-
-                    <!-- Charts -->
-                    <div class="glass-effect rounded-xl p-4 sm:p-6 lg:col-span-2">
-                        <h3 class="font-semibold text-lg mb-4">Statistik Konseling</h3>
-                        <div class="flex flex-col lg:flex-row gap-6">
-                            <div class="w-full lg:w-1/3">
-                                <div class="relative h-[240px] chart-container-responsive">
-                                    <canvas id="jenisPieChart"></canvas>
-                                </div>
-                            </div>
-                            <div class="w-full lg:w-2/3 mt-4 lg:mt-0">
-                                <div class="relative h-[240px] chart-container-responsive">
-                                    <canvas id="trendLineChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ── TOP KONSELOR ── -->
-                <?php if (count($top_konselor) > 0): ?>
-                    <div class="glass-effect rounded-xl p-4 sm:p-6 mb-6">
-                        <h3 class="font-semibold text-lg mb-4">
-                            <i class="fas fa-user-tie text-purple-400 mr-2"></i>Aktivitas Konselor
-                        </h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                            <?php foreach ($top_konselor as $tk):
-                                $pct_selesai = $tk['jumlah'] > 0 ? round(($tk['selesai'] / $tk['jumlah']) * 100) : 0;
-                            ?>
-                                <div class="bg-gray-800/40 border border-gray-700/50 rounded-lg p-4 flex flex-col gap-2 hover:border-purple-500/40 transition-colors">
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-8 h-8 rounded-full bg-purple-600/30 flex items-center justify-center flex-shrink-0">
-                                            <i class="fas fa-user-tie text-purple-400 text-xs"></i>
-                                        </div>
-                                        <p class="text-sm font-semibold leading-tight truncate" title="<?= htmlspecialchars($tk['konselor']) ?>">
-                                            <?= htmlspecialchars($tk['konselor']) ?>
-                                        </p>
-                                    </div>
-                                    <div class="flex justify-between text-xs text-gray-400">
-                                        <span>Total sesi</span>
-                                        <span class="font-bold text-white"><?= $tk['jumlah'] ?></span>
-                                    </div>
-                                    <div class="flex justify-between text-xs text-gray-400">
-                                        <span>Selesai</span>
-                                        <span class="font-semibold text-green-400"><?= $tk['selesai'] ?></span>
-                                    </div>
-                                    <div>
-                                        <div class="flex justify-between text-xs mb-1">
-                                            <span class="text-gray-500">Penyelesaian</span>
-                                            <span class="text-purple-400 font-semibold"><?= $pct_selesai ?>%</span>
-                                        </div>
-                                        <div class="progress-bar-wrap">
-                                            <div class="progress-bar-fill bg-purple-500" style="width: <?= $pct_selesai ?>%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-                <?php endif; ?>
-
+              
                 <!-- ── DATA TABLE ── -->
                 <div class="glass-effect rounded-xl overflow-hidden">
                     <div class="p-4 sm:p-6 border-b border-gray-800">

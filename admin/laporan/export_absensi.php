@@ -741,7 +741,7 @@ ob_start();
 
     <!-- FOOTER -->
     <div class="footer">
-        <p>Jakarta, <?= date('d F Y') ?></p>
+        <p>Lebaksiu, <?= date('d F Y') ?></p>
         <br>
         <p>___________________________</p>
         <p><strong>Admin SMK NURUL ULUM</strong></p>
