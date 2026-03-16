@@ -163,42 +163,69 @@ $status_colors = [
     <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-purple-900/30 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
         <div class="flex items-center justify-between p-4 lg:p-6 border-b border-purple-900/30">
             <div class="flex items-center gap-3">
-                <img src="../../assets/default/logo-smk40.png" alt="SMKN 40" class="h-8 lg:h-10 w-auto">
+                <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 lg:h-10 w-auto">
                 <div>
-                    <h1 class="font-semibold text-sm lg:text-base">SMKN 40</h1>
+                    <h1 class="font-semibold text-sm lg:text-base">SMK NURUL ULUM</h1>
                     <p class="text-xs text-gray-400">Sistem Absensi</p>
                 </div>
             </div>
-            <!-- Close sidebar button - only visible on mobile -->
             <button class="text-gray-400 hover:text-white lg:hidden" onclick="toggleSidebar()">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
 
         <nav class="p-4 space-y-2 overflow-y-auto no-scrollbar" style="max-height: calc(100vh - 76px);">
-            <a href="../dashboard/" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
-                <i class="fas fa-home"></i>
-                <span>Dashboard</span>
+            <a href="../dashboard/"
+                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                <i class="fas fa-home"></i><span>Dashboard</span>
             </a>
-            <a href="../absensi/" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
-                <i class="fas fa-calendar-check"></i>
-                <span>Absensi</span>
+            <li class="relative group">
+                <button
+                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                    <i class="fas fa-calendar-check"></i><span>Monitoring Siswa</span>
+                    <i class="fas fa-chevron-down ml-auto text-sm"></i>
+                </button>
+                <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
+                    <li><a href="../absensi/index.php"
+                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                    </li>
+                    <li><a href="../absensi/pelanggaran.php"
+                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                    </li>
+                    <li><a href="../absensi/konseling.php"
+                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
+                    </li>
+                </ul>
+            </li>
+            <a href="../siswa/"
+                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                <i class="fas fa-users"></i><span>Data Siswa</span>
             </a>
-            <a href="index.php" class="flex items-center gap-3 text-white/90 p-3 rounded-lg menu-active">
-                <i class="fas fa-users text-purple-500"></i>
-                <span>Data Siswa</span>
+            <li class="relative group">
+                <button
+                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                    <i class="fas fa-file-alt"></i><span>Laporan</span>
+                    <i class="fas fa-chevron-down ml-auto text-sm"></i>
+                </button>
+                <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
+                    <li><a href="../laporan/index.php"
+                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                    </li>
+                    <li><a href="../laporan/laporan_pelanggaran.php"
+                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                    </li>
+                    <li><a href="../laporan/konseling.php"
+                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
+                    </li>
+                </ul>
+            </li>
+            <a href="../profil/"
+                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                <i class="fas fa-user-cog"></i><span>Profil</span>
             </a>
-            <a href="../laporan/" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
-                <i class="fas fa-file-alt"></i>
-                <span>Laporan</span>
-            </a>
-            <a href="../profil/" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
-                <i class="fas fa-user-cog"></i>
-                <span>Profil</span>
-            </a>
-            <a href="../logout.php" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors mt-10">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
+            <a href="../logout.php"
+                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors mt-10">
+                <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>
         </nav>
     </aside>

@@ -178,7 +178,7 @@ $poin_color = $poin >= 50 ? 'red' : ($poin >= 25 ? 'orange' : 'yellow');
                 <ul class="ml-8 mt-2 block">
                     <li><a href="../absensi/index.php" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a></li>
                     <li><a href="index.php" class="block p-2 text-purple-400 bg-purple-500/10 rounded-lg">Pelanggaran</a></li>
-                    <li><a href="../absensi/konseling" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a></li>
+                    <li><a href="konseling.php" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a></li>
                 </ul>
             </li>
             <a href="../siswa/" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
@@ -191,8 +191,8 @@ $poin_color = $poin >= 50 ? 'red' : ($poin >= 25 ? 'orange' : 'yellow');
                 </button>
                 <ul class="ml-8 mt-2 hidden group-hover:block">
                     <li><a href="../laporan/index.php" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a></li>
-                    <li><a href="../laporan/pelanggaran" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a></li>
-                    <li><a href="../laporan/konseling" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a></li>
+                    <li><a href="../laporan/laporan_pelanggaran.php" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a></li>
+                    <li><a href="../laporan/laporan_konseling.php" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a></li>
                 </ul>
             </li>
             <a href="../profil/" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
@@ -226,7 +226,7 @@ $poin_color = $poin >= 50 ? 'red' : ($poin >= 25 ? 'orange' : 'yellow');
 
                 <!-- Page Header -->
                 <div class="flex items-center mb-6">
-                    <a href="pelanggaran.php" class="mr-3 p-2 rounded-full hover:bg-gray-800/60 transition-colors">
+                    <a href="../laporan/laporan_pelanggaran.php" class="mr-3 p-2 rounded-full hover:bg-gray-800/60 transition-colors">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <div>

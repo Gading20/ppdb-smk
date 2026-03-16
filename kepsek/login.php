@@ -24,8 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($kepsek) {
             // Coba password_verify dulu (bcrypt), fallback plain text
-            $valid = password_verify($password, $kepsek['password']) 
-                     || $password === $kepsek['password'];
+            $valid = password_verify($password, $kepsek['password'])
+                || $password === $kepsek['password'];
 
             if ($valid) {
                 // Set session
@@ -35,13 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['kepsek_email']     = $kepsek['email'];
                 $_SESSION['kepsek_nip']       = $kepsek['nip'];
                 $_SESSION['kepsek_photo']     = $kepsek['foto_profil'];
-                $_SESSION['kepsek_last_login']= $kepsek['last_login'];
+                $_SESSION['kepsek_last_login'] = $kepsek['last_login'];
                 $_SESSION['role']             = 'kepsek';
 
                 // Update last_login
                 $current_time = date('Y-m-d H:i:s');
                 $conn->prepare("UPDATE kepsek SET last_login = :t WHERE id = :id")
-                     ->execute(['t' => $current_time, 'id' => $kepsek['id']]);
+                    ->execute(['t' => $current_time, 'id' => $kepsek['id']]);
 
                 $_SESSION['kepsek_last_login'] = $current_time;
 
@@ -68,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -80,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             backdrop-filter: blur(10px);
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
+
         input:-webkit-autofill,
         input:-webkit-autofill:hover,
         input:-webkit-autofill:focus {
@@ -163,10 +165,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Login sebagai Kepala Sekolah
                 </button>
 
-                <!-- Back to admin login -->
+                <!-- Back to main page -->
                 <div class="text-center pt-2">
-                    <a href="index.php" class="text-gray-500 hover:text-emerald-400 text-sm transition-colors duration-200">
-                        <i class="fas fa-arrow-left mr-1"></i> Kembali ke Login Admin
+                    <a href="../index.php" class="text-gray-500 hover:text-emerald-400 text-sm transition-colors duration-200">
+                        <i class="fas fa-arrow-left mr-1"></i> Kembali ke Halaman Utama
                     </a>
                 </div>
 
@@ -182,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script>
         function togglePassword() {
-            const password   = document.getElementById('password');
+            const password = document.getElementById('password');
             const toggleIcon = document.getElementById('toggleIcon');
             if (password.type === 'password') {
                 password.type = 'text';
@@ -194,4 +196,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </script>
 </body>
+
 </html>

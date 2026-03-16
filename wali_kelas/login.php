@@ -28,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['walikelas_email']     = $walikelas['email'];
                 $_SESSION['walikelas_nip']       = $walikelas['nip'];
                 $_SESSION['walikelas_kelas']     = $walikelas['kelas'];
+                $_SESSION['walikelas_tingkat']   = $walikelas['tingkat'];
+                $_SESSION['walikelas_rombel']    = $walikelas['rombel'];
                 $_SESSION['walikelas_jurusan']   = $walikelas['jurusan'];
                 $_SESSION['walikelas_photo']     = $walikelas['foto_profil'];
                 $_SESSION['walikelas_last_login'] = $walikelas['last_login'];

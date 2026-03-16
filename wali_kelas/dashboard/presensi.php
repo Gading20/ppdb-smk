@@ -11,6 +11,8 @@ if (!isset($_SESSION['walikelas_id'])) {
 // Kelas & jurusan dari session (tidak bisa diubah user)
 $kelas   = $_SESSION['walikelas_kelas'];
 $jurusan = $_SESSION['walikelas_jurusan'];
+// Tingkat kelas (10/11/12) yang cocok dengan kolom kelas di tabel siswa
+$tingkat = $_SESSION['walikelas_tingkat'] ?? $kelas;
 
 // ── Filter ─────────────────────────────────────────────────────────────────
 $date_filter     = $_GET['date']     ?? date('Y-m-d');
@@ -25,8 +27,8 @@ $offset = ($page - 1) * $items_per_page;
 
 // ── Base SQL (selalu filter kelas sendiri) ─────────────────────────────────
 $base = "FROM absensi a JOIN siswa s ON a.siswa_id = s.id
-         WHERE s.kelas = :kelas AND s.jurusan = :jurusan";
-$params = ['kelas' => $kelas, 'jurusan' => $jurusan];
+         WHERE s.kelas = :tingkat AND s.jurusan = :jurusan";
+$params = ['tingkat' => $tingkat, 'jurusan' => $jurusan];
 
 if ($date_filter) {
     $base .= " AND a.tanggal = :date";
@@ -73,6 +75,48 @@ $stmt->bindValue(':limit',  $items_per_page, PDO::PARAM_INT);
 $stmt->execute();
 $absensi_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// ── Total siswa di kelas ini ───────────────────────────────────────────────
+$stmt = $conn->prepare("SELECT COUNT(*) FROM siswa WHERE kelas = :tingkat AND jurusan = :jurusan");
+$stmt->execute(['tingkat' => $tingkat, 'jurusan' => $jurusan]);
+$total_students = $stmt->fetchColumn();
+
+// ── Statistik absensi hari ini (kelas sendiri) untuk sidebar Info Kelas ──────
+$today_sidebar = date('Y-m-d');
+$stats = ['hadir' => 0, 'sakit' => 0, 'izin' => 0, 'terlambat' => 0, 'alpha' => 0];
+
+$stmt_stats = $conn->prepare(
+    "SELECT a.status, COUNT(*) as count FROM absensi a
+     JOIN siswa s ON a.siswa_id = s.id
+     WHERE a.tanggal = :today AND a.approval_status = 'Approved'
+       AND s.kelas = :tingkat AND s.jurusan = :jurusan
+     GROUP BY a.status"
+);
+$stmt_stats->execute(['today' => $today_sidebar, 'tingkat' => $tingkat, 'jurusan' => $jurusan]);
+while ($row = $stmt_stats->fetch(PDO::FETCH_ASSOC)) {
+    $stats[strtolower($row['status'])] = $row['count'];
+}
+
+// ── Stat cards (kelas sendiri) ─────────────────────────────────────────────
+$status_counts = ['Proses' => 0, 'Selesai' => 0, 'Ditunda' => 0];
+$sc = $conn->prepare(
+    "SELECT k.status, COUNT(*) as c FROM konseling k
+     JOIN siswa s ON k.siswa_id = s.id
+     WHERE s.kelas = :tingkat AND s.jurusan = :jurusan
+     GROUP BY k.status"
+);
+$sc->execute(['tingkat' => $tingkat, 'jurusan' => $jurusan]);
+foreach ($sc->fetchAll(PDO::FETCH_ASSOC) as $r) {
+    if (isset($status_counts[$r['status']])) $status_counts[$r['status']] = $r['c'];
+}
+
+$total_stmt = $conn->prepare(
+    "SELECT COUNT(*) FROM konseling k
+     JOIN siswa s ON k.siswa_id = s.id
+     WHERE s.kelas = :tingkat AND s.jurusan = :jurusan"
+);
+$total_stmt->execute(['tingkat' => $tingkat, 'jurusan' => $jurusan]);
+$total_count = $total_stmt->fetchColumn();
+
 // ── Stat cards (kelas sendiri, hari ini) ───────────────────────────────────
 $today = date('Y-m-d');
 $status_counts = ['Hadir' => 0, 'Sakit' => 0, 'Izin' => 0, 'Terlambat' => 0, 'Alpha' => 0];
@@ -80,10 +124,10 @@ $sc = $conn->prepare(
     "SELECT a.status, COUNT(*) as c FROM absensi a
      JOIN siswa s ON a.siswa_id = s.id
      WHERE a.tanggal = :t AND a.approval_status = 'Approved'
-       AND s.kelas = :kelas AND s.jurusan = :jurusan
+       AND s.kelas = :tingkat AND s.jurusan = :jurusan
      GROUP BY a.status"
 );
-$sc->execute(['t' => $today, 'kelas' => $kelas, 'jurusan' => $jurusan]);
+$sc->execute(['t' => $today, 'tingkat' => $tingkat, 'jurusan' => $jurusan]);
 foreach ($sc->fetchAll(PDO::FETCH_ASSOC) as $r) $status_counts[$r['status']] = $r['c'];
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -249,10 +293,18 @@ function pageUrl($pg)
                     <li><a href="konseling.php" class="block p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Konseling</a></li>
                 </ul>
             </div>
-            <a href="siswa.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-emerald-500/10 transition-colors">
-                <i class="fas fa-users text-emerald-400"></i><span>Data Siswa</span>
-            </a>
-            <hr class="border-gray-700/40 my-3">
+
+            <!-- Info Cepat -->
+            <!-- <div class="px-3 py-2">
+                <p class="text-xs text-gray-500 uppercase tracking-wider mb-3">Info Kelas</p>
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between"><span class="text-gray-400">Kelas</span><span class="font-semibold text-emerald-300"><?= htmlspecialchars($kelas . ' ' . $jurusan) ?></span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Total Siswa</span><span class="font-semibold"><?= $total_students ?></span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Hadir Hari Ini</span><span class="font-semibold text-emerald-400"><?= $stats['hadir'] ?></span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Alpha Hari Ini</span><span class="font-semibold text-red-400"><?= $stats['alpha'] ?></span></div>
+                </div>
+            </div> -->
+
             <a href="../../wali_kelas/logout.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors">
                 <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>

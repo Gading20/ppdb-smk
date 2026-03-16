@@ -14,6 +14,8 @@ $yesterday = date('Y-m-d', strtotime('-1 day'));
 // Kelas & jurusan dari session
 $kelas   = $_SESSION['walikelas_kelas'];
 $jurusan = $_SESSION['walikelas_jurusan'];
+// Tingkat kelas di tabel siswa (10/11/12) — beda dengan kolom 'kelas' di wali_kelas
+$tingkat = $_SESSION['walikelas_tingkat'] ?? $kelas;
 
 // ── Statistik absensi hari ini (kelas sendiri) ─────────────────────────────
 $stats = ['hadir' => 0, 'sakit' => 0, 'izin' => 0, 'terlambat' => 0, 'alpha' => 0];
@@ -22,10 +24,10 @@ $stmt = $conn->prepare(
     "SELECT a.status, COUNT(*) as count FROM absensi a
      JOIN siswa s ON a.siswa_id = s.id
      WHERE a.tanggal = :today AND a.approval_status = 'Approved'
-       AND s.kelas = :kelas AND s.jurusan = :jurusan
+       AND s.kelas = :tingkat AND s.jurusan = :jurusan
      GROUP BY a.status"
 );
-$stmt->execute(['today' => $today, 'kelas' => $kelas, 'jurusan' => $jurusan]);
+$stmt->execute(['today' => $today, 'tingkat' => $tingkat, 'jurusan' => $jurusan]);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $stats[strtolower($row['status'])] = $row['count'];
 }
@@ -37,10 +39,10 @@ $stmt = $conn->prepare(
     "SELECT a.status, COUNT(*) as count FROM absensi a
      JOIN siswa s ON a.siswa_id = s.id
      WHERE a.tanggal = :yesterday AND a.approval_status = 'Approved'
-       AND s.kelas = :kelas AND s.jurusan = :jurusan
+       AND s.kelas = :tingkat AND s.jurusan = :jurusan
      GROUP BY a.status"
 );
-$stmt->execute(['yesterday' => $yesterday, 'kelas' => $kelas, 'jurusan' => $jurusan]);
+$stmt->execute(['yesterday' => $yesterday, 'tingkat' => $tingkat, 'jurusan' => $jurusan]);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $yesterday_stats[strtolower($row['status'])] = $row['count'];
 }
@@ -53,8 +55,8 @@ foreach ($stats as $k => $v) {
 }
 
 // ── Total siswa di kelas ini ───────────────────────────────────────────────
-$stmt = $conn->prepare("SELECT COUNT(*) FROM siswa WHERE kelas = :kelas AND jurusan = :jurusan");
-$stmt->execute(['kelas' => $kelas, 'jurusan' => $jurusan]);
+$stmt = $conn->prepare("SELECT COUNT(*) FROM siswa WHERE kelas = :tingkat AND jurusan = :jurusan");
+$stmt->execute(['tingkat' => $tingkat, 'jurusan' => $jurusan]);
 $total_students = $stmt->fetchColumn();
 
 // ── Absensi hari ini (detail kelas sendiri) ────────────────────────────────
@@ -62,10 +64,10 @@ $stmt = $conn->prepare(
     "SELECT a.*, s.nama_lengkap, s.kelas, s.jurusan, s.nis, s.foto_profil
      FROM absensi a
      JOIN siswa s ON a.siswa_id = s.id
-     WHERE a.tanggal = :today AND s.kelas = :kelas AND s.jurusan = :jurusan
+     WHERE a.tanggal = :today AND s.kelas = :tingkat AND s.jurusan = :jurusan
      ORDER BY a.created_at DESC"
 );
-$stmt->execute(['today' => $today, 'kelas' => $kelas, 'jurusan' => $jurusan]);
+$stmt->execute(['today' => $today, 'tingkat' => $tingkat, 'jurusan' => $jurusan]);
 $absensi_hari_ini = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // ── Weekly stats (kelas sendiri) ───────────────────────────────────────────
@@ -77,11 +79,11 @@ $stmt = $conn->prepare(
      JOIN siswa s ON a.siswa_id = s.id
      WHERE a.tanggal >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
        AND a.approval_status = 'Approved'
-       AND s.kelas = :kelas AND s.jurusan = :jurusan
+       AND s.kelas = :tingkat AND s.jurusan = :jurusan
      GROUP BY DATE(a.tanggal), a.status
      ORDER BY date ASC"
 );
-$stmt->execute(['kelas' => $kelas, 'jurusan' => $jurusan]);
+$stmt->execute(['tingkat' => $tingkat, 'jurusan' => $jurusan]);
 $weeklyStats = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // ── Top pelanggaran (kelas sendiri) ───────────────────────────────────────
@@ -89,13 +91,62 @@ $stmt = $conn->prepare(
     "SELECT s.nama_lengkap, s.kelas, COUNT(p.id) as jumlah, SUM(p.poin) as total_poin
      FROM pelanggaran p
      JOIN siswa s ON p.siswa_id = s.id
-     WHERE s.kelas = :kelas AND s.jurusan = :jurusan
+     WHERE s.kelas = :tingkat AND s.jurusan = :jurusan
      GROUP BY p.siswa_id
      ORDER BY total_poin DESC
      LIMIT 5"
 );
-$stmt->execute(['kelas' => $kelas, 'jurusan' => $jurusan]);
+$stmt->execute(['tingkat' => $tingkat, 'jurusan' => $jurusan]);
 $topPelanggar = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// ── Ringkasan Konseling (kelas sendiri) ────────────────────────────────────
+$konseling_status = ['Proses' => 0, 'Selesai' => 0, 'Ditunda' => 0];
+$stmt = $conn->prepare(
+    "SELECT k.status, COUNT(*) as c FROM konseling k
+     JOIN siswa s ON k.siswa_id = s.id
+     WHERE s.kelas = :tingkat AND s.jurusan = :jurusan
+     GROUP BY k.status"
+);
+$stmt->execute(['tingkat' => $tingkat, 'jurusan' => $jurusan]);
+foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $r) {
+    if (isset($konseling_status[$r['status']])) $konseling_status[$r['status']] = (int)$r['c'];
+}
+$stmt = $conn->prepare(
+    "SELECT COUNT(*) FROM konseling k
+     JOIN siswa s ON k.siswa_id = s.id
+     WHERE s.kelas = :tingkat AND s.jurusan = :jurusan"
+);
+$stmt->execute(['tingkat' => $tingkat, 'jurusan' => $jurusan]);
+$konseling_total = (int)$stmt->fetchColumn();
+
+// ── Konseling terbaru (kelas sendiri) ─────────────────────────────────────
+$stmt = $conn->prepare(
+    "SELECT k.id, k.tanggal, k.jenis_konseling, k.masalah, k.status, k.konselor,
+            s.nama_lengkap, s.nis, s.foto_profil
+     FROM konseling k
+     JOIN siswa s ON k.siswa_id = s.id
+     WHERE s.kelas = :tingkat AND s.jurusan = :jurusan
+     ORDER BY k.tanggal DESC, k.id DESC
+     LIMIT 5"
+);
+$stmt->execute(['tingkat' => $tingkat, 'jurusan' => $jurusan]);
+$recentKonseling = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// ── Rekap absensi bulan ini (kelas sendiri) ────────────────────────────────
+$bulan_ini = date('Y-m');
+$stmt = $conn->prepare(
+    "SELECT a.status, COUNT(*) as count FROM absensi a
+     JOIN siswa s ON a.siswa_id = s.id
+     WHERE DATE_FORMAT(a.tanggal, '%Y-%m') = :bulan
+       AND a.approval_status = 'Approved'
+       AND s.kelas = :tingkat AND s.jurusan = :jurusan
+     GROUP BY a.status"
+);
+$stmt->execute(['bulan' => $bulan_ini, 'tingkat' => $tingkat, 'jurusan' => $jurusan]);
+$stats_bulan = ['hadir' => 0, 'sakit' => 0, 'izin' => 0, 'terlambat' => 0, 'alpha' => 0];
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $stats_bulan[strtolower($row['status'])] = (int)$row['count'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -192,10 +243,10 @@ $topPelanggar = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </ul>
             </div>
 
-            <hr class="border-gray-700/40 my-3">
+            <!-- <hr class="border-gray-700/40 my-3"> -->
 
             <!-- Info Cepat -->
-            <div class="px-3 py-2">
+            <!-- <div class="px-3 py-2">
                 <p class="text-xs text-gray-500 uppercase tracking-wider mb-3">Info Kelas</p>
                 <div class="space-y-2 text-xs">
                     <div class="flex justify-between"><span class="text-gray-400">Kelas</span><span class="font-semibold text-emerald-300"><?= htmlspecialchars($kelas . ' ' . $jurusan) ?></span></div>
@@ -205,7 +256,7 @@ $topPelanggar = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
 
-            <hr class="border-gray-700/40 my-3">
+            <hr class="border-gray-700/40 my-3"> -->
 
             <a href="../../wali_kelas/logout.php"
                 class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors">
@@ -286,7 +337,7 @@ $topPelanggar = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php endforeach; ?>
                 </div>
 
-                <!-- ── CHART + TOP PELANGGAR ──────────────────────────────────────── -->
+                <!-- ── REKAP BULAN INI + CHART ─────────────────────────────────────── -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
 
                     <!-- Weekly Chart -->
@@ -301,14 +352,66 @@ $topPelanggar = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
 
-                    <!-- Top Pelanggar -->
+                    <!-- Rekap Bulan Ini -->
                     <div class="glass rounded-xl overflow-hidden fade-up" style="animation-delay:.2s">
-                        <div class="bg-gradient-to-r from-red-900/30 to-orange-900/20 px-5 py-4 border-b border-gray-800/50">
+                        <div class="bg-gradient-to-r from-emerald-900/30 to-teal-900/20 px-5 py-4 border-b border-gray-800/50">
+                            <h3 class="font-semibold flex items-center gap-2 text-sm">
+                                <i class="fas fa-calendar-alt text-emerald-400"></i>
+                                Rekap Absensi Bulan Ini
+                                <span class="text-xs text-gray-500 font-normal ml-1"><?= date('F Y') ?></span>
+                            </h3>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <?php
+                            $bulanCards = [
+                                ['Hadir',     'hadir',     'emerald', 'fa-check-circle'],
+                                ['Sakit',     'sakit',     'yellow',  'fa-hospital'],
+                                ['Izin',      'izin',      'blue',    'fa-clipboard'],
+                                ['Terlambat', 'terlambat', 'orange',  'fa-clock'],
+                                ['Alpha',     'alpha',     'red',     'fa-user-times'],
+                            ];
+                            foreach ($bulanCards as [$lbl, $key, $col, $ico]):
+                                $total_bulan = array_sum($stats_bulan);
+                                $pct_bulan = $total_bulan > 0 ? round($stats_bulan[$key] / $total_bulan * 100) : 0;
+                            ?>
+                                <div class="flex items-center gap-3">
+                                    <div class="h-7 w-7 rounded-md bg-<?= $col ?>-500/20 flex items-center justify-center shrink-0">
+                                        <i class="fas <?= $ico ?> text-<?= $col ?>-400 text-xs"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-xs text-gray-400"><?= $lbl ?></span>
+                                            <span class="text-xs font-bold"><?= $stats_bulan[$key] ?></span>
+                                        </div>
+                                        <div class="h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                                            <div class="h-full bg-<?= $col ?>-500 rounded-full" style="width:<?= $pct_bulan ?>%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="px-5 py-3 border-t border-gray-800/50">
+                            <a href="presensi.php" class="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+                                <i class="fas fa-arrow-right"></i> Lihat semua presensi
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── TOP PELANGGAR + RINGKASAN KONSELING ────────────────────────────── -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+                    <!-- Top Pelanggar -->
+                    <div class="glass rounded-xl overflow-hidden fade-up" style="animation-delay:.22s">
+                        <div class="bg-gradient-to-r from-red-900/30 to-orange-900/20 px-5 py-4 border-b border-gray-800/50 flex items-center justify-between">
                             <h3 class="font-semibold flex items-center gap-2 text-sm">
                                 <i class="fas fa-exclamation-triangle text-red-400"></i>
-                                Top 5 Pelanggaran
+                                Top 5 Pelanggar
                                 <span class="text-xs text-gray-500 font-normal">– Kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?></span>
                             </h3>
+                            <a href="pelanggaran.php" class="text-xs text-red-400 hover:text-red-300">
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
                         </div>
                         <div class="divide-y divide-gray-800/50">
                             <?php if (!empty($topPelanggar)): ?>
@@ -320,7 +423,7 @@ $topPelanggar = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <span class="text-xs font-bold text-gray-500 w-4"><?= $i + 1 ?></span>
                                         <div class="flex-1 min-w-0">
                                             <p class="text-sm font-medium truncate"><?= htmlspecialchars($s['nama_lengkap']) ?></p>
-                                            <p class="text-xs text-gray-500"><?= htmlspecialchars($s['kelas'] ?? '-') ?></p>
+                                            <p class="text-xs text-gray-500"><?= $s['jumlah'] ?> pelanggaran</p>
                                         </div>
                                         <div class="text-right shrink-0">
                                             <p class="text-sm font-bold text-yellow-400"><?= $s['total_poin'] ?> poin</p>
@@ -334,6 +437,76 @@ $topPelanggar = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="p-8 text-center text-gray-500 text-sm">
                                     <i class="fas fa-check-circle text-2xl text-emerald-500/40 mb-2 block"></i>
                                     Belum ada data pelanggaran
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- Ringkasan Konseling -->
+                    <div class="glass rounded-xl overflow-hidden fade-up" style="animation-delay:.25s">
+                        <div class="bg-gradient-to-r from-blue-900/30 to-purple-900/20 px-5 py-4 border-b border-gray-800/50 flex items-center justify-between">
+                            <h3 class="font-semibold flex items-center gap-2 text-sm">
+                                <i class="fas fa-comments text-blue-400"></i>
+                                Ringkasan Konseling
+                                <span class="text-xs text-gray-500 font-normal">– Kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?></span>
+                            </h3>
+                            <a href="konseling.php" class="text-xs text-blue-400 hover:text-blue-300">
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                        <!-- Stat mini -->
+                        <div class="grid grid-cols-4 divide-x divide-gray-800/50 border-b border-gray-800/50">
+                            <?php
+                            $kCards = [
+                                ['Total',   $konseling_total,              'purple',  'fa-clipboard-list'],
+                                ['Proses',  $konseling_status['Proses'],   'blue',    'fa-spinner'],
+                                ['Selesai', $konseling_status['Selesai'],  'emerald', 'fa-check-circle'],
+                                ['Ditunda', $konseling_status['Ditunda'],  'red',     'fa-pause-circle'],
+                            ];
+                            foreach ($kCards as [$lbl, $val, $col, $ico]):
+                            ?>
+                                <div class="p-3 text-center">
+                                    <i class="fas <?= $ico ?> text-<?= $col ?>-400 text-xs mb-1 block"></i>
+                                    <p class="text-lg font-bold"><?= $val ?></p>
+                                    <p class="text-xs text-gray-500"><?= $lbl ?></p>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <!-- Recent konseling list -->
+                        <div class="divide-y divide-gray-800/50">
+                            <?php if (!empty($recentKonseling)): ?>
+                                <?php
+                                $statusIcons = ['Proses' => '⏳', 'Selesai' => '✅', 'Ditunda' => '⏸'];
+                                $jColors = [
+                                    'Akademik' => 'purple',
+                                    'Pribadi' => 'pink',
+                                    'Sosial' => 'emerald',
+                                    'Karir' => 'yellow',
+                                    'Keluarga' => 'orange',
+                                    'Lainnya' => 'gray'
+                                ];
+                                foreach ($recentKonseling as $kRow):
+                                    $sIcon = $statusIcons[$kRow['status']] ?? '';
+                                    $jCol  = $jColors[$kRow['jenis_konseling']] ?? 'gray';
+                                ?>
+                                    <div class="px-4 py-3 flex items-start gap-3 hover:bg-white/5 transition-colors">
+                                        <img src="../../<?= $kRow['foto_profil'] ?: 'assets/default/photo-profile.png' ?>"
+                                            class="h-8 w-8 rounded-full object-cover border border-gray-700 shrink-0 mt-0.5" alt="">
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center gap-2 flex-wrap">
+                                                <p class="text-sm font-medium truncate"><?= htmlspecialchars($kRow['nama_lengkap']) ?></p>
+                                                <span class="text-xs px-1.5 py-0.5 rounded-full bg-<?= $jCol ?>-500/10 text-<?= $jCol ?>-400 border border-<?= $jCol ?>-500/20"><?= htmlspecialchars($kRow['jenis_konseling']) ?></span>
+                                            </div>
+                                            <p class="text-xs text-gray-500 truncate" title="<?= htmlspecialchars($kRow['masalah']) ?>"><?= htmlspecialchars($kRow['masalah']) ?></p>
+                                            <p class="text-xs text-gray-600 mt-0.5"><?= date('d M Y', strtotime($kRow['tanggal'])) ?> · <?= htmlspecialchars($kRow['konselor']) ?></p>
+                                        </div>
+                                        <span class="text-sm shrink-0"><?= $sIcon ?></span>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="p-8 text-center text-gray-500 text-sm">
+                                    <i class="fas fa-comments text-2xl text-blue-500/30 mb-2 block"></i>
+                                    Belum ada data konseling
                                 </div>
                             <?php endif; ?>
                         </div>

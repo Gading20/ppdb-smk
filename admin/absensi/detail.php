@@ -197,7 +197,7 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
                     <li><a href="../absensi/pelanggaran.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
                     </li>
-                    <li><a href="../absensi/konseling"
+                    <li><a href="../absensi/konseling.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
                     </li>
                 </ul>
@@ -216,10 +216,10 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
                     <li><a href="../laporan/index.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
                     </li>
-                    <li><a href="../laporan/pelanggaran"
+                    <li><a href="../laporan/laporan_pelanggaran.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
                     </li>
-                    <li><a href="../laporan/konseling"
+                    <li><a href="../laporan/konseling.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
                     </li>
                 </ul>
@@ -262,7 +262,7 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
             <div class="max-w-4xl mx-auto">
                 <!-- Header with back button - enhanced for mobile -->
                 <div class="flex items-center mb-6">
-                    <a href="index.php" class="mr-3 p-2 rounded-full hover:bg-gray-800/60 transition-colors">
+                    <a href="../laporan/index.php" class="mr-3 p-2 rounded-full hover:bg-gray-800/60 transition-colors">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <div>
@@ -553,7 +553,7 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
         updateMobileTime(); // Initial call
 
         // Make sure sidebar closes when pressing escape key
-        document.addEventListener('keydown', function (e) {
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 // Close delete modal if open
                 if (!document.getElementById('deleteModal').classList.contains('hidden')) {
@@ -581,7 +581,7 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
         setMobileHeight();
 
         // Add touch device improvements
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
                 // Add visual feedback for touch interactions
                 const touchElements = document.querySelectorAll('a, button');
@@ -592,7 +592,7 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
                 // Enable image preview alternative for touch devices
                 const imageLinks = document.querySelectorAll('.image-preview');
                 imageLinks.forEach(link => {
-                    link.addEventListener('click', function (e) {
+                    link.addEventListener('click', function(e) {
                         // Add a gentle tap effect
                         const img = this.querySelector('img');
                         if (img) {
