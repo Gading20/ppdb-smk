@@ -11,6 +11,8 @@ if (!isset($_SESSION['walikelas_id'])) {
 // Kelas & jurusan dari session (tidak bisa diubah user)
 $kelas   = $_SESSION['walikelas_kelas'];
 $jurusan = $_SESSION['walikelas_jurusan'];
+// Tingkat kelas (10/11/12) yang cocok dengan kolom kelas di tabel siswa
+$tingkat = $_SESSION['walikelas_tingkat'] ?? $kelas;
 
 // ── Filter ─────────────────────────────────────────────────────────────────
 $date_filter   = $_GET['date']   ?? '';
@@ -24,8 +26,8 @@ $page   = max(1, (int)($_GET['page'] ?? 1));
 $offset = ($page - 1) * $items_per_page;
 
 // ── SQL (selalu filter kelas sendiri) ─────────────────────────────────────
-$where  = "WHERE s.kelas = :kelas AND s.jurusan = :jurusan";
-$params = ['kelas' => $kelas, 'jurusan' => $jurusan];
+$where  = "WHERE s.kelas = :tingkat AND s.jurusan = :jurusan";
+$params = ['tingkat' => $tingkat, 'jurusan' => $jurusan];
 
 if ($date_filter) {
     $where .= " AND p.tanggal = :date";
@@ -58,6 +60,48 @@ $count_stmt->execute();
 $total_items = $count_stmt->fetchColumn();
 $total_pages = max(1, ceil($total_items / $items_per_page));
 
+// ── Total siswa di kelas ini ───────────────────────────────────────────────
+$stmt = $conn->prepare("SELECT COUNT(*) FROM siswa WHERE kelas = :tingkat AND jurusan = :jurusan");
+$stmt->execute(['tingkat' => $tingkat, 'jurusan' => $jurusan]);
+$total_students = $stmt->fetchColumn();
+
+// ── Statistik absensi hari ini (kelas sendiri) ─────────────────────────────
+$today_date = date('Y-m-d');
+$stats = ['hadir' => 0, 'sakit' => 0, 'izin' => 0, 'terlambat' => 0, 'alpha' => 0];
+
+$stmt_stats = $conn->prepare(
+    "SELECT a.status, COUNT(*) as count FROM absensi a
+     JOIN siswa s ON a.siswa_id = s.id
+     WHERE a.tanggal = :today AND a.approval_status = 'Approved'
+       AND s.kelas = :tingkat AND s.jurusan = :jurusan
+     GROUP BY a.status"
+);
+$stmt_stats->execute(['today' => $today_date, 'tingkat' => $tingkat, 'jurusan' => $jurusan]);
+while ($row = $stmt_stats->fetch(PDO::FETCH_ASSOC)) {
+    $stats[strtolower($row['status'])] = $row['count'];
+}
+
+// ── Stat cards (kelas sendiri) ─────────────────────────────────────────────
+$status_counts = ['Proses' => 0, 'Selesai' => 0, 'Ditunda' => 0];
+$sc = $conn->prepare(
+    "SELECT k.status, COUNT(*) as c FROM konseling k
+     JOIN siswa s ON k.siswa_id = s.id
+     WHERE s.kelas = :tingkat AND s.jurusan = :jurusan
+     GROUP BY k.status"
+);
+$sc->execute(['tingkat' => $tingkat, 'jurusan' => $jurusan]);
+foreach ($sc->fetchAll(PDO::FETCH_ASSOC) as $r) {
+    if (isset($status_counts[$r['status']])) $status_counts[$r['status']] = $r['c'];
+}
+
+$total_stmt = $conn->prepare(
+    "SELECT COUNT(*) FROM konseling k
+     JOIN siswa s ON k.siswa_id = s.id
+     WHERE s.kelas = :tingkat AND s.jurusan = :jurusan"
+);
+$total_stmt->execute(['tingkat' => $tingkat, 'jurusan' => $jurusan]);
+$total_count = $total_stmt->fetchColumn();
+
 // Main query
 $order_clause = $sort_col === 'total_poin'
     ? "ORDER BY total_poin $sort_order, p.tanggal DESC"
@@ -89,18 +133,18 @@ $jenis_counts = ['Ringan' => 0, 'Sedang' => 0, 'Berat' => 0];
 $sc = $conn->prepare(
     "SELECT p.jenis_pelanggaran, COUNT(*) as c FROM pelanggaran p
      JOIN siswa s ON p.siswa_id = s.id
-     WHERE p.tanggal = :t AND s.kelas = :kelas AND s.jurusan = :jurusan
+     WHERE p.tanggal = :t AND s.kelas = :tingkat AND s.jurusan = :jurusan
      GROUP BY p.jenis_pelanggaran"
 );
-$sc->execute(['t' => $today, 'kelas' => $kelas, 'jurusan' => $jurusan]);
+$sc->execute(['t' => $today, 'tingkat' => $tingkat, 'jurusan' => $jurusan]);
 foreach ($sc->fetchAll(PDO::FETCH_ASSOC) as $r) {
     if (isset($jenis_counts[$r['jenis_pelanggaran']])) $jenis_counts[$r['jenis_pelanggaran']] = $r['c'];
 }
 $proses_stmt = $conn->prepare(
     "SELECT COUNT(*) FROM pelanggaran p JOIN siswa s ON p.siswa_id = s.id
-     WHERE p.status = 'Proses' AND s.kelas = :kelas AND s.jurusan = :jurusan"
+     WHERE p.status = 'Proses' AND s.kelas = :tingkat AND s.jurusan = :jurusan"
 );
-$proses_stmt->execute(['kelas' => $kelas, 'jurusan' => $jurusan]);
+$proses_stmt->execute(['tingkat' => $tingkat, 'jurusan' => $jurusan]);
 $proses_count = $proses_stmt->fetchColumn();
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -286,10 +330,17 @@ function poinColor($poin)
                     <li><a href="konseling.php" class="block p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Konseling</a></li>
                 </ul>
             </div>
-            <a href="siswa.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-emerald-500/10 transition-colors">
-                <i class="fas fa-users text-emerald-400"></i><span>Data Siswa</span>
-            </a>
-            <hr class="border-gray-700/40 my-3">
+
+            <!-- Info Cepat -->
+            <!-- <div class="px-3 py-2">
+                <p class="text-xs text-gray-500 uppercase tracking-wider mb-3">Info Kelas</p>
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between"><span class="text-gray-400">Kelas</span><span class="font-semibold text-emerald-300"><?= htmlspecialchars($kelas . ' ' . $jurusan) ?></span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Total Siswa</span><span class="font-semibold"><?= $total_students ?></span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Hadir Hari Ini</span><span class="font-semibold text-emerald-400"><?= $stats['hadir'] ?></span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Alpha Hari Ini</span><span class="font-semibold text-red-400"><?= $stats['alpha'] ?></span></div>
+                </div>
+            </div> -->
             <a href="../../wali_kelas/logout.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors">
                 <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>

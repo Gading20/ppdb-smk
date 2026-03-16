@@ -287,10 +287,10 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
                     <li><a href="../laporan/index.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
                     </li>
-                    <li><a href="../laporan/pelanggaran"
+                    <li><a href="../laporan/laporan_pelanggaran.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
                     </li>
-                    <li><a href="../laporan/konseling"
+                    <li><a href="../laporan/laporan_konseling.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
                     </li>
                 </ul>
@@ -490,7 +490,7 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
                                     <span class="text-gray-500 text-xs font-normal">(opsional)</span>
                                 </h3>
                                 <textarea name="solusi" rows="4" class="form-input resize-y"
-                                    placeholder="Tuliskan solusi atau rekomendasi yang diberikan..."><?= htmlspecialchars($_POST['solusi'] ?? $k['solusi']) ?></textarea>
+                                    placeholder="Tuliskan solusi atau rekomendasi yang diberikan..."><?= htmlspecialchars($_POST['solusi'] ?? $k['solusi'] ?? '') ?></textarea>
                             </div>
 
                             <!-- Tindak Lanjut -->
@@ -504,7 +504,7 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
                                     <span class="text-gray-500 text-xs font-normal">(opsional)</span>
                                 </h3>
                                 <textarea name="tindak_lanjut" rows="4" class="form-input resize-y"
-                                    placeholder="Tuliskan tindak lanjut yang akan dilakukan..."><?= htmlspecialchars($_POST['tindak_lanjut'] ?? $k['tindak_lanjut']) ?></textarea>
+                                    placeholder="Tuliskan tindak lanjut yang akan dilakukan..."><?= htmlspecialchars($_POST['tindak_lanjut'] ?? $k['tindak_lanjut'] ?? '') ?></textarea>
                             </div>
 
                             <!-- Tombol Aksi -->
@@ -549,7 +549,9 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
         function updateMobileTime() {
             const el = document.getElementById('current-time-mobile');
             if (el) el.textContent = new Date().toLocaleTimeString('id-ID', {
-                hour: '2-digit', minute: '2-digit', hour12: false
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
             });
         }
         setInterval(updateMobileTime, 60000);

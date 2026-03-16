@@ -190,16 +190,14 @@ $topPelanggar = $conn->query(
             <hr class="border-gray-700/40 my-3">
 
             <!-- Info Cepat -->
-            <div class="px-3 py-2">
+            <!-- <div class="px-3 py-2">
                 <p class="text-xs text-gray-500 uppercase tracking-wider mb-3">Info Cepat</p>
                 <div class="space-y-2 text-xs">
                     <div class="flex justify-between"><span class="text-gray-400">Total Siswa</span><span class="font-semibold"><?= $total_students ?></span></div>
                     <div class="flex justify-between"><span class="text-gray-400">Hadir Hari Ini</span><span class="font-semibold text-emerald-400"><?= $stats['hadir'] ?></span></div>
                     <div class="flex justify-between"><span class="text-gray-400">Alpha Hari Ini</span><span class="font-semibold text-red-400"><?= $stats['alpha'] ?></span></div>
                 </div>
-            </div>
-
-            <hr class="border-gray-700/40 my-3">
+            </div> -->
 
             <a href="../../kepsek/logout.php"
                 class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors">

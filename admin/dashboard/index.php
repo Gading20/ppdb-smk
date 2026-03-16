@@ -317,7 +317,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                 </ul>
             </li>
 
-            <a href="../profil/"
+            <a href="../profil/index.php"
                 class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
                 <i class="fas fa-user-cog"></i>
                 <span>Profil</span>
@@ -361,7 +361,7 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                     aria-label="Menu">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
-                <img src="../../assets/default/logo-smk40.png" alt="SMKN 40" class="h-8 w-auto">
+                <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 w-auto">
             </div>
             <div class="flex items-center gap-3">
                 <span id="current-time-mobile" class="text-sm font-medium hidden sm:block"></span>
@@ -451,11 +451,11 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                                                     class="mt-2 rounded-lg w-full h-32 object-cover" alt="Bukti">
                                             <?php endif; ?>
                                             <div class="flex gap-2 mt-3">
-                                                <button onclick="handleAbsence(<?= $notif['id'] ?>, 'approve')"
+                                                <button onclick="handleAbsence(<?= $notif['id'] ?>, 'approve', this)"
                                                     class="flex-1 py-1.5 rounded-lg bg-green-500/10 text-green-500 hover:bg-green-500/20 transition-colors text-sm touch-padding">
                                                     <i class="fas fa-check mr-1"></i> Setujui
                                                 </button>
-                                                <button onclick="handleAbsence(<?= $notif['id'] ?>, 'reject')"
+                                                <button onclick="handleAbsence(<?= $notif['id'] ?>, 'reject', this)"
                                                     class="flex-1 py-1.5 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors text-sm touch-padding">
                                                     <i class="fas fa-times mr-1"></i> Tolak
                                                 </button>
@@ -1301,7 +1301,21 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
             }
         }
 
-        async function handleAbsence(id, action) {
+        async function handleAbsence(id, action, btn) {
+            // Cegah double click
+            if (btn && btn.disabled) return;
+
+            // Loading state: disable kedua tombol di baris notif ini
+            const notifItem = document.querySelector(`.notification-item[data-notif-id="${id}"]`);
+            const btns = notifItem ? notifItem.querySelectorAll('button') : [];
+            btns.forEach(b => {
+                b.disabled = true;
+                b.classList.add('opacity-50', 'cursor-not-allowed');
+            });
+
+            const origHTML = btn ? btn.innerHTML : '';
+            if (btn) btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Memproses...';
+
             try {
                 const response = await fetch('../api/approve_absence.php', {
                     method: 'POST',
@@ -1314,10 +1328,10 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                     })
                 });
                 const data = await response.json();
-                if (response.ok) {
-                    showToast(action === 'approve' ? 'Absensi berhasil disetujui' : 'Absensi ditolak', action === 'approve' ? 'success' : 'error');
-                    const notifItem = document.querySelector(`.notification-item[data-notif-id="${id}"]`);
+                if (response.ok && data.success) {
+                    showToast(action === 'approve' ? '✅ Absensi berhasil disetujui' : '❌ Absensi ditolak', action === 'approve' ? 'success' : 'error');
                     if (notifItem) {
+                        notifItem.style.transition = 'opacity 0.3s';
                         notifItem.style.opacity = '0';
                         notifItem.style.height = notifItem.offsetHeight + 'px';
                         setTimeout(() => {
@@ -1331,10 +1345,18 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                             }, 300);
                         }, 300);
                     }
-                } else throw new Error(data.message || 'Terjadi kesalahan');
+                } else {
+                    throw new Error(data.error || data.message || 'Terjadi kesalahan');
+                }
             } catch (error) {
                 console.error('Error:', error);
-                showToast(error.message || 'Terjadi kesalahan', 'error');
+                showToast(error.message || 'Gagal memproses permintaan', 'error');
+                // Kembalikan tombol ke kondisi semula jika error
+                btns.forEach(b => {
+                    b.disabled = false;
+                    b.classList.remove('opacity-50', 'cursor-not-allowed');
+                });
+                if (btn) btn.innerHTML = origHTML;
             }
         }
 

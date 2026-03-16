@@ -74,6 +74,27 @@ $stmt->bindValue(':limit',  $items_per_page, PDO::PARAM_INT);
 $stmt->execute();
 $konseling_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// ── Total siswa di kelas ini ───────────────────────────────────────────────
+$stmt = $conn->prepare("SELECT COUNT(*) FROM siswa WHERE kelas = :kelas AND jurusan = :jurusan");
+$stmt->execute(['kelas' => $kelas, 'jurusan' => $jurusan]);
+$total_students = $stmt->fetchColumn();
+
+// ── Statistik absensi hari ini (kelas sendiri) ─────────────────────────────
+$today_date = date('Y-m-d');
+$stats = ['hadir' => 0, 'sakit' => 0, 'izin' => 0, 'terlambat' => 0, 'alpha' => 0];
+
+$stmt_stats = $conn->prepare(
+    "SELECT a.status, COUNT(*) as count FROM absensi a
+     JOIN siswa s ON a.siswa_id = s.id
+     WHERE a.tanggal = :today AND a.approval_status = 'Approved'
+       AND s.kelas = :kelas AND s.jurusan = :jurusan
+     GROUP BY a.status"
+);
+$stmt_stats->execute(['today' => $today_date, 'kelas' => $kelas, 'jurusan' => $jurusan]);
+while ($row = $stmt_stats->fetch(PDO::FETCH_ASSOC)) {
+    $stats[strtolower($row['status'])] = $row['count'];
+}
+
 // ── Stat cards (kelas sendiri) ─────────────────────────────────────────────
 $status_counts = ['Proses' => 0, 'Selesai' => 0, 'Ditunda' => 0];
 $sc = $conn->prepare(
@@ -259,10 +280,17 @@ function pageUrl($pg)
                     <li><a href="konseling.php" class="block p-2 text-emerald-400 bg-emerald-500/10 rounded-lg text-sm font-medium">Konseling</a></li>
                 </ul>
             </div>
-            <a href="siswa.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-emerald-500/10 transition-colors">
-                <i class="fas fa-users text-emerald-400"></i><span>Data Siswa</span>
-            </a>
-            <hr class="border-gray-700/40 my-3">
+
+            <!-- Info Cepat -->
+            <!-- <div class="px-3 py-2">
+                <p class="text-xs text-gray-500 uppercase tracking-wider mb-3">Info Kelas</p>
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between"><span class="text-gray-400">Kelas</span><span class="font-semibold text-emerald-300"><?= htmlspecialchars($kelas . ' ' . $jurusan) ?></span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Total Siswa</span><span class="font-semibold"><?= $total_students ?></span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Hadir Hari Ini</span><span class="font-semibold text-emerald-400"><?= $stats['hadir'] ?></span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Alpha Hari Ini</span><span class="font-semibold text-red-400"><?= $stats['alpha'] ?></span></div>
+                </div>
+            </div> -->
             <a href="../../wali_kelas/logout.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors">
                 <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>

@@ -419,7 +419,7 @@ $jenis_colors = [
                             <i class="fas fa-file-pdf"></i>
                             <span class="hidden sm:inline">Cetak PDF</span>
                         </a>
-                        <a href="export_absensi.php?format=excel<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
+                        <a href="export_konseling.php?format=excel<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
                             class="px-3 py-2 sm:px-4 sm:py-2 bg-green-600 hover:bg-green-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
                             <i class="fas fa-file-excel"></i> <span class="hidden sm:inline">Export Excel</span>
                         </a>
@@ -669,7 +669,7 @@ $jenis_colors = [
                                                 </span>
                                             </td>
                                             <td class="px-5 py-4 text-center">
-                                                <a href="../absensi/detail_konseling.php?id=<?= $rec['id'] ?>"
+                                                <a href="../absensi/detailk.php?id=<?= $rec['id'] ?>"
                                                     class="text-blue-400 hover:text-blue-300">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
@@ -861,7 +861,7 @@ $jenis_colors = [
         });
 
         function resetFilters() {
-            window.location.href = 'konseling.php';
+            window.location.href = 'laporan_konseling.php';
         }
 
         function toggleSidebar() {

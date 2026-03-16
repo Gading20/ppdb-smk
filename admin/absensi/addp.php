@@ -343,7 +343,7 @@ $default_date = date('Y-m-d');
                     </li>
                     <li><a href="../absensi/pelanggaran.php"
                             class="block p-2 text-purple-400 bg-purple-500/10 rounded-lg">Pelanggaran</a></li>
-                    <li><a href="../absensi/konseling"
+                    <li><a href="../absensi/konseling.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
                     </li>
                 </ul>
@@ -362,10 +362,10 @@ $default_date = date('Y-m-d');
                     <li><a href="../laporan/index.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
                     </li>
-                    <li><a href="../laporan/pelanggaran"
+                    <li><a href="../laporan/laporan_pelanggaran.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
                     </li>
-                    <li><a href="../laporan/konseling"
+                    <li><a href="../laporan/laporan_konseling.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
                     </li>
                 </ul>
@@ -403,7 +403,7 @@ $default_date = date('Y-m-d');
             <div class="max-w-4xl mx-auto">
 
                 <div class="flex items-center mb-6">
-                    <a href="index.php" class="mr-4 p-2 rounded-full hover:bg-gray-800 transition-colors">
+                    <a href="pelanggaran.php" class="mr-4 p-2 rounded-full hover:bg-gray-800 transition-colors">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <div>

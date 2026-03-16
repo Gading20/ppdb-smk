@@ -468,12 +468,12 @@ foreach ($attendance_stats as $stat) {
                 <i class="fas fa-home text-purple-500"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="../riwayat/"
+            <a href="../riwayat/index.php"
                 class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
                 <i class="fas fa-history"></i>
                 <span>Riwayat Absensi</span>
             </a>
-            <a href="../profil/"
+            <a href="../profil/index.php"
                 class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
                 <i class="fas fa-user"></i>
                 <span>Profil</span>
