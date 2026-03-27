@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 require_once '../../config/database.php';
 
@@ -189,17 +189,17 @@ $default_date = date('Y-m-d');
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         .glass-effect {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(147, 51, 234, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         body {
-            background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
+            background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
         }
 
         .menu-active {
-            background: linear-gradient(to right, rgba(147, 51, 234, 0.2), rgba(147, 51, 234, 0.05));
+            background: linear-gradient(to right, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
             border-left: 4px solid #9333ea;
         }
 
@@ -309,84 +309,84 @@ $default_date = date('Y-m-d');
     </style>
 </head>
 
-<body class="min-h-screen text-white bg-fixed">
-    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+<body class="min-h-screen text-gray-800 bg-fixed">
+    <div id="mobile-overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar -->
     <aside id="sidebar"
-        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-purple-900/30 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
-        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-purple-900/30">
+        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-violet-200 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
+        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-violet-200">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 lg:h-10 w-auto">
                 <div>
-                    <h1 class="font-semibold text-sm lg:text-base">SMK NURUL ULUM</h1>
-                    <p class="text-xs text-gray-400">Sistem Absensi</p>
+                    <h1 class="font-semibold text-sm lg:text-base text-gray-800">SMK NURUL ULUM</h1>
+                    <p class="text-xs text-gray-500">Sistem Absensi</p>
                 </div>
             </div>
-            <button class="text-gray-400 hover:text-white lg:hidden" onclick="toggleSidebar()">
+            <button class="text-gray-600 hover:text-gray-800 lg:hidden" onclick="toggleSidebar()">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
         <nav class="p-4 space-y-2 overflow-y-auto no-scrollbar" style="max-height:calc(100vh - 76px)">
             <a href="../dashboard/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-home"></i><span>Dashboard</span>
             </a>
             <li class="relative group">
-                <button class="flex items-center gap-3 text-white/90 p-3 rounded-lg menu-active w-full">
-                    <i class="fas fa-calendar-check text-purple-500"></i><span>Monitoring Siswa</span>
+                <button class="flex items-center gap-3 text-gray-700 p-3 rounded-lg menu-active w-full">
+                    <i class="fas fa-calendar-check text-violet-600"></i><span>Monitoring Siswa</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 block">
                     <li><a href="../absensi/index.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
                     </li>
                     <li><a href="../absensi/pelanggaran.php"
-                            class="block p-2 text-purple-400 bg-purple-500/10 rounded-lg">Pelanggaran</a></li>
+                            class="block p-2 text-violet-500 bg-purple-500/10 rounded-lg">Pelanggaran</a></li>
                     <li><a href="../absensi/konseling.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a>
                     </li>
                 </ul>
             </li>
             <a href="../siswa/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-users"></i><span>Data Siswa</span>
             </a>
             <li class="relative group">
                 <button
-                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
                     <i class="fas fa-file-alt"></i><span>Laporan</span><i
                         class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 hidden group-hover:block">
                     <li><a href="../laporan/index.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
                     </li>
                     <li><a href="../laporan/laporan_pelanggaran.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
                     </li>
                     <li><a href="../laporan/laporan_konseling.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a>
                     </li>
                 </ul>
             </li>
             <a href="../profil/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-user-cog"></i><span>Profil</span>
             </a>
             <a href="../logout.php"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors mt-10">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors mt-10">
                 <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>
         </nav>
     </aside>
 
-    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 transition-all duration-300">
+    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-sky-50 to-indigo-50 transition-all duration-300">
         <!-- Mobile Header -->
         <div
-            class="lg:hidden bg-gray-900/60 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-purple-900/30">
+            class="lg:hidden bg-white/90 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-violet-200">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-white p-2 -ml-2 rounded-lg hover:bg-gray-800/60">
+                <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-100">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
                 <img src="../../assets/default/logo-smk40.png" alt="SMKN 40" class="h-8 w-auto">
@@ -395,7 +395,7 @@ $default_date = date('Y-m-d');
                 <span id="current-time-mobile" class="text-sm font-medium hidden sm:block"></span>
                 <?php $photo_path = $_SESSION['admin_photo'] ?? 'assets/default/avatar.png'; ?>
                 <img src="../../<?= $photo_path ?>" alt="Profile"
-                    class="h-8 w-8 rounded-full object-cover border border-purple-500/50">
+                    class="h-8 w-8 rounded-full object-cover border border-violet-300">
             </div>
         </div>
 
@@ -403,18 +403,18 @@ $default_date = date('Y-m-d');
             <div class="max-w-4xl mx-auto">
 
                 <div class="flex items-center mb-6">
-                    <a href="pelanggaran.php" class="mr-4 p-2 rounded-full hover:bg-gray-800 transition-colors">
+                    <a href="pelanggaran.php" class="mr-4 p-2 rounded-full hover:bg-gray-50 transition-colors">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <div>
                         <h1 class="text-xl md:text-2xl font-bold">Tambah Pelanggaran</h1>
-                        <p class="text-gray-400 text-sm">Pilih siswa lalu klik kartu deskripsi pelanggaran</p>
+                        <p class="text-gray-500 text-sm">Pilih siswa lalu klik kartu deskripsi pelanggaran</p>
                     </div>
                 </div>
 
                 <?php if ($error): ?>
                     <div
-                        class="bg-red-500/10 border border-red-500/30 text-red-500 rounded-lg p-4 mb-6 flex items-start animate-fade-in">
+                        class="bg-red-500/10 border border-red-200 text-red-500 rounded-lg p-4 mb-6 flex items-start animate-fade-in">
                         <i class="fas fa-exclamation-circle mt-0.5 mr-3 flex-shrink-0"></i>
                         <div>
                             <p class="font-medium">Gagal menyimpan</p>
@@ -436,9 +436,9 @@ $default_date = date('Y-m-d');
                         </h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm text-gray-400 mb-1.5">Filter Kelas</label>
+                                <label class="block text-sm text-gray-500 mb-1.5">Filter Kelas</label>
                                 <select id="kelas_filter" onchange="filterSiswaByKelas()"
-                                    class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-purple-500 touch-target">
+                                    class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2.5 text-gray-800 focus:outline-none focus:border-violet-500 touch-target">
                                     <option value="">-- Semua Kelas --</option>
                                     <?php foreach ($kelas_list as $k): ?>
                                         <option value="<?= $k ?>"><?= $k ?></option>
@@ -446,10 +446,10 @@ $default_date = date('Y-m-d');
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-sm text-gray-400 mb-1.5">Nama Siswa <span
+                                <label class="block text-sm text-gray-500 mb-1.5">Nama Siswa <span
                                         class="text-red-400">*</span></label>
                                 <select id="siswa_id" name="siswa_id" required onchange="onSiswaChange()"
-                                    class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-purple-500 touch-target">
+                                    class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2.5 text-gray-800 focus:outline-none focus:border-violet-500 touch-target">
                                     <option value="">-- Pilih Siswa --</option>
                                     <?php foreach ($siswa_list as $s): ?>
                                         <option value="<?= $s['id'] ?>" data-kelas="<?= $s['kelas'] ?>"
@@ -465,19 +465,19 @@ $default_date = date('Y-m-d');
 
                         <!-- Panel pelanggaran existing -->
                         <div id="existing-info"
-                            class="hidden mt-4 p-3 rounded-lg bg-gray-800/60 border border-gray-700">
-                            <p class="text-xs text-gray-400 mb-2 font-medium">
-                                <i class="fas fa-history mr-1 text-purple-400"></i>Pelanggaran tercatat:
+                            class="hidden mt-4 p-3 rounded-lg bg-gray-50/60 border border-gray-300">
+                            <p class="text-xs text-gray-500 mb-2 font-medium">
+                                <i class="fas fa-history mr-1 text-violet-500"></i>Pelanggaran tercatat:
                             </p>
                             <div id="existing-detail" class="flex flex-wrap gap-2 mb-2"></div>
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-gray-500">Total:</span>
-                                <div class="flex-1 bg-gray-700 rounded-full h-1.5">
+                                <div class="flex-1 bg-gray-100 rounded-full h-1.5">
                                     <div id="total-bar"
                                         class="h-1.5 rounded-full bg-green-500 transition-all duration-500"
                                         style="width:0%"></div>
                                 </div>
-                                <span id="total-label" class="text-xs font-bold text-green-400">0/100</span>
+                                <span id="total-label" class="text-xs font-bold text-green-600">0/100</span>
                             </div>
                         </div>
                     </div>
@@ -494,7 +494,7 @@ $default_date = date('Y-m-d');
                         <div class="flex gap-2 mb-4">
                             <?php foreach (['Ringan', 'Sedang', 'Berat'] as $j): ?>
                                 <button type="button" onclick="switchTab('<?= $j ?>')" id="tab-<?= $j ?>"
-                                    class="tab-btn px-4 py-1.5 rounded-full border border-gray-600 text-sm text-gray-400">
+                                    class="tab-btn px-4 py-1.5 rounded-full border border-gray-300 text-sm text-gray-500">
                                     <?= $j ?>
                                     <span class="ml-1 text-xs opacity-60">(<?= count($deskripsi_by_jenis[$j]) ?>)</span>
                                 </button>
@@ -515,16 +515,16 @@ $default_date = date('Y-m-d');
                                             <div class="flex items-center justify-between mb-1.5">
                                                 <span
                                                     class="text-xs font-bold px-2 py-0.5 rounded badge-<?= strtolower($jenis) ?>"><?= $d['kode'] ?></span>
-                                                <span class="text-xs font-semibold text-gray-300"><?= $d['poin_default'] ?>
+                                                <span class="text-xs font-semibold text-gray-700"><?= $d['poin_default'] ?>
                                                     poin</span>
                                             </div>
-                                            <p class="text-sm font-medium text-white"><?= htmlspecialchars($d['nama']) ?></p>
+                                            <p class="text-sm font-medium text-gray-800"><?= htmlspecialchars($d['nama']) ?></p>
                                             <?php if ($d['tindakan']): ?>
                                                 <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">
                                                     <?= htmlspecialchars($d['tindakan']) ?></p>
                                             <?php endif; ?>
                                             <div
-                                                class="exist-badge hidden mt-2 flex items-center gap-1 text-xs text-yellow-400">
+                                                class="exist-badge hidden mt-2 flex items-center gap-1 text-xs text-amber-600">
                                                 <i class="fas fa-plus-circle"></i>
                                                 <span>Poin akan ditambahkan</span>
                                             </div>
@@ -542,13 +542,13 @@ $default_date = date('Y-m-d');
                         <!-- Preview terpilih -->
                         <div id="selected-preview"
                             class="hidden mt-4 p-3 rounded-lg bg-purple-900/20 border border-purple-500/40">
-                            <p class="text-xs text-purple-400 mb-1.5 font-medium">Dipilih:</p>
+                            <p class="text-xs text-violet-500 mb-1.5 font-medium">Dipilih:</p>
                             <div class="flex items-center gap-3 flex-wrap">
                                 <span id="prev-kode" class="text-xs font-bold px-2 py-0.5 rounded"></span>
-                                <span id="prev-nama" class="text-sm font-medium text-white flex-1"></span>
+                                <span id="prev-nama" class="text-sm font-medium text-gray-800 flex-1"></span>
                                 <span id="prev-poin" class="text-sm font-bold text-purple-300"></span>
                             </div>
-                            <p id="prev-notif" class="hidden mt-2 text-xs text-yellow-400">
+                            <p id="prev-notif" class="hidden mt-2 text-xs text-amber-600">
                                 <i class="fas fa-info-circle mr-1"></i>
                                 Siswa sudah punya pelanggaran ini — poin akan dijumlahkan.
                             </p>
@@ -564,23 +564,23 @@ $default_date = date('Y-m-d');
                         </h2>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                             <div>
-                                <label class="block text-sm text-gray-400 mb-1.5">Tanggal <span
+                                <label class="block text-sm text-gray-500 mb-1.5">Tanggal <span
                                         class="text-red-400">*</span></label>
                                 <input type="date" name="tanggal" value="<?= $default_date ?>" required
-                                    class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-purple-500">
+                                    class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2.5 text-gray-800 focus:outline-none focus:border-violet-500">
                             </div>
                             <div>
-                                <label class="block text-sm text-gray-400 mb-1.5">Poin Ditambahkan <span
+                                <label class="block text-sm text-gray-500 mb-1.5">Poin Ditambahkan <span
                                         class="text-red-400">*</span></label>
                                 <input type="number" id="poin_display" min="1" max="100"
                                     placeholder="Pilih deskripsi dulu"
-                                    class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-purple-500">
+                                    class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2.5 text-gray-800 focus:outline-none focus:border-violet-500">
                                 <p class="text-xs text-gray-500 mt-1">Bisa diubah dari nilai default</p>
                             </div>
                             <div>
-                                <label class="block text-sm text-gray-400 mb-1.5">Status</label>
+                                <label class="block text-sm text-gray-500 mb-1.5">Status</label>
                                 <select name="status"
-                                    class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-purple-500">
+                                    class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2.5 text-gray-800 focus:outline-none focus:border-violet-500">
                                     <option value="Pending">Pending</option>
                                     <option value="Proses">Proses</option>
                                     <option value="Selesai">Selesai</option>
@@ -588,27 +588,27 @@ $default_date = date('Y-m-d');
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm text-gray-400 mb-1.5">
+                            <label class="block text-sm text-gray-500 mb-1.5">
                                 Tindakan / Sanksi
                                 <span class="text-gray-500 font-normal">(Opsional)</span>
-                                <span id="tindakan-auto-badge" class="hidden ml-2 text-xs text-purple-400 font-normal">
+                                <span id="tindakan-auto-badge" class="hidden ml-2 text-xs text-violet-500 font-normal">
                                     <i class="fas fa-magic mr-1"></i>Terisi otomatis dari database
                                 </span>
                             </label>
                             <textarea id="tindakan_textarea" name="tindakan" rows="2"
                                 placeholder="Tindakan akan terisi otomatis saat memilih jenis pelanggaran..."
-                                class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-purple-500 resize-none transition-all duration-300"></textarea>
+                                class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2.5 text-gray-800 focus:outline-none focus:border-violet-500 resize-none transition-all duration-300"></textarea>
                         </div>
                     </div>
 
                     <!-- Submit -->
                     <div class="flex flex-col sm:flex-row justify-end gap-3">
                         <a href="pelanggaran.php"
-                            class="w-full sm:w-auto px-6 py-2.5 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors font-medium text-center">
+                            class="w-full sm:w-auto px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors font-medium text-center">
                             <i class="fas fa-times mr-2"></i>Batal
                         </a>
                         <button type="submit" id="btn-submit" disabled
-                            class="w-full sm:w-auto px-6 py-2.5 bg-purple-600 hover:bg-purple-700 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg transition-colors font-medium">
+                            class="w-full sm:w-auto px-6 py-2.5 bg-purple-600 hover:bg-purple-700 disabled:opacity-40 disabled:cursor-not-allowed text-gray-800 rounded-lg transition-colors font-medium">
                             <i class="fas fa-save mr-2"></i>Simpan Pelanggaran
                         </button>
                     </div>
@@ -744,7 +744,7 @@ $default_date = date('Y-m-d');
                     (total >= 75 ? 'bg-red-500' : total >= 50 ? 'bg-orange-500' : total >= 25 ? 'bg-yellow-500' : 'bg-green-500');
                 label.textContent = total + '/100';
                 label.className = 'text-xs font-bold ' +
-                    (total >= 75 ? 'text-red-400' : total >= 50 ? 'text-orange-400' : total >= 25 ? 'text-yellow-400' : 'text-green-400');
+                    (total >= 75 ? 'text-red-400' : total >= 50 ? 'text-orange-400' : total >= 25 ? 'text-amber-600' : 'text-green-600');
 
                 infoBox.classList.remove('hidden');
             } catch (e) {

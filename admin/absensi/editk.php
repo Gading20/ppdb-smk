@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 require_once '../../config/database.php';
 
@@ -100,17 +100,17 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         .glass-effect {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(147, 51, 234, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         body {
-            background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
+            background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
         }
 
         .menu-active {
-            background: linear-gradient(to right, rgba(147, 51, 234, 0.2), rgba(147, 51, 234, 0.05));
+            background: linear-gradient(to right, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
             border-left: 4px solid #9333ea;
         }
 
@@ -234,84 +234,84 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
     </style>
 </head>
 
-<body class="min-h-screen text-white bg-fixed">
-    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+<body class="min-h-screen text-gray-800 bg-fixed">
+    <div id="mobile-overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar -->
     <aside id="sidebar"
-        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-purple-900/30 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
-        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-purple-900/30">
+        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-violet-200 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
+        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-violet-200">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 lg:h-10 w-auto">
                 <div>
-                    <h1 class="font-semibold text-sm lg:text-base">SMK NURUL ULUM</h1>
-                    <p class="text-xs text-gray-400">Sistem Absensi</p>
+                    <h1 class="font-semibold text-sm lg:text-base text-gray-800">SMK NURUL ULUM</h1>
+                    <p class="text-xs text-gray-500">Sistem Absensi</p>
                 </div>
             </div>
-            <button class="text-gray-400 hover:text-white lg:hidden" onclick="toggleSidebar()">
+            <button class="text-gray-600 hover:text-gray-800 lg:hidden" onclick="toggleSidebar()">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
         <nav class="p-4 space-y-2 overflow-y-auto no-scrollbar" style="max-height:calc(100vh - 76px)">
             <a href="../dashboard/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-home"></i><span>Dashboard</span>
             </a>
             <li class="relative group">
-                <button class="flex items-center gap-3 text-white/90 p-3 rounded-lg menu-active w-full">
-                    <i class="fas fa-calendar-check text-purple-500"></i><span>Monitoring Siswa</span>
+                <button class="flex items-center gap-3 text-gray-700 p-3 rounded-lg menu-active w-full">
+                    <i class="fas fa-calendar-check text-violet-600"></i><span>Monitoring Siswa</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 block">
                     <li><a href="../absensi/index.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
                     </li>
                     <li><a href="../absensi/pelanggaran.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
                     </li>
                     <li><a href="../absensi/konseling.php"
-                            class="block p-2 text-purple-400 bg-purple-500/10 rounded-lg">Konseling</a></li>
+                            class="block p-2 text-violet-500 bg-purple-500/10 rounded-lg">Konseling</a></li>
                 </ul>
             </li>
             <a href="../siswa/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-users"></i><span>Data Siswa</span>
             </a>
             <li class="relative group">
                 <button
-                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
                     <i class="fas fa-file-alt"></i><span>Laporan</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 hidden group-hover:block">
                     <li><a href="../laporan/index.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
                     </li>
                     <li><a href="../laporan/laporan_pelanggaran.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
                     </li>
                     <li><a href="../laporan/laporan_konseling.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a>
                     </li>
                 </ul>
             </li>
             <a href="../profil/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-user-cog"></i><span>Profil</span>
             </a>
             <a href="../logout.php"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors mt-10">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors mt-10">
                 <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>
         </nav>
     </aside>
 
-    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 transition-all duration-300">
+    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-sky-50 to-indigo-50 transition-all duration-300">
         <!-- Mobile Header -->
         <div
-            class="lg:hidden bg-gray-900/60 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-purple-900/30">
+            class="lg:hidden bg-white/90 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-violet-200">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-white p-2 -ml-2 rounded-lg hover:bg-gray-800/60">
+                <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-100">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
                 <img src="../../assets/default/logo-smk40.png" alt="Logo" class="h-8 w-auto">
@@ -320,7 +320,7 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
                 <span id="current-time-mobile" class="text-sm font-medium hidden sm:block"></span>
                 <?php $photo_path = $_SESSION['admin_photo'] ?? 'assets/default/avatar.png'; ?>
                 <img src="../../<?= $photo_path ?>" alt="Profile"
-                    class="h-8 w-8 rounded-full object-cover border border-purple-500/50">
+                    class="h-8 w-8 rounded-full object-cover border border-violet-300">
             </div>
         </div>
 
@@ -331,17 +331,17 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
                 <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
                     <div class="flex items-center gap-3">
                         <a href="detailk.php?id=<?= $id ?>"
-                            class="p-2 rounded-full hover:bg-gray-800 transition-colors">
+                            class="p-2 rounded-full hover:bg-gray-50 transition-colors">
                             <i class="fas fa-arrow-left"></i>
                         </a>
                         <div>
                             <h1 class="text-xl md:text-2xl font-bold">Edit Konseling</h1>
-                            <p class="text-gray-400 text-sm">ID #<?= $k['id'] ?> &middot;
+                            <p class="text-gray-500 text-sm">ID #<?= $k['id'] ?> &middot;
                                 <?= date('d F Y', strtotime($k['tanggal'])) ?></p>
                         </div>
                     </div>
                     <a href="detailk.php?id=<?= $id ?>"
-                        class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center gap-2 text-sm transition-colors">
+                        class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center gap-2 text-sm transition-colors">
                         <i class="fas fa-eye"></i> Lihat Detail
                     </a>
                 </div>
@@ -374,18 +374,18 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
                             <div class="relative inline-block mb-3">
                                 <img src="../../<?= $k['foto_profil'] ?: 'assets/default/avatar.png' ?>"
                                     alt="Foto Siswa"
-                                    class="w-20 h-20 rounded-full object-cover border-2 border-purple-500/50 mx-auto">
+                                    class="w-20 h-20 rounded-full object-cover border-2 border-violet-300 mx-auto">
                                 <span
                                     class="absolute bottom-0 right-0 w-5 h-5 bg-purple-600 rounded-full flex items-center justify-center">
                                     <i class="fas fa-user-graduate text-xs"></i>
                                 </span>
                             </div>
                             <h2 class="font-bold text-base"><?= htmlspecialchars($k['nama_lengkap']) ?></h2>
-                            <p class="text-gray-400 text-sm"><?= $k['nis'] ?></p>
+                            <p class="text-gray-500 text-sm"><?= $k['nis'] ?></p>
                             <p class="text-gray-500 text-xs mt-0.5"><?= $k['kelas'] ?> &mdash; <?= $k['jurusan'] ?></p>
 
                             <div
-                                class="mt-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-xs text-yellow-400 text-left">
+                                class="mt-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-200 text-xs text-amber-600 text-left">
                                 <i class="fas fa-info-circle mr-1"></i>
                                 Data siswa tidak dapat diubah di halaman ini.
                             </div>
@@ -394,7 +394,7 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
                         <!-- Panduan Jenis -->
                         <div class="glass-effect rounded-xl p-4 animate-fade-in-d1">
                             <h3 class="text-sm font-semibold mb-3 flex items-center gap-2">
-                                <i class="fas fa-tag text-purple-400"></i> Jenis Konseling
+                                <i class="fas fa-tag text-violet-500"></i> Jenis Konseling
                             </h3>
                             <div class="space-y-2 text-xs">
                                 <?php
@@ -423,7 +423,7 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
                             <!-- Baris 1: Tanggal + Jenis -->
                             <div class="glass-effect rounded-xl p-5 animate-fade-in">
                                 <h3 class="font-semibold text-sm mb-4 flex items-center gap-2">
-                                    <i class="fas fa-info-circle text-purple-400"></i> Informasi Dasar
+                                    <i class="fas fa-info-circle text-violet-500"></i> Informasi Dasar
                                 </h3>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
@@ -483,7 +483,7 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
                             <div class="glass-effect rounded-xl p-5 animate-fade-in-d1">
                                 <h3 class="font-semibold text-sm mb-4 flex items-center gap-2">
                                     <span
-                                        class="w-5 h-5 rounded bg-green-500/20 text-green-400 flex items-center justify-center text-xs">
+                                        class="w-5 h-5 rounded bg-green-500/20 text-green-600 flex items-center justify-center text-xs">
                                         <i class="fas fa-lightbulb"></i>
                                     </span>
                                     Solusi / Rekomendasi
@@ -497,7 +497,7 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
                             <div class="glass-effect rounded-xl p-5 animate-fade-in-d2">
                                 <h3 class="font-semibold text-sm mb-4 flex items-center gap-2">
                                     <span
-                                        class="w-5 h-5 rounded bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs">
+                                        class="w-5 h-5 rounded bg-blue-50 text-blue-600 flex items-center justify-center text-xs">
                                         <i class="fas fa-forward"></i>
                                     </span>
                                     Tindak Lanjut
@@ -510,11 +510,11 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
                             <!-- Tombol Aksi -->
                             <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
                                 <a href="konseling.php?id=<?= $id ?>"
-                                    class="px-5 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center gap-2 text-sm transition-colors">
+                                    class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center gap-2 text-sm transition-colors">
                                     <i class="fas fa-times"></i> Batal
                                 </a>
                                 <button type="submit"
-                                    class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 rounded-lg flex items-center gap-2 text-sm font-semibold transition-colors shadow-lg shadow-purple-900/30">
+                                    class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 rounded-lg flex items-center gap-2 text-sm font-semibold transition-colors shadow-lg shadow-violet-200">
                                     <i class="fas fa-save"></i> Simpan Perubahan
                                 </button>
                             </div>

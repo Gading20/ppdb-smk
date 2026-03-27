@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 require_once '../../config/database.php';
 
@@ -170,7 +170,7 @@ function poinColor($poin)
 {
     if ($poin >= 75) return ['bar' => 'bg-red-500',    'text' => 'text-red-400'];
     if ($poin >= 50) return ['bar' => 'bg-orange-500', 'text' => 'text-orange-400'];
-    if ($poin >= 25) return ['bar' => 'bg-yellow-500', 'text' => 'text-yellow-400'];
+    if ($poin >= 25) return ['bar' => 'bg-yellow-500', 'text' => 'text-amber-600'];
     return              ['bar' => 'bg-emerald-500', 'text' => 'text-emerald-400'];
 }
 ?>
@@ -196,7 +196,7 @@ function poinColor($poin)
         }
 
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #064e3b 100%);
+            background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
         }
 
         .j-ringan {
@@ -298,13 +298,13 @@ function poinColor($poin)
     </style>
 </head>
 
-<body class="min-h-screen text-white bg-fixed">
+<body class="min-h-screen text-gray-800 bg-fixed">
 
-    <div id="overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+    <div id="overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- ── SIDEBAR ──────────────────────────────────────────────────────────── -->
-    <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass border-r border-emerald-900/30 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0">
-        <div class="flex items-center justify-between p-5 border-b border-emerald-900/30">
+    <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass border-r border-emerald-200 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0">
+        <div class="flex items-center justify-between p-5 border-b border-emerald-200">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" class="h-10 w-auto" alt="Logo">
                 <div>
@@ -312,22 +312,22 @@ function poinColor($poin)
                     <p class="text-xs text-emerald-400">Wali Kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?></p>
                 </div>
             </div>
-            <button class="lg:hidden text-gray-400 hover:text-white" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
+            <button class="lg:hidden text-gray-500 hover:text-gray-800" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
         </div>
         <nav class="p-4 space-y-1 overflow-y-auto no-scrollbar" style="max-height:calc(100vh - 76px)">
-            <a href="../dashboard/index.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-emerald-500/10 transition-colors">
+            <a href="../dashboard/index.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-500 hover:bg-emerald-500/10 transition-colors">
                 <i class="fas fa-home text-emerald-400"></i><span>Dashboard</span>
             </a>
             <div>
-                <button onclick="toggleMenu(this)" class="flex items-center gap-3 w-full p-3 rounded-lg text-gray-300 hover:bg-emerald-500/10 transition-colors">
+                <button onclick="toggleMenu(this)" class="flex items-center gap-3 w-full p-3 rounded-lg text-gray-700 hover:bg-emerald-500/10 transition-colors">
                     <i class="fas fa-calendar-check text-emerald-400"></i>
                     <span>Monitoring Siswa</span>
                     <i class="fas fa-chevron-down ml-auto text-xs rotate-icon" style="transform:rotate(180deg)"></i>
                 </button>
                 <ul class="ml-8 mt-1 space-y-1 sub-menu">
-                    <li><a href="presensi.php" class="block p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Presensi</a></li>
+                    <li><a href="presensi.php" class="block p-2 text-gray-600 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Presensi</a></li>
                     <li><a href="pelanggaran.php" class="block p-2 text-emerald-400 bg-emerald-500/10 rounded-lg text-sm font-medium">Pelanggaran</a></li>
-                    <li><a href="konseling.php" class="block p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Konseling</a></li>
+                    <li><a href="konseling.php" class="block p-2 text-gray-600 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Konseling</a></li>
                 </ul>
             </div>
 
@@ -335,13 +335,13 @@ function poinColor($poin)
             <!-- <div class="px-3 py-2">
                 <p class="text-xs text-gray-500 uppercase tracking-wider mb-3">Info Kelas</p>
                 <div class="space-y-2 text-xs">
-                    <div class="flex justify-between"><span class="text-gray-400">Kelas</span><span class="font-semibold text-emerald-300"><?= htmlspecialchars($kelas . ' ' . $jurusan) ?></span></div>
-                    <div class="flex justify-between"><span class="text-gray-400">Total Siswa</span><span class="font-semibold"><?= $total_students ?></span></div>
-                    <div class="flex justify-between"><span class="text-gray-400">Hadir Hari Ini</span><span class="font-semibold text-emerald-400"><?= $stats['hadir'] ?></span></div>
-                    <div class="flex justify-between"><span class="text-gray-400">Alpha Hari Ini</span><span class="font-semibold text-red-400"><?= $stats['alpha'] ?></span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Kelas</span><span class="font-semibold text-emerald-300"><?= htmlspecialchars($kelas . ' ' . $jurusan) ?></span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Total Siswa</span><span class="font-semibold"><?= $total_students ?></span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Hadir Hari Ini</span><span class="font-semibold text-emerald-400"><?= $stats['hadir'] ?></span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Alpha Hari Ini</span><span class="font-semibold text-red-400"><?= $stats['alpha'] ?></span></div>
                 </div>
             </div> -->
-            <a href="../../wali_kelas/logout.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors">
+            <a href="../../wali_kelas/logout.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-500 hover:bg-red-500/10 hover:text-red-400 transition-colors">
                 <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>
         </nav>
@@ -351,9 +351,9 @@ function poinColor($poin)
     <main class="lg:ml-64 min-h-screen">
 
         <!-- Mobile topbar -->
-        <div class="lg:hidden sticky top-0 z-30 glass px-4 py-3 flex items-center justify-between border-b border-emerald-900/30">
+        <div class="lg:hidden sticky top-0 z-30 glass px-4 py-3 flex items-center justify-between border-b border-emerald-200">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-white p-2 -ml-2 rounded-lg hover:bg-gray-800/50"><i class="fas fa-bars"></i></button>
+                <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-50/50"><i class="fas fa-bars"></i></button>
                 <span class="text-sm font-medium">Pelanggaran Kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?></span>
             </div>
             <img src="../../<?= $_SESSION['walikelas_photo'] ?: 'assets/default/photo-profile.png' ?>"
@@ -370,9 +370,9 @@ function poinColor($poin)
                             <i class="fas fa-exclamation-triangle text-red-400"></i>
                             Pelanggaran Kelas <?= htmlspecialchars($kelas . ' ' . $jurusan) ?>
                         </h1>
-                        <p class="text-gray-400 text-sm mt-1">Data pelanggaran siswa – hanya lihat</p>
+                        <p class="text-gray-500 text-sm mt-1">Data pelanggaran siswa – hanya lihat</p>
                     </div>
-                    <span class="mt-3 lg:mt-0 flex items-center gap-2 px-4 py-2 glass rounded-xl text-xs text-emerald-300 border border-emerald-500/30">
+                    <span class="mt-3 lg:mt-0 flex items-center gap-2 px-4 py-2 glass rounded-xl text-xs text-emerald-300 border border-emerald-200">
                         <i class="fas fa-eye"></i> Mode Lihat Saja
                     </span>
                 </header>
@@ -381,19 +381,19 @@ function poinColor($poin)
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 fade-up" style="animation-delay:.05s">
                     <div class="glass rounded-xl p-4 flex items-center gap-3">
                         <div class="h-10 w-10 rounded-lg bg-green-500/15 flex items-center justify-center shrink-0">
-                            <i class="fas fa-exclamation-circle text-green-400"></i>
+                            <i class="fas fa-exclamation-circle text-green-600"></i>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-400">Ringan (Hari Ini)</p>
+                            <p class="text-xs text-gray-500">Ringan (Hari Ini)</p>
                             <p class="text-xl font-bold"><?= $jenis_counts['Ringan'] ?></p>
                         </div>
                     </div>
                     <div class="glass rounded-xl p-4 flex items-center gap-3">
                         <div class="h-10 w-10 rounded-lg bg-yellow-500/15 flex items-center justify-center shrink-0">
-                            <i class="fas fa-exclamation-triangle text-yellow-400"></i>
+                            <i class="fas fa-exclamation-triangle text-amber-600"></i>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-400">Sedang (Hari Ini)</p>
+                            <p class="text-xs text-gray-500">Sedang (Hari Ini)</p>
                             <p class="text-xl font-bold"><?= $jenis_counts['Sedang'] ?></p>
                         </div>
                     </div>
@@ -402,7 +402,7 @@ function poinColor($poin)
                             <i class="fas fa-times-circle text-red-400"></i>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-400">Berat (Hari Ini)</p>
+                            <p class="text-xs text-gray-500">Berat (Hari Ini)</p>
                             <p class="text-xl font-bold"><?= $jenis_counts['Berat'] ?></p>
                         </div>
                     </div>
@@ -411,7 +411,7 @@ function poinColor($poin)
                             <i class="fas fa-hourglass-half text-amber-400"></i>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-400">Sedang Diproses</p>
+                            <p class="text-xs text-gray-500">Sedang Diproses</p>
                             <p class="text-xl font-bold"><?= $proses_count ?></p>
                         </div>
                     </div>
@@ -436,15 +436,15 @@ function poinColor($poin)
 
                             <!-- Tanggal -->
                             <div>
-                                <label class="text-xs text-gray-400 mb-1 block">Tanggal</label>
+                                <label class="text-xs text-gray-500 mb-1 block">Tanggal</label>
                                 <input type="date" name="date" value="<?= $date_filter ?>"
-                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-emerald-500">
                             </div>
 
                             <!-- Jenis -->
                             <div>
-                                <label class="text-xs text-gray-400 mb-1 block">Jenis Pelanggaran</label>
-                                <select name="jenis" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                                <label class="text-xs text-gray-500 mb-1 block">Jenis Pelanggaran</label>
+                                <select name="jenis" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-emerald-500">
                                     <option value="">Semua Jenis</option>
                                     <?php foreach (['Ringan', 'Sedang', 'Berat'] as $j): ?>
                                         <option value="<?= $j ?>" <?= $jenis_filter === $j ? 'selected' : '' ?>><?= $j ?></option>
@@ -454,8 +454,8 @@ function poinColor($poin)
 
                             <!-- Status -->
                             <div>
-                                <label class="text-xs text-gray-400 mb-1 block">Status Tindak Lanjut</label>
-                                <select name="status" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                                <label class="text-xs text-gray-500 mb-1 block">Status Tindak Lanjut</label>
+                                <select name="status" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-emerald-500">
                                     <option value="">Semua Status</option>
                                     <?php foreach (['Pending', 'Proses', 'Selesai'] as $s): ?>
                                         <option value="<?= $s ?>" <?= $status_filter === $s ? 'selected' : '' ?>><?= $s ?></option>
@@ -465,11 +465,11 @@ function poinColor($poin)
 
                             <!-- Search -->
                             <div>
-                                <label class="text-xs text-gray-400 mb-1 block">Cari Siswa</label>
+                                <label class="text-xs text-gray-500 mb-1 block">Cari Siswa</label>
                                 <div class="relative">
                                     <input type="text" name="search" value="<?= htmlspecialchars($search) ?>"
                                         placeholder="Nama atau NIS..."
-                                        class="w-full bg-gray-800 border border-gray-700 rounded-lg pl-9 pr-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                                        class="w-full bg-gray-50 border border-gray-300 rounded-lg pl-9 pr-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-emerald-500">
                                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
                                 </div>
                             </div>
@@ -488,14 +488,14 @@ function poinColor($poin)
                         <div class="overflow-x-auto">
                             <table class="w-full whitespace-nowrap text-sm">
                                 <thead>
-                                    <tr class="bg-gray-800/50 text-gray-400 text-xs uppercase">
-                                        <th class="px-4 py-3 text-left"><a href="<?= buildSortUrl('nis') ?>" class="flex items-center gap-1 hover:text-white">NIS <?= sortIcon('nis', $sort_col, $sort_order) ?></a></th>
-                                        <th class="px-4 py-3 text-left"><a href="<?= buildSortUrl('nama_lengkap') ?>" class="flex items-center gap-1 hover:text-white">Nama <?= sortIcon('nama_lengkap', $sort_col, $sort_order) ?></a></th>
-                                        <th class="px-4 py-3 text-left"><a href="<?= buildSortUrl('tanggal') ?>" class="flex items-center gap-1 hover:text-white">Tanggal <?= sortIcon('tanggal', $sort_col, $sort_order) ?></a></th>
-                                        <th class="px-4 py-3 text-left"><a href="<?= buildSortUrl('jenis_pelanggaran') ?>" class="flex items-center gap-1 hover:text-white">Jenis <?= sortIcon('jenis_pelanggaran', $sort_col, $sort_order) ?></a></th>
+                                    <tr class="bg-gray-50/50 text-gray-500 text-xs uppercase">
+                                        <th class="px-4 py-3 text-left"><a href="<?= buildSortUrl('nis') ?>" class="flex items-center gap-1 hover:text-gray-800">NIS <?= sortIcon('nis', $sort_col, $sort_order) ?></a></th>
+                                        <th class="px-4 py-3 text-left"><a href="<?= buildSortUrl('nama_lengkap') ?>" class="flex items-center gap-1 hover:text-gray-800">Nama <?= sortIcon('nama_lengkap', $sort_col, $sort_order) ?></a></th>
+                                        <th class="px-4 py-3 text-left"><a href="<?= buildSortUrl('tanggal') ?>" class="flex items-center gap-1 hover:text-gray-800">Tanggal <?= sortIcon('tanggal', $sort_col, $sort_order) ?></a></th>
+                                        <th class="px-4 py-3 text-left"><a href="<?= buildSortUrl('jenis_pelanggaran') ?>" class="flex items-center gap-1 hover:text-gray-800">Jenis <?= sortIcon('jenis_pelanggaran', $sort_col, $sort_order) ?></a></th>
                                         <th class="px-4 py-3 text-left">Deskripsi</th>
-                                        <th class="px-4 py-3 text-left"><a href="<?= buildSortUrl('poin') ?>" class="flex items-center gap-1 hover:text-white">Poin <?= sortIcon('poin', $sort_col, $sort_order) ?></a></th>
-                                        <th class="px-4 py-3 text-left"><a href="<?= buildSortUrl('status') ?>" class="flex items-center gap-1 hover:text-white">Status <?= sortIcon('status', $sort_col, $sort_order) ?></a></th>
+                                        <th class="px-4 py-3 text-left"><a href="<?= buildSortUrl('poin') ?>" class="flex items-center gap-1 hover:text-gray-800">Poin <?= sortIcon('poin', $sort_col, $sort_order) ?></a></th>
+                                        <th class="px-4 py-3 text-left"><a href="<?= buildSortUrl('status') ?>" class="flex items-center gap-1 hover:text-gray-800">Status <?= sortIcon('status', $sort_col, $sort_order) ?></a></th>
                                         <th class="px-4 py-3 text-left">Tindakan</th>
                                     </tr>
                                 </thead>
@@ -509,27 +509,27 @@ function poinColor($poin)
                                         $jc    = 'j-' . strtolower($p['jenis_pelanggaran']);
                                         $stc   = 'st-' . strtolower($p['status']);
                                     ?>
-                                        <tr class="hover:bg-emerald-900/10 transition-colors">
-                                            <td class="px-4 py-3 text-gray-400"><?= htmlspecialchars($p['nis']) ?></td>
+                                        <tr class="hover:bg-emerald-50 transition-colors">
+                                            <td class="px-4 py-3 text-gray-500"><?= htmlspecialchars($p['nis']) ?></td>
                                             <td class="px-4 py-3">
                                                 <div class="flex items-center gap-3">
                                                     <img src="../../<?= $p['foto_profil'] ?: 'assets/default/photo-profile.png' ?>"
-                                                        class="h-8 w-8 rounded-full object-cover border border-gray-700 shrink-0" alt="">
+                                                        class="h-8 w-8 rounded-full object-cover border border-gray-300 shrink-0" alt="">
                                                     <span class="font-medium"><?= htmlspecialchars($p['nama_lengkap']) ?></span>
                                                 </div>
                                             </td>
-                                            <td class="px-4 py-3 text-gray-300"><?= date('d/m/Y', strtotime($p['tanggal'])) ?></td>
+                                            <td class="px-4 py-3 text-gray-700"><?= date('d/m/Y', strtotime($p['tanggal'])) ?></td>
                                             <td class="px-4 py-3">
                                                 <span class="px-2 py-1 rounded-full text-xs <?= $jc ?>"><?= $p['jenis_pelanggaran'] ?></span>
                                             </td>
                                             <td class="px-4 py-3">
-                                                <span class="text-gray-300 max-w-[150px] truncate block" title="<?= htmlspecialchars($p['deskripsi']) ?>">
+                                                <span class="text-gray-700 max-w-[150px] truncate block" title="<?= htmlspecialchars($p['deskripsi']) ?>">
                                                     <?= htmlspecialchars($p['deskripsi']) ?>
                                                 </span>
                                             </td>
                                             <td class="px-4 py-3">
                                                 <div class="flex flex-col gap-1.5">
-                                                    <span class="font-bold <?= $p['jenis_pelanggaran'] === 'Berat' ? 'text-red-400' : ($p['jenis_pelanggaran'] === 'Sedang' ? 'text-yellow-400' : 'text-green-400') ?>">
+                                                    <span class="font-bold <?= $p['jenis_pelanggaran'] === 'Berat' ? 'text-red-400' : ($p['jenis_pelanggaran'] === 'Sedang' ? 'text-amber-600' : 'text-green-600') ?>">
                                                         <?= $p['poin'] ?> <span class="font-normal text-xs text-gray-500">poin</span>
                                                     </span>
                                                     <div class="flex flex-wrap gap-1">
@@ -546,7 +546,7 @@ function poinColor($poin)
                                             <td class="px-4 py-3">
                                                 <span class="px-2 py-1 rounded-full text-xs <?= $stc ?>"><?= $p['status'] ?></span>
                                             </td>
-                                            <td class="px-4 py-3 text-gray-400 max-w-[140px] truncate" title="<?= htmlspecialchars($p['tindakan'] ?? '') ?>">
+                                            <td class="px-4 py-3 text-gray-500 max-w-[140px] truncate" title="<?= htmlspecialchars($p['tindakan'] ?? '') ?>">
                                                 <?= htmlspecialchars($p['tindakan'] ?? '-') ?>
                                             </td>
                                         </tr>
@@ -556,28 +556,28 @@ function poinColor($poin)
                         </div>
 
                         <!-- Pagination -->
-                        <div class="px-5 py-4 border-t border-gray-800/50 flex flex-col sm:flex-row justify-between items-center gap-3">
-                            <p class="text-xs text-gray-400">
+                        <div class="px-5 py-4 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                            <p class="text-xs text-gray-500">
                                 Menampilkan <?= min($offset + 1, $total_items) ?>–<?= min($offset + $items_per_page, $total_items) ?> dari <?= $total_items ?> data
                             </p>
                             <div class="flex gap-1">
                                 <?php if ($page > 1): ?>
-                                    <a href="<?= pageUrl(1) ?>" class="px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-xs"><i class="fas fa-angle-double-left"></i></a>
-                                    <a href="<?= pageUrl($page - 1) ?>" class="px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-xs"><i class="fas fa-angle-left"></i></a>
+                                    <a href="<?= pageUrl(1) ?>" class="px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-xs"><i class="fas fa-angle-double-left"></i></a>
+                                    <a href="<?= pageUrl($page - 1) ?>" class="px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-xs"><i class="fas fa-angle-left"></i></a>
                                 <?php endif; ?>
                                 <?php
                                 $s = max(1, $page - 2);
                                 $e = min($total_pages, $page + 2);
                                 if ($s > 1) echo '<span class="px-2 py-1.5 text-gray-500 text-xs">…</span>';
                                 for ($i = $s; $i <= $e; $i++) {
-                                    $cls = $i == $page ? 'bg-emerald-600 text-white' : 'bg-gray-800 hover:bg-gray-700';
+                                    $cls = $i == $page ? 'bg-emerald-600 text-gray-800' : 'bg-gray-50 hover:bg-gray-100';
                                     echo "<a href='" . pageUrl($i) . "' class='px-3 py-1.5 $cls rounded text-xs'>$i</a>";
                                 }
                                 if ($e < $total_pages) echo '<span class="px-2 py-1.5 text-gray-500 text-xs">…</span>';
                                 ?>
                                 <?php if ($page < $total_pages): ?>
-                                    <a href="<?= pageUrl($page + 1) ?>" class="px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-xs"><i class="fas fa-angle-right"></i></a>
-                                    <a href="<?= pageUrl($total_pages) ?>" class="px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-xs"><i class="fas fa-angle-double-right"></i></a>
+                                    <a href="<?= pageUrl($page + 1) ?>" class="px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-xs"><i class="fas fa-angle-right"></i></a>
+                                    <a href="<?= pageUrl($total_pages) ?>" class="px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-xs"><i class="fas fa-angle-double-right"></i></a>
                                 <?php endif; ?>
                             </div>
                         </div>

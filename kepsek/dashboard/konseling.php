@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 require_once '../../config/database.php';
 
@@ -116,7 +116,7 @@ function pageUrl($pg)
         }
 
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #064e3b 100%);
+            background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
         }
 
         /* Status konseling */
@@ -145,13 +145,13 @@ function pageUrl($pg)
     </style>
 </head>
 
-<body class="min-h-screen text-white bg-fixed">
+<body class="min-h-screen text-gray-800 bg-fixed">
 
-    <div id="overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+    <div id="overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- ── SIDEBAR ──────────────────────────────────────────────────────────── -->
-    <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass border-r border-emerald-900/30 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0">
-        <div class="flex items-center justify-between p-5 border-b border-emerald-900/30">
+    <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass border-r border-emerald-200 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0">
+        <div class="flex items-center justify-between p-5 border-b border-emerald-200">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" class="h-10 w-auto" alt="Logo">
                 <div>
@@ -159,28 +159,28 @@ function pageUrl($pg)
                     <p class="text-xs text-emerald-400">Kepala Sekolah</p>
                 </div>
             </div>
-            <button class="lg:hidden text-gray-400 hover:text-white" onclick="toggleSidebar()">
+            <button class="lg:hidden text-gray-500 hover:text-gray-800" onclick="toggleSidebar()">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         <nav class="p-4 space-y-1 overflow-y-auto no-scrollbar" style="max-height:calc(100vh - 76px)">
-            <a href="../dashboard_kepsek/index.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-emerald-500/10 transition-colors">
+            <a href="../dashboard_kepsek/index.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-500 hover:bg-emerald-500/10 transition-colors">
                 <i class="fas fa-home text-emerald-400"></i><span>Dashboard</span>
             </a>
             <div>
-                <button onclick="toggleMenu(this)" class="flex items-center gap-3 w-full p-3 rounded-lg text-gray-300 hover:bg-emerald-500/10 transition-colors">
+                <button onclick="toggleMenu(this)" class="flex items-center gap-3 w-full p-3 rounded-lg text-gray-700 hover:bg-emerald-500/10 transition-colors">
                     <i class="fas fa-calendar-check text-emerald-400"></i>
                     <span>Monitoring Siswa</span>
                     <i class="fas fa-chevron-down ml-auto text-xs rotate-icon" style="transform:rotate(180deg)"></i>
                 </button>
                 <ul class="ml-8 mt-1 space-y-1 sub-menu">
-                    <li><a href="presensi.php"   class="block p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Presensi</a></li>
-                    <li><a href="pelanggaran.php" class="block p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Pelanggaran</a></li>
+                    <li><a href="presensi.php"   class="block p-2 text-gray-600 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Presensi</a></li>
+                    <li><a href="pelanggaran.php" class="block p-2 text-gray-600 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Pelanggaran</a></li>
                     <li><a href="konseling.php"   class="block p-2 text-emerald-400 bg-emerald-500/10 rounded-lg text-sm font-medium">Konseling</a></li>
                 </ul>
             </div>
-            <hr class="border-gray-700/40 my-3">
-            <a href="../../kepsek/logout.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors">
+            <hr class="border-gray-300/40 my-3">
+            <a href="../../kepsek/logout.php" class="flex items-center gap-3 p-3 rounded-lg text-gray-500 hover:bg-red-500/10 hover:text-red-400 transition-colors">
                 <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>
         </nav>
@@ -190,9 +190,9 @@ function pageUrl($pg)
     <main class="lg:ml-64 min-h-screen">
 
         <!-- Mobile topbar -->
-        <div class="lg:hidden sticky top-0 z-30 glass px-4 py-3 flex items-center justify-between border-b border-emerald-900/30">
+        <div class="lg:hidden sticky top-0 z-30 glass px-4 py-3 flex items-center justify-between border-b border-emerald-200">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-white p-2 -ml-2 rounded-lg hover:bg-gray-800/50"><i class="fas fa-bars"></i></button>
+                <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-50/50"><i class="fas fa-bars"></i></button>
                 <span class="text-sm font-medium">Data Konseling</span>
             </div>
             <img src="../../<?= $_SESSION['kepsek_photo'] ?: 'assets/default/photo-profile.png' ?>"
@@ -208,9 +208,9 @@ function pageUrl($pg)
                         <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">
                             <i class="fas fa-comments text-emerald-400"></i> Data Konseling Siswa
                         </h1>
-                        <p class="text-gray-400 text-sm mt-1">Monitoring konseling siswa – hanya lihat</p>
+                        <p class="text-gray-500 text-sm mt-1">Monitoring konseling siswa – hanya lihat</p>
                     </div>
-                    <span class="mt-3 lg:mt-0 flex items-center gap-2 px-4 py-2 glass rounded-xl text-xs text-emerald-300 border border-emerald-500/30">
+                    <span class="mt-3 lg:mt-0 flex items-center gap-2 px-4 py-2 glass rounded-xl text-xs text-emerald-300 border border-emerald-200">
                         <i class="fas fa-eye"></i> Mode Lihat Saja
                     </span>
                 </header>
@@ -230,7 +230,7 @@ function pageUrl($pg)
                                 <i class="fas <?= $ico ?> text-<?= $col ?>-400"></i>
                             </div>
                             <div>
-                                <p class="text-xs text-gray-400"><?= $lbl ?></p>
+                                <p class="text-xs text-gray-500"><?= $lbl ?></p>
                                 <p class="text-xl font-bold"><?= $val ?></p>
                             </div>
                         </div>
@@ -256,15 +256,15 @@ function pageUrl($pg)
 
                             <!-- Tanggal -->
                             <div>
-                                <label class="text-xs text-gray-400 mb-1 block">Tanggal</label>
+                                <label class="text-xs text-gray-500 mb-1 block">Tanggal</label>
                                 <input type="date" name="date" value="<?= $date_filter ?>"
-                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-emerald-500">
                             </div>
 
                             <!-- Jenis Konseling -->
                             <div>
-                                <label class="text-xs text-gray-400 mb-1 block">Jenis Konseling</label>
-                                <select name="jenis" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                                <label class="text-xs text-gray-500 mb-1 block">Jenis Konseling</label>
+                                <select name="jenis" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-emerald-500">
                                     <option value="">Semua Jenis</option>
                                     <?php foreach ($jenis_options as $j): ?>
                                         <option value="<?= $j ?>" <?= $jenis_filter === $j ? 'selected' : '' ?>><?= $j ?></option>
@@ -274,8 +274,8 @@ function pageUrl($pg)
 
                             <!-- Status -->
                             <div>
-                                <label class="text-xs text-gray-400 mb-1 block">Status</label>
-                                <select name="status" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                                <label class="text-xs text-gray-500 mb-1 block">Status</label>
+                                <select name="status" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-emerald-500">
                                     <option value="">Semua Status</option>
                                     <?php foreach (['Proses', 'Selesai', 'Ditunda'] as $s): ?>
                                         <option value="<?= $s ?>" <?= $status_filter === $s ? 'selected' : '' ?>><?= $s ?></option>
@@ -285,11 +285,11 @@ function pageUrl($pg)
 
                             <!-- Search -->
                             <div>
-                                <label class="text-xs text-gray-400 mb-1 block">Cari Siswa / Konselor</label>
+                                <label class="text-xs text-gray-500 mb-1 block">Cari Siswa / Konselor</label>
                                 <div class="relative">
                                     <input type="text" name="search" value="<?= htmlspecialchars($search) ?>"
                                         placeholder="Nama, NIS, atau Konselor..."
-                                        class="w-full bg-gray-800 border border-gray-700 rounded-lg pl-9 pr-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                                        class="w-full bg-gray-50 border border-gray-300 rounded-lg pl-9 pr-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-emerald-500">
                                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
                                 </div>
                             </div>
@@ -309,28 +309,28 @@ function pageUrl($pg)
                         <div class="overflow-x-auto">
                             <table class="w-full whitespace-nowrap text-sm">
                                 <thead>
-                                    <tr class="bg-gray-800/50 text-gray-400 text-xs uppercase">
+                                    <tr class="bg-gray-50/50 text-gray-500 text-xs uppercase">
                                         <th class="px-5 py-3 text-left">
-                                            <a href="<?= buildSortUrl('nis') ?>" class="flex items-center gap-1 hover:text-white">NIS <?= sortIcon('nis', $sort_col, $sort_order) ?></a>
+                                            <a href="<?= buildSortUrl('nis') ?>" class="flex items-center gap-1 hover:text-gray-800">NIS <?= sortIcon('nis', $sort_col, $sort_order) ?></a>
                                         </th>
                                         <th class="px-5 py-3 text-left">
-                                            <a href="<?= buildSortUrl('nama_lengkap') ?>" class="flex items-center gap-1 hover:text-white">Nama <?= sortIcon('nama_lengkap', $sort_col, $sort_order) ?></a>
+                                            <a href="<?= buildSortUrl('nama_lengkap') ?>" class="flex items-center gap-1 hover:text-gray-800">Nama <?= sortIcon('nama_lengkap', $sort_col, $sort_order) ?></a>
                                         </th>
                                         <th class="px-5 py-3 text-left">
-                                            <a href="<?= buildSortUrl('kelas') ?>" class="flex items-center gap-1 hover:text-white">Kelas <?= sortIcon('kelas', $sort_col, $sort_order) ?></a>
+                                            <a href="<?= buildSortUrl('kelas') ?>" class="flex items-center gap-1 hover:text-gray-800">Kelas <?= sortIcon('kelas', $sort_col, $sort_order) ?></a>
                                         </th>
                                         <th class="px-5 py-3 text-left">
-                                            <a href="<?= buildSortUrl('tanggal') ?>" class="flex items-center gap-1 hover:text-white">Tanggal <?= sortIcon('tanggal', $sort_col, $sort_order) ?></a>
+                                            <a href="<?= buildSortUrl('tanggal') ?>" class="flex items-center gap-1 hover:text-gray-800">Tanggal <?= sortIcon('tanggal', $sort_col, $sort_order) ?></a>
                                         </th>
                                         <th class="px-5 py-3 text-left">
-                                            <a href="<?= buildSortUrl('jenis_konseling') ?>" class="flex items-center gap-1 hover:text-white">Jenis <?= sortIcon('jenis_konseling', $sort_col, $sort_order) ?></a>
+                                            <a href="<?= buildSortUrl('jenis_konseling') ?>" class="flex items-center gap-1 hover:text-gray-800">Jenis <?= sortIcon('jenis_konseling', $sort_col, $sort_order) ?></a>
                                         </th>
                                         <th class="px-5 py-3 text-left">Masalah</th>
                                         <th class="px-5 py-3 text-left">
-                                            <a href="<?= buildSortUrl('konselor') ?>" class="flex items-center gap-1 hover:text-white">Konselor <?= sortIcon('konselor', $sort_col, $sort_order) ?></a>
+                                            <a href="<?= buildSortUrl('konselor') ?>" class="flex items-center gap-1 hover:text-gray-800">Konselor <?= sortIcon('konselor', $sort_col, $sort_order) ?></a>
                                         </th>
                                         <th class="px-5 py-3 text-left">
-                                            <a href="<?= buildSortUrl('status') ?>" class="flex items-center gap-1 hover:text-white">Status <?= sortIcon('status', $sort_col, $sort_order) ?></a>
+                                            <a href="<?= buildSortUrl('status') ?>" class="flex items-center gap-1 hover:text-gray-800">Status <?= sortIcon('status', $sort_col, $sort_order) ?></a>
                                         </th>
                                         <th class="px-5 py-3 text-center">Detail</th>
                                     </tr>
@@ -340,28 +340,28 @@ function pageUrl($pg)
                                         $statusIcons = ['Proses' => '⏳', 'Selesai' => '✅', 'Ditunda' => '⏸'];
                                         $icon = $statusIcons[$row['status']] ?? '';
                                     ?>
-                                        <tr class="hover:bg-emerald-900/10 transition-colors">
-                                            <td class="px-5 py-3 text-gray-400"><?= htmlspecialchars($row['nis']) ?></td>
+                                        <tr class="hover:bg-emerald-50 transition-colors">
+                                            <td class="px-5 py-3 text-gray-500"><?= htmlspecialchars($row['nis']) ?></td>
                                             <td class="px-5 py-3">
                                                 <div class="flex items-center gap-3">
                                                     <img src="../../<?= $row['foto_profil'] ?: 'assets/default/photo-profile.png' ?>"
-                                                        class="h-8 w-8 rounded-full object-cover border border-gray-700 shrink-0" alt="">
+                                                        class="h-8 w-8 rounded-full object-cover border border-gray-300 shrink-0" alt="">
                                                     <span class="font-medium"><?= htmlspecialchars($row['nama_lengkap']) ?></span>
                                                 </div>
                                             </td>
-                                            <td class="px-5 py-3 text-gray-400"><?= htmlspecialchars($row['kelas']) ?> <?= htmlspecialchars($row['jurusan']) ?></td>
-                                            <td class="px-5 py-3 text-gray-300"><?= date('d/m/Y', strtotime($row['tanggal'])) ?></td>
+                                            <td class="px-5 py-3 text-gray-500"><?= htmlspecialchars($row['kelas']) ?> <?= htmlspecialchars($row['jurusan']) ?></td>
+                                            <td class="px-5 py-3 text-gray-700"><?= date('d/m/Y', strtotime($row['tanggal'])) ?></td>
                                             <td class="px-5 py-3">
                                                 <span class="px-2.5 py-1 rounded-full text-xs font-medium j-<?= strtolower($row['jenis_konseling']) ?>">
                                                     <?= htmlspecialchars($row['jenis_konseling']) ?>
                                                 </span>
                                             </td>
-                                            <td class="px-5 py-3 text-gray-400">
+                                            <td class="px-5 py-3 text-gray-500">
                                                 <div class="truncate-cell" title="<?= htmlspecialchars($row['masalah']) ?>">
                                                     <?= htmlspecialchars($row['masalah']) ?>
                                                 </div>
                                             </td>
-                                            <td class="px-5 py-3 text-gray-300"><?= htmlspecialchars($row['konselor']) ?></td>
+                                            <td class="px-5 py-3 text-gray-700"><?= htmlspecialchars($row['konselor']) ?></td>
                                             <td class="px-5 py-3">
                                                 <span class="px-2.5 py-1 rounded-full text-xs font-medium s-<?= strtolower($row['status']) ?>">
                                                     <?= $icon ?> <?= htmlspecialchars($row['status']) ?>
@@ -381,28 +381,28 @@ function pageUrl($pg)
                         </div>
 
                         <!-- Pagination -->
-                        <div class="px-5 py-4 border-t border-gray-800/50 flex flex-col sm:flex-row justify-between items-center gap-3">
-                            <p class="text-xs text-gray-400">
+                        <div class="px-5 py-4 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                            <p class="text-xs text-gray-500">
                                 Menampilkan <?= min($offset + 1, $total_items) ?>–<?= min($offset + $items_per_page, $total_items) ?> dari <?= $total_items ?> data
                             </p>
                             <div class="flex gap-1">
                                 <?php if ($page > 1): ?>
-                                    <a href="<?= pageUrl(1) ?>"        class="px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-xs"><i class="fas fa-angle-double-left"></i></a>
-                                    <a href="<?= pageUrl($page - 1) ?>" class="px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-xs"><i class="fas fa-angle-left"></i></a>
+                                    <a href="<?= pageUrl(1) ?>"        class="px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-xs"><i class="fas fa-angle-double-left"></i></a>
+                                    <a href="<?= pageUrl($page - 1) ?>" class="px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-xs"><i class="fas fa-angle-left"></i></a>
                                 <?php endif; ?>
                                 <?php
                                 $s = max(1, $page - 2);
                                 $e = min($total_pages, $page + 2);
                                 if ($s > 1) echo '<span class="px-2 py-1.5 text-gray-500 text-xs">…</span>';
                                 for ($i = $s; $i <= $e; $i++) {
-                                    $cls = $i == $page ? 'bg-emerald-600 text-white' : 'bg-gray-800 hover:bg-gray-700';
+                                    $cls = $i == $page ? 'bg-emerald-600 text-gray-800' : 'bg-gray-50 hover:bg-gray-100';
                                     echo "<a href='" . pageUrl($i) . "' class='px-3 py-1.5 $cls rounded text-xs'>$i</a>";
                                 }
                                 if ($e < $total_pages) echo '<span class="px-2 py-1.5 text-gray-500 text-xs">…</span>';
                                 ?>
                                 <?php if ($page < $total_pages): ?>
-                                    <a href="<?= pageUrl($page + 1) ?>"     class="px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-xs"><i class="fas fa-angle-right"></i></a>
-                                    <a href="<?= pageUrl($total_pages) ?>"  class="px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-xs"><i class="fas fa-angle-double-right"></i></a>
+                                    <a href="<?= pageUrl($page + 1) ?>"     class="px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-xs"><i class="fas fa-angle-right"></i></a>
+                                    <a href="<?= pageUrl($total_pages) ?>"  class="px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-xs"><i class="fas fa-angle-double-right"></i></a>
                                 <?php endif; ?>
                             </div>
                         </div>

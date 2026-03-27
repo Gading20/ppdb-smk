@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 require_once '../../config/database.php';
 
@@ -129,17 +129,17 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         .glass-effect {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(147, 51, 234, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         body {
-            background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
+            background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
         }
 
         .menu-active {
-            background: linear-gradient(to right, rgba(147, 51, 234, 0.2), rgba(147, 51, 234, 0.05));
+            background: linear-gradient(to right, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
             border-left: 4px solid #9333ea;
         }
 
@@ -203,90 +203,90 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 
-<body class="min-h-screen text-white bg-fixed">
+<body class="min-h-screen text-gray-800 bg-fixed">
     <!-- Mobile Overlay - only visible when sidebar is open on mobile -->
-    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+    <div id="mobile-overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- Side Navigation -->
     <aside id="sidebar"
-        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-purple-900/30 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
-        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-purple-900/30">
+        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-violet-200 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
+        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-violet-200">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 lg:h-10 w-auto">
                 <div>
-                    <h1 class="font-semibold text-sm lg:text-base">SMK NURUL ULUM</h1>
-                    <p class="text-xs text-gray-400">Sistem Absensi</p>
+                    <h1 class="font-semibold text-sm lg:text-base text-gray-800">SMK NURUL ULUM</h1>
+                    <p class="text-xs text-gray-500">Sistem Absensi</p>
                 </div>
             </div>
             <!-- Close sidebar button - only visible on mobile -->
-            <button class="text-gray-400 hover:text-white lg:hidden" onclick="toggleSidebar()">
+            <button class="text-gray-600 hover:text-gray-800 lg:hidden" onclick="toggleSidebar()">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
 
         <nav class="p-4 space-y-2 overflow-y-auto no-scrollbar" style="max-height: calc(100vh - 76px);">
             <a href="../dashboard/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-home"></i><span>Dashboard</span>
             </a>
             <li class="relative group">
                 <button
-                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
                     <i class="fas fa-calendar-check"></i><span>Monitoring Siswa</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
                     <li><a href="../absensi/index.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
                     </li>
                     <li><a href="../absensi/pelanggaran.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
                     </li>
                     <li><a href="../absensi/konseling"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a>
                     </li>
                 </ul>
             </li>
             <a href="../siswa/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-users"></i><span>Data Siswa</span>
             </a>
             <li class="relative group">
                 <button
-                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
                     <i class="fas fa-file-alt"></i><span>Laporan</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
                     <li><a href="../laporan/index.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
                     </li>
                     <li><a href="../laporan/pelanggaran"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
                     </li>
                     <li><a href="../laporan/konseling"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a>
                     </li>
                 </ul>
             </li>
             <a href="../profil/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-user-cog"></i><span>Profil</span>
             </a>
             <a href="../logout.php"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors mt-10">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors mt-10">
                 <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>
         </nav>
     </aside>
 
     <!-- Main Content -->
-    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 transition-all duration-300">
+    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-sky-50 to-indigo-50 transition-all duration-300">
         <!-- Mobile Header -->
         <div
-            class="lg:hidden bg-gray-900/60 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-purple-900/30">
+            class="lg:hidden bg-white/90 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-violet-200">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-white p-2 -ml-2 rounded-lg hover:bg-gray-800/60"
+                <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-100"
                     aria-label="Menu">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
@@ -299,7 +299,7 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 $photo_path = $_SESSION['admin_photo'] ?? 'assets/default/avatar.png';
                 ?>
                 <img src="../../<?= $photo_path ?>" alt="Profile"
-                    class="h-8 w-8 rounded-full object-cover border border-purple-500/50">
+                    class="h-8 w-8 rounded-full object-cover border border-violet-300">
             </div>
         </div>
 
@@ -308,12 +308,12 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 <!-- Header with back button - enhanced for mobile -->
                 <div class="flex items-center mb-6">
                     <a href="index.php?id=<?= $id ?>"
-                        class="mr-3 p-2 rounded-full hover:bg-gray-800/60 transition-colors">
+                        class="mr-3 p-2 rounded-full hover:bg-gray-100 transition-colors">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <div>
                         <h1 class="text-xl md:text-2xl font-bold">Edit Absensi</h1>
-                        <p class="text-sm md:text-base text-gray-400">Ubah data kehadiran siswa</p>
+                        <p class="text-sm md:text-base text-gray-500">Ubah data kehadiran siswa</p>
                     </div>
                 </div>
 
@@ -330,7 +330,7 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
                 <?php if ($error): ?>
                     <div
-                        class="bg-red-500/10 border border-red-500/30 text-red-500 rounded-lg p-4 mb-6 flex items-start animate-fade-in">
+                        class="bg-red-500/10 border border-red-200 text-red-500 rounded-lg p-4 mb-6 flex items-start animate-fade-in">
                         <i class="fas fa-exclamation-circle mt-0.5 mr-3"></i>
                         <div>
                             <p class="font-medium">Gagal menyimpan perubahan</p>
@@ -343,8 +343,8 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 <div class="glass-effect rounded-xl p-4 md:p-6 mb-6 animate-fade-in">
                     <form method="POST" enctype="multipart/form-data">
                         <!-- Student Info - Improved for mobile -->
-                        <div class="mb-6 p-4 bg-gray-800/50 rounded-lg">
-                            <p class="text-sm text-gray-400 mb-1">Data Siswa:</p>
+                        <div class="mb-6 p-4 bg-gray-50/50 rounded-lg">
+                            <p class="text-sm text-gray-500 mb-1">Data Siswa:</p>
                             <p class="text-base md:text-lg font-medium break-words">
                                 <?= htmlspecialchars($absensi['nama_lengkap']) ?>
                                 (<?= htmlspecialchars($absensi['nis']) ?>)</p>
@@ -353,26 +353,26 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
                             <!-- Date - Mobile optimized -->
                             <div>
-                                <label for="tanggal" class="block text-sm text-gray-400 mb-2">Tanggal</label>
+                                <label for="tanggal" class="block text-sm text-gray-500 mb-2">Tanggal</label>
                                 <input type="date" id="tanggal" name="tanggal" value="<?= $absensi['tanggal'] ?>"
                                     required
-                                    class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-3 md:py-2 text-white focus:outline-none focus:border-purple-500 touch-target">
+                                    class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-3 md:py-2 text-gray-800 focus:outline-none focus:border-violet-500 touch-target">
                             </div>
 
                             <!-- Time - Mobile optimized -->
                             <div>
-                                <label for="jam_masuk" class="block text-sm text-gray-400 mb-2">Jam Masuk</label>
+                                <label for="jam_masuk" class="block text-sm text-gray-500 mb-2">Jam Masuk</label>
                                 <input type="time" id="jam_masuk" name="jam_masuk"
                                     value="<?= $absensi['jam_masuk'] !== '00:00:00' ? $absensi['jam_masuk'] : '' ?>"
-                                    class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-3 md:py-2 text-white focus:outline-none focus:border-purple-500 touch-target">
-                                <p class="text-xs text-gray-400 mt-1">Biarkan kosong untuk absensi sakit/izin/alpha</p>
+                                    class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-3 md:py-2 text-gray-800 focus:outline-none focus:border-violet-500 touch-target">
+                                <p class="text-xs text-gray-500 mt-1">Biarkan kosong untuk absensi sakit/izin/alpha</p>
                             </div>
 
                             <!-- Status dropdown - Mobile optimized -->
                             <div>
-                                <label for="status" class="block text-sm text-gray-400 mb-2">Status</label>
+                                <label for="status" class="block text-sm text-gray-500 mb-2">Status</label>
                                 <select id="status" name="status" required onchange="toggleTimeVisibility()"
-                                    class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-3 md:py-2 text-white focus:outline-none focus:border-purple-500 touch-target">
+                                    class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-3 md:py-2 text-gray-800 focus:outline-none focus:border-violet-500 touch-target">
                                     <option value="Hadir" <?= $absensi['status'] == 'Hadir' ? 'selected' : '' ?>>Hadir
                                     </option>
                                     <option value="Sakit" <?= $absensi['status'] == 'Sakit' ? 'selected' : '' ?>>Sakit
@@ -388,10 +388,10 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
                             <!-- Approval Status dropdown - Mobile optimized -->
                             <div>
-                                <label for="approval_status" class="block text-sm text-gray-400 mb-2">Status
+                                <label for="approval_status" class="block text-sm text-gray-500 mb-2">Status
                                     Persetujuan</label>
                                 <select id="approval_status" name="approval_status" required
-                                    class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-3 md:py-2 text-white focus:outline-none focus:border-purple-500 touch-target">
+                                    class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-3 md:py-2 text-gray-800 focus:outline-none focus:border-violet-500 touch-target">
                                     <option value="Pending" <?= $absensi['approval_status'] == 'Pending' ? 'selected' : '' ?>>Pending</option>
                                     <option value="Approved" <?= $absensi['approval_status'] == 'Approved' ? 'selected' : '' ?>>Approved</option>
                                     <option value="Rejected" <?= $absensi['approval_status'] == 'Rejected' ? 'selected' : '' ?>>Rejected</option>
@@ -401,20 +401,20 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
                         <!-- Description - Mobile optimized -->
                         <div class="mb-6">
-                            <label for="keterangan" class="block text-sm text-gray-400 mb-2">Keterangan</label>
+                            <label for="keterangan" class="block text-sm text-gray-500 mb-2">Keterangan</label>
                             <textarea id="keterangan" name="keterangan" rows="3"
-                                class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:border-purple-500 touch-target"><?= htmlspecialchars($absensi['keterangan']) ?></textarea>
+                                class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-3 text-gray-800 focus:outline-none focus:border-violet-500 touch-target"><?= htmlspecialchars($absensi['keterangan']) ?></textarea>
                         </div>
 
                         <!-- File Upload - Improved for mobile -->
                         <div class="mb-6">
-                            <label for="bukti_file" class="block text-sm text-gray-400 mb-2">Ganti File Bukti
+                            <label for="bukti_file" class="block text-sm text-gray-500 mb-2">Ganti File Bukti
                                 (Opsional)</label>
                             <div class="relative">
                                 <input type="file" id="bukti_file" name="bukti_file" class="hidden"
                                     accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                 <input type="text" id="file_name" readonly placeholder="Pilih file..."
-                                    class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-3 md:py-2 text-white cursor-pointer touch-target"
+                                    class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-3 md:py-2 text-gray-800 cursor-pointer touch-target"
                                     onclick="document.getElementById('bukti_file').click()">
                                 <button type="button" onclick="document.getElementById('bukti_file').click()"
                                     class="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 bg-purple-600/80 hover:bg-purple-600 rounded text-sm">
@@ -423,7 +423,7 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             <?php if ($absensi['bukti_file']): ?>
                                 <div class="flex items-center mt-2">
-                                    <span class="text-xs text-gray-400 mr-2">File saat ini:</span>
+                                    <span class="text-xs text-gray-500 mr-2">File saat ini:</span>
                                     <a href="../../<?= htmlspecialchars($absensi['bukti_file']) ?>" target="_blank"
                                         class="text-xs text-blue-400 hover:text-blue-300 flex items-center">
                                         <i class="fas fa-file-alt mr-1"></i>
@@ -436,7 +436,7 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         <!-- Submit Button - Full width on mobile -->
                         <div class="flex justify-end">
                             <button type="submit"
-                                class="w-full md:w-auto px-6 py-3 md:py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-medium">
+                                class="w-full md:w-auto px-6 py-3 md:py-2 bg-purple-600 hover:bg-purple-700 text-gray-800 rounded-lg transition-colors font-medium">
                                 <i class="fas fa-save mr-2"></i> Simpan Perubahan
                             </button>
                         </div>
@@ -446,7 +446,7 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 <!-- Back button - only visible on mobile -->
                 <div class="mt-6 flex justify-center lg:hidden">
                     <a href="detail.php?id=<?= $id ?>"
-                        class="px-4 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center justify-center text-sm transition-colors">
+                        class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center text-sm transition-colors">
                         <i class="fas fa-arrow-left mr-2"></i> Kembali ke Detail Absensi
                     </a>
                 </div>

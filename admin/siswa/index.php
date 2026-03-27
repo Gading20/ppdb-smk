@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 require_once '../../config/database.php';
 
@@ -109,8 +109,8 @@ function getSortIcon($column, $sort_column, $sort_order)
     }
 
     return $sort_order === 'ASC'
-        ? '<i class="fas fa-sort-up text-purple-500"></i>'
-        : '<i class="fas fa-sort-down text-purple-500"></i>';
+        ? '<i class="fas fa-sort-up text-violet-600"></i>'
+        : '<i class="fas fa-sort-down text-violet-600"></i>';
 }
 
 // Helper function to build pagination URLs
@@ -147,18 +147,18 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         .glass-effect {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(147, 51, 234, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         .menu-active {
-            background: linear-gradient(to right, rgba(147, 51, 234, 0.2), rgba(147, 51, 234, 0.05));
+            background: linear-gradient(to right, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
             border-left: 4px solid #9333ea;
         }
 
         body {
-            background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
+            background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
         }
 
         @keyframes fadeIn {
@@ -216,36 +216,36 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
     </style>
 </head>
 
-<body class="min-h-screen text-white bg-fixed">
+<body class="min-h-screen text-gray-800 bg-fixed">
     <!-- Mobile Overlay - only visible when sidebar is open on mobile -->
-    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+    <div id="mobile-overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- Side Navigation -->
     <aside id="sidebar"
-        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-purple-900/30 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
-        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-purple-900/30">
+        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-violet-200 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
+        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-violet-200">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 lg:h-10 w-auto">
                 <div>
-                    <h1 class="font-semibold text-sm lg:text-base">SMK NURUL ULUM</h1>
-                    <p class="text-xs text-gray-400">Sistem Absensi</p>
+                    <h1 class="font-semibold text-sm lg:text-base text-gray-800">SMK NURUL ULUM</h1>
+                    <p class="text-xs text-gray-500">Sistem Absensi</p>
                 </div>
             </div>
             <!-- Close sidebar button - only visible on mobile -->
-            <button class="text-gray-400 hover:text-white lg:hidden" onclick="toggleSidebar()">
+            <button class="text-gray-600 hover:text-gray-800 lg:hidden" onclick="toggleSidebar()">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
 
         <nav class="p-4 space-y-2 overflow-y-auto no-scrollbar" style="max-height: calc(100vh - 76px);">
             <a href="../dashboard/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-home"></i>
                 <span>Dashboard</span>
             </a>
             <li class="relative group">
                 <button
-                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
                     <i class="fas fa-calendar-check"></i>
                     <span>Monitoring Siswa</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
@@ -254,31 +254,31 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                 <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
                     <li>
                         <a href="../absensi/index.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">
                             Presensi
                         </a>
                     </li>
                     <li>
                         <a href="../absensi/pelanggaran.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">
                             Pelanggaran
                         </a>
                     </li>
                     <li>
                         <a href="../absensi/konseling.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">
                             Konseling
                         </a>
                     </li>
                 </ul>
             </li>
-            <a href="index.php" class="flex items-center gap-3 text-white/90 p-3 rounded-lg menu-active">
-                <i class="fas fa-users text-purple-500"></i>
+            <a href="index.php" class="flex items-center gap-3 text-gray-700 p-3 rounded-lg menu-active">
+                <i class="fas fa-users text-violet-600"></i>
                 <span>Data Siswa</span>
             </a>
             <li class="relative group">
                 <button
-                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
                     <i class="fas fa-file-alt"></i>
                     <span>Laporan</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
@@ -287,31 +287,31 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                 <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
                     <li>
                         <a href="../laporan/index.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">
                             Presensi
                         </a>
                     </li>
                     <li>
                         <a href="../laporan/laporan_pelanggaran.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">
                             Pelanggaran
                         </a>
                     </li>
                     <li>
                         <a href="../laporan/laporan_konseling.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">
                             Konseling
                         </a>
                     </li>
                 </ul>
             </li>
             <a href="../profil/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-user-cog"></i>
                 <span>Profil</span>
             </a>
             <a href="../logout.php"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors mt-10">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors mt-10">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
             </a>
@@ -319,12 +319,12 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
     </aside>
 
     <!-- Main Content -->
-    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 transition-all duration-300">
+    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-sky-50 to-indigo-50 transition-all duration-300">
         <!-- Mobile Header -->
         <div
-            class="lg:hidden bg-gray-900/60 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-purple-900/30">
+            class="lg:hidden bg-white/90 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-violet-200">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-white p-2 -ml-2 rounded-lg hover:bg-gray-800/60"
+                <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-100"
                     aria-label="Menu">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
@@ -337,7 +337,7 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                 $photo_path = $_SESSION['admin_photo'] ?? 'assets/default/avatar.png';
                 ?>
                 <img src="../../<?= $photo_path ?>" alt="Profile"
-                    class="h-8 w-8 rounded-full object-cover border border-purple-500/50">
+                    class="h-8 w-8 rounded-full object-cover border border-violet-300">
             </div>
         </div>
 
@@ -350,7 +350,7 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                         <i
                             class="fas <?= $notification['type'] === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle' ?> mr-3"></i>
                         <p class="text-sm"><?= htmlspecialchars($notification['message']) ?></p>
-                        <button class="ml-auto text-gray-400 hover:text-gray-300" onclick="this.parentElement.remove()">
+                        <button class="ml-auto text-gray-500 hover:text-gray-700" onclick="this.parentElement.remove()">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
@@ -360,7 +360,7 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                 <header class="flex flex-wrap justify-between items-center mb-6 gap-4">
                     <div>
                         <h1 class="text-xl md:text-2xl font-bold">Data Siswa</h1>
-                        <p class="text-gray-400 text-sm md:text-base">Kelola data siswa SMK NURUL ULUM</p>
+                        <p class="text-gray-500 text-sm md:text-base">Kelola data siswa SMK NURUL ULUM</p>
                     </div>
                     <div class="hidden sm:block">
                         <a href="add.php"
@@ -396,10 +396,10 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                     <!-- Total Students -->
                     <div class="glass-effect rounded-lg p-4 flex items-center">
                         <div class="h-10 w-10 rounded-lg bg-purple-500/10 flex items-center justify-center mr-3">
-                            <i class="fas fa-users text-purple-500"></i>
+                            <i class="fas fa-users text-violet-600"></i>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-400">Total Siswa</p>
+                            <p class="text-xs text-gray-500">Total Siswa</p>
                             <p class="text-xl font-bold"><?= $total_students ?></p>
                         </div>
                     </div>
@@ -414,11 +414,11 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                         ];
                         $icon = $major_icons[$stat['jurusan']] ?? 'fa-user';
                         ?>
-                        <div class="glass-effect rounded-lg p-4 hover:bg-gray-800/50 transition-colors cursor-pointer"
+                        <div class="glass-effect rounded-lg p-4 hover:bg-gray-50/50 transition-colors cursor-pointer"
                             onclick="window.location='index.php?kelas=<?= $stat['kelas'] ?>&jurusan=<?= $stat['jurusan'] ?>'">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs text-gray-400">Kelas <?= $stat['kelas'] ?> <?= $stat['jurusan'] ?></p>
+                                    <p class="text-xs text-gray-500">Kelas <?= $stat['kelas'] ?> <?= $stat['jurusan'] ?></p>
                                     <p class="text-xl font-bold mt-1"><?= $stat['count'] ?></p>
                                 </div>
                                 <div class="h-10 w-10 rounded-lg <?= $colors['bg'] ?> flex items-center justify-center">
@@ -435,7 +435,7 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                         <h3 class="font-medium text-lg mb-2 md:mb-0">Filter & Pencarian</h3>
                         <?php if (!empty($_GET) && isset($_GET['search']) || isset($_GET['kelas']) || isset($_GET['jurusan'])): ?>
                             <a href="index.php"
-                                class="text-sm flex items-center gap-1 text-purple-400 hover:text-purple-300">
+                                class="text-sm flex items-center gap-1 text-violet-500 hover:text-purple-300">
                                 <i class="fas fa-times-circle"></i> Reset Filter
                             </a>
                         <?php endif; ?>
@@ -448,10 +448,10 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4">
                             <div>
-                                <label class="text-xs text-gray-400 block mb-1">Kelas</label>
+                                <label class="text-xs text-gray-500 block mb-1">Kelas</label>
                                 <div class="relative">
                                     <select name="kelas"
-                                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-purple-500">
+                                        class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-violet-500">
                                         <option value="">Semua Kelas</option>
                                         <option value="10" <?= $kelas_filter === '10' ? 'selected' : '' ?>>10</option>
                                         <option value="11" <?= $kelas_filter === '11' ? 'selected' : '' ?>>11</option>
@@ -459,7 +459,7 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                                     </select>
                                     <?php if ($kelas_filter): ?>
                                         <button type="button" onclick="clearField('kelas')"
-                                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300">
+                                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
                                             <i class="fas fa-times-circle"></i>
                                         </button>
                                     <?php endif; ?>
@@ -467,10 +467,10 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                             </div>
 
                             <div>
-                                <label class="text-xs text-gray-400 block mb-1">Jurusan</label>
+                                <label class="text-xs text-gray-500 block mb-1">Jurusan</label>
                                 <div class="relative">
                                     <select name="jurusan"
-                                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-purple-500">
+                                        class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-violet-500">
                                         <option value="">Semua Jurusan</option>
                                         <option value="RPL" <?= $jurusan_filter === 'RPL' ? 'selected' : '' ?>>RPL</option>
                                         <option value="DKV" <?= $jurusan_filter === 'DKV' ? 'selected' : '' ?>>DKV</option>
@@ -480,7 +480,7 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                                     </select>
                                     <?php if ($jurusan_filter): ?>
                                         <button type="button" onclick="clearField('jurusan')"
-                                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300">
+                                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
                                             <i class="fas fa-times-circle"></i>
                                         </button>
                                     <?php endif; ?>
@@ -488,15 +488,15 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                             </div>
 
                             <div>
-                                <label class="text-xs text-gray-400 block mb-1">Pencarian</label>
+                                <label class="text-xs text-gray-500 block mb-1">Pencarian</label>
                                 <div class="relative">
                                     <input type="text" name="search" value="<?= htmlspecialchars($search) ?>"
                                         placeholder="Nama, NIS, atau Email..."
-                                        class="w-full bg-gray-800 border border-gray-700 rounded-lg pl-9 pr-9 py-2.5 text-sm text-white focus:outline-none focus:border-purple-500">
+                                        class="w-full bg-gray-50 border border-gray-300 rounded-lg pl-9 pr-9 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-violet-500">
                                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
                                     <?php if ($search): ?>
                                         <button type="button" onclick="clearField('search')"
-                                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300">
+                                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
                                             <i class="fas fa-times-circle"></i>
                                         </button>
                                     <?php endif; ?>
@@ -506,7 +506,7 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
 
                         <div class="mt-6 flex justify-end">
                             <button type="submit"
-                                class="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors text-sm">
+                                class="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-gray-800 rounded-lg transition-colors text-sm">
                                 <i class="fas fa-filter mr-2"></i>Terapkan Filter
                             </button>
                         </div>
@@ -519,38 +519,38 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                         <div class="overflow-x-auto table-container">
                             <table class="w-full whitespace-nowrap">
                                 <thead>
-                                    <tr class="bg-gray-800/50 text-gray-300 text-left">
+                                    <tr class="bg-gray-50/50 text-gray-700 text-left">
                                         <th class="px-6 py-3 text-xs font-medium">
                                             <a href="<?= buildSortUrl('nis') ?>"
-                                                class="flex items-center gap-1 hover:text-white">
+                                                class="flex items-center gap-1 hover:text-gray-800">
                                                 NIS
                                                 <?php echo getSortIcon('nis', $sort_column, $sort_order); ?>
                                             </a>
                                         </th>
                                         <th class="px-6 py-3 text-xs font-medium">
                                             <a href="<?= buildSortUrl('nama_lengkap') ?>"
-                                                class="flex items-center gap-1 hover:text-white">
+                                                class="flex items-center gap-1 hover:text-gray-800">
                                                 Nama
                                                 <?php echo getSortIcon('nama_lengkap', $sort_column, $sort_order); ?>
                                             </a>
                                         </th>
                                         <th class="px-6 py-3 text-xs font-medium">
                                             <a href="<?= buildSortUrl('kelas') ?>"
-                                                class="flex items-center gap-1 hover:text-white">
+                                                class="flex items-center gap-1 hover:text-gray-800">
                                                 Kelas
                                                 <?php echo getSortIcon('kelas', $sort_column, $sort_order); ?>
                                             </a>
                                         </th>
                                         <th class="px-6 py-3 text-xs font-medium">
                                             <a href="<?= buildSortUrl('jurusan') ?>"
-                                                class="flex items-center gap-1 hover:text-white">
+                                                class="flex items-center gap-1 hover:text-gray-800">
                                                 Jurusan
                                                 <?php echo getSortIcon('jurusan', $sort_column, $sort_order); ?>
                                             </a>
                                         </th>
                                         <th class="px-6 py-3 text-xs font-medium hidden md:table-cell">
                                             <a href="<?= buildSortUrl('email') ?>"
-                                                class="flex items-center gap-1 hover:text-white">
+                                                class="flex items-center gap-1 hover:text-gray-800">
                                                 Email
                                                 <?php echo getSortIcon('email', $sort_column, $sort_order); ?>
                                             </a>
@@ -585,7 +585,7 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                                                         <i class="fas fa-eye"></i>
                                                     </a>
                                                     <a href="edit.php?id=<?= $siswa['id'] ?>"
-                                                        class="text-yellow-400 hover:text-yellow-300 p-1.5 rounded-full hover:bg-yellow-500/10"
+                                                        class="text-amber-600 hover:text-yellow-300 p-1.5 rounded-full hover:bg-yellow-500/10"
                                                         title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
@@ -605,18 +605,18 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                         <!-- Responsive Pagination -->
                         <div
                             class="p-4 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4">
-                            <p class="text-sm text-gray-400 order-2 sm:order-1">
+                            <p class="text-sm text-gray-500 order-2 sm:order-1">
                                 Menampilkan <?= min($offset + 1, $total_items) ?> -
                                 <?= min($offset + $items_per_page, $total_items) ?> dari <?= $total_items ?> data
                             </p>
                             <div class="flex space-x-1 order-1 sm:order-2 pagination-compact">
                                 <?php if ($page > 1): ?>
                                     <a href="<?= buildPaginationUrl(1) ?>"
-                                        class="px-2 sm:px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-sm flex items-center justify-center min-w-[32px]">
+                                        class="px-2 sm:px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-sm flex items-center justify-center min-w-[32px]">
                                         <i class="fas fa-angle-double-left"></i>
                                     </a>
                                     <a href="<?= buildPaginationUrl($page - 1) ?>"
-                                        class="px-2 sm:px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-sm flex items-center justify-center min-w-[32px]">
+                                        class="px-2 sm:px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-sm flex items-center justify-center min-w-[32px]">
                                         <i class="fas fa-angle-left"></i>
                                     </a>
                                 <?php endif; ?>
@@ -636,8 +636,8 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                                 for ($i = $start_page; $i <= $end_page; $i++) {
                                     $is_current = $i == $page;
                                     $class = $is_current
-                                        ? 'px-2 sm:px-3 py-1.5 bg-purple-600 rounded text-white text-sm flex items-center justify-center min-w-[32px] current-page page-number'
-                                        : 'px-2 sm:px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-sm flex items-center justify-center min-w-[32px] page-number';
+                                        ? 'px-2 sm:px-3 py-1.5 bg-purple-600 rounded text-gray-800 text-sm flex items-center justify-center min-w-[32px] current-page page-number'
+                                        : 'px-2 sm:px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-sm flex items-center justify-center min-w-[32px] page-number';
 
                                     echo '<a href="' . buildPaginationUrl($i) . '" class="' . $class . '">' . $i . '</a>';
                                 }
@@ -650,11 +650,11 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
 
                                 <?php if ($page < $total_pages): ?>
                                     <a href="<?= buildPaginationUrl($page + 1) ?>"
-                                        class="px-2 sm:px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-sm flex items-center justify-center min-w-[32px]">
+                                        class="px-2 sm:px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-sm flex items-center justify-center min-w-[32px]">
                                         <i class="fas fa-angle-right"></i>
                                     </a>
                                     <a href="<?= buildPaginationUrl($total_pages) ?>"
-                                        class="px-2 sm:px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-sm flex items-center justify-center min-w-[32px]">
+                                        class="px-2 sm:px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-sm flex items-center justify-center min-w-[32px]">
                                         <i class="fas fa-angle-double-right"></i>
                                     </a>
                                 <?php endif; ?>
@@ -663,9 +663,9 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                     <?php else: ?>
                         <div class="p-10 text-center">
                             <i class="fas fa-users text-5xl text-gray-600 mb-4"></i>
-                            <p class="text-gray-400">Tidak ada data siswa yang ditemukan</p>
+                            <p class="text-gray-500">Tidak ada data siswa yang ditemukan</p>
                             <?php if (!empty($_GET)): ?>
-                                <a href="index.php" class="mt-4 inline-block text-purple-400 hover:text-purple-500">
+                                <a href="index.php" class="mt-4 inline-block text-violet-500 hover:text-violet-600">
                                     <i class="fas fa-arrow-left mr-1"></i> Reset Filter
                                 </a>
                             <?php endif; ?>
@@ -689,10 +689,10 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
         <div class="fixed inset-0 bg-black bg-opacity-50" onclick="hideDeleteModal()"></div>
         <div class="glass-effect rounded-lg p-6 w-11/12 max-w-md relative z-10">
             <h3 class="text-xl font-semibold mb-4">Konfirmasi Hapus</h3>
-            <p class="text-gray-300 mb-6">Apakah Anda yakin ingin menghapus data siswa ini? Semua data absensi terkait
+            <p class="text-gray-700 mb-6">Apakah Anda yakin ingin menghapus data siswa ini? Semua data absensi terkait
                 juga akan dihapus. Tindakan ini tidak dapat dibatalkan.</p>
             <div class="flex justify-end gap-4">
-                <button onclick="hideDeleteModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm">
+                <button onclick="hideDeleteModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm">
                     Batal
                 </button>
                 <form id="deleteForm" method="POST" action="delete.php">

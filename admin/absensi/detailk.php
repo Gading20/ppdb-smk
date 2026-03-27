@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 require_once '../../config/database.php';
 
@@ -91,17 +91,17 @@ function jenisIcon($j)
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         .glass-effect {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(147, 51, 234, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         body {
-            background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
+            background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
         }
 
         .menu-active {
-            background: linear-gradient(to right, rgba(147, 51, 234, 0.2), rgba(147, 51, 234, 0.05));
+            background: linear-gradient(to right, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
             border-left: 4px solid #9333ea;
         }
 
@@ -269,84 +269,84 @@ function jenisIcon($j)
     </style>
 </head>
 
-<body class="min-h-screen text-white bg-fixed">
-    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+<body class="min-h-screen text-gray-800 bg-fixed">
+    <div id="mobile-overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar -->
     <aside id="sidebar"
-        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-purple-900/30 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
-        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-purple-900/30">
+        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-violet-200 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
+        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-violet-200">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 lg:h-10 w-auto">
                 <div>
-                    <h1 class="font-semibold text-sm lg:text-base">SMK NURUL ULUM</h1>
-                    <p class="text-xs text-gray-400">Sistem Absensi</p>
+                    <h1 class="font-semibold text-sm lg:text-base text-gray-800">SMK NURUL ULUM</h1>
+                    <p class="text-xs text-gray-500">Sistem Absensi</p>
                 </div>
             </div>
-            <button class="text-gray-400 hover:text-white lg:hidden" onclick="toggleSidebar()">
+            <button class="text-gray-600 hover:text-gray-800 lg:hidden" onclick="toggleSidebar()">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
         <nav class="p-4 space-y-2 overflow-y-auto no-scrollbar" style="max-height:calc(100vh - 76px)">
             <a href="../dashboard/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-home"></i><span>Dashboard</span>
             </a>
             <li class="relative group">
-                <button class="flex items-center gap-3 text-white/90 p-3 rounded-lg menu-active w-full">
-                    <i class="fas fa-calendar-check text-purple-500"></i><span>Monitoring Siswa</span>
+                <button class="flex items-center gap-3 text-gray-700 p-3 rounded-lg menu-active w-full">
+                    <i class="fas fa-calendar-check text-violet-600"></i><span>Monitoring Siswa</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 block">
                     <li><a href="../absensi/index.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
                     </li>
                     <li><a href="../absensi/pelanggaran.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
                     </li>
                     <li><a href="../absensi/konseling.php"
-                            class="block p-2 text-purple-400 bg-purple-500/10 rounded-lg">Konseling</a></li>
+                            class="block p-2 text-violet-500 bg-purple-500/10 rounded-lg">Konseling</a></li>
                 </ul>
             </li>
             <a href="../siswa/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-users"></i><span>Data Siswa</span>
             </a>
             <li class="relative group">
                 <button
-                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
                     <i class="fas fa-file-alt"></i><span>Laporan</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 hidden group-hover:block">
                     <li><a href="../laporan/index.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
                     </li>
                     <li><a href="../laporan/pelanggaran"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
                     </li>
                     <li><a href="../laporan/konseling"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a>
                     </li>
                 </ul>
             </li>
             <a href="../profil/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-user-cog"></i><span>Profil</span>
             </a>
             <a href="../logout.php"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors mt-10">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors mt-10">
                 <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>
         </nav>
     </aside>
 
-    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 transition-all duration-300">
+    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-sky-50 to-indigo-50 transition-all duration-300">
         <!-- Mobile Header -->
         <div
-            class="lg:hidden no-print bg-gray-900/60 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-purple-900/30">
+            class="lg:hidden no-print bg-white/60 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-violet-200">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-white p-2 -ml-2 rounded-lg hover:bg-gray-800/60">
+                <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-100">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
                 <img src="../../assets/default/logo-smk40.png" alt="Logo" class="h-8 w-auto">
@@ -355,7 +355,7 @@ function jenisIcon($j)
                 <span id="current-time-mobile" class="text-sm font-medium hidden sm:block"></span>
                 <?php $photo_path = $_SESSION['admin_photo'] ?? 'assets/default/avatar.png'; ?>
                 <img src="../../<?= $photo_path ?>" alt="Profile"
-                    class="h-8 w-8 rounded-full object-cover border border-purple-500/50">
+                    class="h-8 w-8 rounded-full object-cover border border-violet-300">
             </div>
         </div>
 
@@ -365,18 +365,18 @@ function jenisIcon($j)
                 <!-- Breadcrumb + actions -->
                 <div class="flex flex-wrap items-center justify-between gap-4 mb-6 no-print">
                     <div class="flex items-center gap-3">
-                        <a href="konseling.php" class="p-2 rounded-full hover:bg-gray-800 transition-colors">
+                        <a href="konseling.php" class="p-2 rounded-full hover:bg-gray-50 transition-colors">
                             <i class="fas fa-arrow-left"></i>
                         </a>
                         <div>
                             <h1 class="text-xl md:text-2xl font-bold">Detail Konseling</h1>
-                            <p class="text-gray-400 text-sm">ID #<?= $k['id'] ?> &middot;
+                            <p class="text-gray-500 text-sm">ID #<?= $k['id'] ?> &middot;
                                 <?= date('d F Y', strtotime($k['tanggal'])) ?></p>
                         </div>
                     </div>
                     <div class="flex flex-wrap gap-2">
                         <button onclick="window.print()"
-                            class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center gap-2 text-sm transition-colors">
+                            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center gap-2 text-sm transition-colors">
                             <i class="fas fa-print"></i> Cetak
                         </button>
                         <a href="editk.php?id=<?= $k['id'] ?>"
@@ -400,25 +400,25 @@ function jenisIcon($j)
                             <div class="relative inline-block mb-3">
                                 <img src="../../<?= $k['foto_profil'] ?: 'assets/default/avatar.png' ?>"
                                     alt="Foto Siswa"
-                                    class="w-20 h-20 rounded-full object-cover border-2 border-purple-500/50 mx-auto">
+                                    class="w-20 h-20 rounded-full object-cover border-2 border-violet-300 mx-auto">
                                 <span
                                     class="absolute bottom-0 right-0 w-5 h-5 bg-purple-600 rounded-full flex items-center justify-center">
                                     <i class="fas fa-user-graduate text-xs"></i>
                                 </span>
                             </div>
                             <h2 class="font-bold text-base"><?= htmlspecialchars($k['nama_lengkap']) ?></h2>
-                            <p class="text-gray-400 text-sm"><?= $k['nis'] ?></p>
+                            <p class="text-gray-500 text-sm"><?= $k['nis'] ?></p>
                             <p class="text-gray-500 text-xs mt-0.5"><?= $k['kelas'] ?> &mdash; <?= $k['jurusan'] ?></p>
                         </div>
 
                         <!-- Statistik Konseling Siswa -->
                         <div class="glass-effect rounded-xl p-4 animate-fade-in-d1">
                             <h3 class="text-sm font-semibold mb-3 flex items-center gap-2">
-                                <i class="fas fa-chart-bar text-purple-400"></i> Statistik Konseling
+                                <i class="fas fa-chart-bar text-violet-500"></i> Statistik Konseling
                             </h3>
                             <div class="flex items-center justify-between p-3 section-card">
-                                <span class="text-sm text-gray-400">Total Sesi</span>
-                                <span class="text-lg font-bold text-purple-400"><?= $total_sesi ?></span>
+                                <span class="text-sm text-gray-500">Total Sesi</span>
+                                <span class="text-lg font-bold text-violet-500"><?= $total_sesi ?></span>
                             </div>
                         </div>
 
@@ -426,7 +426,7 @@ function jenisIcon($j)
                         <?php if (count($riwayat) > 0): ?>
                             <div class="glass-effect rounded-xl p-4 animate-fade-in-d2">
                                 <h3 class="text-sm font-semibold mb-3 flex items-center gap-2">
-                                    <i class="fas fa-history text-purple-400"></i> Riwayat Konseling
+                                    <i class="fas fa-history text-violet-500"></i> Riwayat Konseling
                                 </h3>
                                 <div class="space-y-2">
                                     <?php foreach ($riwayat as $r): ?>
@@ -437,13 +437,13 @@ function jenisIcon($j)
                                                 <?= $r['jenis_konseling'] ?>
                                             </span>
                                             <div class="flex-1 min-w-0">
-                                                <p class="text-xs text-white truncate"><?= htmlspecialchars($r['masalah']) ?>
+                                                <p class="text-xs text-gray-800 truncate"><?= htmlspecialchars($r['masalah']) ?>
                                                 </p>
                                                 <p class="text-xs text-gray-500"><?= date('d/m/Y', strtotime($r['tanggal'])) ?>
                                                 </p>
                                             </div>
                                             <span class="text-xs flex-shrink-0 <?= match ($r['status']) {
-                                                'Selesai' => 'text-green-400',
+                                                'Selesai' => 'text-green-600',
                                                 'Ditunda' => 'text-red-400',
                                                 default => 'text-blue-400'
                                             } ?>">
@@ -475,7 +475,7 @@ function jenisIcon($j)
                                         </span>
                                         <p class="text-lg font-bold mt-1">Konseling
                                             <?= htmlspecialchars($k['jenis_konseling']) ?></p>
-                                        <p class="text-gray-400 text-sm"><?= date('d F Y', strtotime($k['tanggal'])) ?>
+                                        <p class="text-gray-500 text-sm"><?= date('d F Y', strtotime($k['tanggal'])) ?>
                                         </p>
                                     </div>
                                 </div>
@@ -488,7 +488,7 @@ function jenisIcon($j)
                                     <!-- Inline status update -->
                                     <div class="status-wrapper relative no-print">
                                         <select id="status-select"
-                                            class="text-xs bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-gray-300 focus:outline-none focus:border-purple-500 cursor-pointer"
+                                            class="text-xs bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-gray-700 focus:outline-none focus:border-violet-500 cursor-pointer"
                                             onchange="updateStatus(this, <?= $k['id'] ?>)">
                                             <option value="Proses" <?= $k['status'] === 'Proses' ? 'selected' : '' ?>>⏳
                                                 Ubah ke Proses</option>
@@ -546,7 +546,7 @@ function jenisIcon($j)
                         <div class="glass-effect rounded-xl p-5 animate-fade-in-d2">
                             <h3 class="font-semibold text-sm mb-3 flex items-center gap-2">
                                 <span
-                                    class="w-5 h-5 rounded bg-green-500/20 text-green-400 flex items-center justify-center text-xs">
+                                    class="w-5 h-5 rounded bg-green-500/20 text-green-600 flex items-center justify-center text-xs">
                                     <i class="fas fa-lightbulb"></i>
                                 </span>
                                 Solusi / Rekomendasi
@@ -565,7 +565,7 @@ function jenisIcon($j)
                         <div class="glass-effect rounded-xl p-5 animate-fade-in-d3">
                             <h3 class="font-semibold text-sm mb-3 flex items-center gap-2">
                                 <span
-                                    class="w-5 h-5 rounded bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs">
+                                    class="w-5 h-5 rounded bg-blue-50 text-blue-600 flex items-center justify-center text-xs">
                                     <i class="fas fa-forward"></i>
                                 </span>
                                 Tindak Lanjut
@@ -583,7 +583,7 @@ function jenisIcon($j)
                         <!-- Navigasi bawah -->
                         <div class="flex flex-wrap justify-between gap-3 pt-2 no-print">
                             <a href="konseling.php"
-                                class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center gap-2 text-sm transition-colors">
+                                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center gap-2 text-sm transition-colors">
                                 <i class="fas fa-arrow-left"></i> Kembali ke Daftar
                             </a>
                             <a href="editk.php?id=<?= $k['id'] ?>"
@@ -609,11 +609,11 @@ function jenisIcon($j)
                 </div>
                 <h3 class="text-lg font-semibold">Konfirmasi Hapus</h3>
             </div>
-            <p class="text-gray-300 mb-2">Apakah Anda yakin ingin menghapus data konseling ini?</p>
+            <p class="text-gray-700 mb-2">Apakah Anda yakin ingin menghapus data konseling ini?</p>
             <p class="text-gray-500 text-sm mb-6">Tindakan ini tidak dapat dibatalkan dan data akan hilang permanen.</p>
             <div class="flex justify-end gap-3">
                 <button onclick="hideDeleteModal()"
-                    class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm transition-colors">
+                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors">
                     Batal
                 </button>
                 <form method="POST" action="deletk.php">
@@ -675,8 +675,8 @@ function jenisIcon($j)
             const inner = document.getElementById('toast-inner');
             inner.className = 'px-5 py-3 rounded-lg text-sm font-medium shadow-lg flex items-center gap-2 ' +
                 (type === 'success' ?
-                    'bg-green-500/20 text-green-400 border border-green-500/30' :
-                    'bg-red-500/20 text-red-400 border border-red-500/30');
+                    'bg-green-500/20 text-green-600 border border-green-500/30' :
+                    'bg-red-500/20 text-red-400 border border-red-200');
             inner.textContent = msg;
             toast.classList.remove('hidden');
             setTimeout(() => toast.classList.add('hidden'), 3000);

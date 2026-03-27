@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 require_once '../../config/database.php';
 
@@ -91,18 +91,18 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .glass-effect {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(147, 51, 234, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         .menu-active {
-            background: linear-gradient(to right, rgba(147, 51, 234, 0.2), rgba(147, 51, 234, 0.05));
+            background: linear-gradient(to right, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
             border-left: 4px solid #9333ea;
         }
 
         body {
-            background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
+            background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
         }
 
         @keyframes fadeInUp {
@@ -133,7 +133,7 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
         .status-hadir {
             background-color: rgba(16, 185, 129, 0.1);
             color: #10B981;
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            border: 1px solid rgba(16, 185, 129, 0.25);
         }
 
         .status-sakit {
@@ -169,7 +169,7 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
         .approval-approved {
             background-color: rgba(16, 185, 129, 0.1);
             color: #10B981;
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            border: 1px solid rgba(16, 185, 129, 0.25);
         }
 
         .approval-rejected {
@@ -184,7 +184,7 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(31, 41, 55, 0.2);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 8px;
         }
 
@@ -268,52 +268,52 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
     </style>
 </head>
 
-<body class="min-h-screen text-white bg-fixed">
+<body class="min-h-screen text-gray-800 bg-fixed">
     <!-- Mobile Overlay - only visible when sidebar is open on mobile -->
-    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+    <div id="mobile-overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- Side Navigation -->
-    <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-purple-900/30 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
-        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-purple-900/30">
+    <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-violet-200 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
+        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-violet-200">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 lg:h-10 w-auto">
                 <div>
-                    <h1 class="font-semibold text-sm lg:text-base">SMKK NUURL ULUM</h1>
-                    <p class="text-xs text-gray-400">Sistem Absensi</p>
+                    <h1 class="font-semibold text-sm lg:text-base text-gray-800">SMKK NUURL ULUM</h1>
+                    <p class="text-xs text-gray-500">Sistem Absensi</p>
                 </div>
             </div>
             <!-- Close sidebar button - only visible on mobile -->
-            <button class="text-gray-400 hover:text-white lg:hidden" onclick="toggleSidebar()">
+            <button class="text-gray-600 hover:text-gray-800 lg:hidden" onclick="toggleSidebar()">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
 
-        <div class="p-4 border-b border-purple-900/30">
+        <div class="p-4 border-b border-violet-200">
             <div class="flex items-center gap-3">
-                <img src="../../<?= $_SESSION['siswa_photo'] ?: 'assets/default/photo-profile.png' ?>" alt="Profile" class="h-10 w-10 rounded-full object-cover border-2 border-purple-500/50">
+                <img src="../../<?= $_SESSION['siswa_photo'] ?: 'assets/default/photo-profile.png' ?>" alt="Profile" class="h-10 w-10 rounded-full object-cover border-2 border-violet-300">
                 <div>
                     <h2 class="font-medium text-sm"><?= $_SESSION['siswa_name'] ?></h2>
-                    <p class="text-xs text-gray-400"><?= $_SESSION['siswa_kelas'] ?> <?= $_SESSION['siswa_jurusan'] ?></p>
+                    <p class="text-xs text-gray-500"><?= $_SESSION['siswa_kelas'] ?> <?= $_SESSION['siswa_jurusan'] ?></p>
                 </div>
             </div>
         </div>
 
         <nav class="p-4 space-y-2">
-            <a href="../dashboard/" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+            <a href="../dashboard/" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-home"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="index.php" class="flex items-center gap-3 text-white/90 p-3 rounded-lg menu-active">
-                <i class="fas fa-history text-purple-500"></i>
+            <a href="index.php" class="flex items-center gap-3 text-gray-700 p-3 rounded-lg menu-active">
+                <i class="fas fa-history text-violet-600"></i>
                 <span>Riwayat Absensi</span>
             </a>
-            <a href="../profil/" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+            <a href="../profil/" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-user"></i>
                 <span>Profil</span>
             </a>
 
             <div class="pt-4 mt-auto">
-                <a href="../logout.php" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors">
+                <a href="../logout.php" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
                 </a>
@@ -322,18 +322,18 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
     </aside>
 
     <!-- Main Content -->
-    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 transition-all duration-300">
+    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-sky-50 to-indigo-50 transition-all duration-300">
         <!-- Mobile Header -->
-        <div class="lg:hidden bg-gray-900/60 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-purple-900/30">
+        <div class="lg:hidden bg-white/90 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-violet-200">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-white p-1">
+                <button onclick="toggleSidebar()" class="text-gray-800 p-1">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
                 <img src="../../assets/default/logo-smk40.png" alt="SMKN 40" class="h-8 w-auto">
             </div>
             <div class="flex items-center gap-3">
                 <span id="current-time-mobile" class="text-sm font-medium"></span>
-                <img src="../../<?= $_SESSION['siswa_photo'] ?: 'assets/default/photo-profile.png' ?>" alt="Profile" class="h-8 w-8 rounded-full object-cover border border-purple-500/50">
+                <img src="../../<?= $_SESSION['siswa_photo'] ?: 'assets/default/photo-profile.png' ?>" alt="Profile" class="h-8 w-8 rounded-full object-cover border border-violet-300">
             </div>
         </div>
 
@@ -342,26 +342,26 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                 <!-- Header -->
                 <header class="mb-6 lg:mb-8">
                     <h1 class="text-xl lg:text-2xl font-bold">Riwayat Absensi</h1>
-                    <p class="text-gray-400 text-sm lg:text-base mt-1">Lihat dan filter riwayat kehadiran Anda</p>
+                    <p class="text-gray-500 text-sm lg:text-base mt-1">Lihat dan filter riwayat kehadiran Anda</p>
                 </header>
 
                 <!-- Summary Cards - Make responsive with grid -->
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4 mb-6">
                     <!-- Total Attendance Card -->
                     <div class="glass-effect rounded-lg p-4">
-                        <h3 class="text-xs uppercase text-gray-400 font-medium mb-1">Total</h3>
+                        <h3 class="text-xs uppercase text-gray-500 font-medium mb-1">Total</h3>
                         <p class="text-2xl font-bold"><?= $attendance_summary['total'] ?></p>
                         <div class="mt-2 text-xs">
-                            <span class="text-gray-400">Periode: <?= date('M Y', strtotime($start_date)) ?></span>
+                            <span class="text-gray-500">Periode: <?= date('M Y', strtotime($start_date)) ?></span>
                         </div>
                     </div>
 
                     <!-- Present Card -->
                     <div class="glass-effect rounded-lg p-4 border-l-4 border-green-500">
-                        <h3 class="text-xs uppercase text-gray-400 font-medium mb-1">Hadir</h3>
+                        <h3 class="text-xs uppercase text-gray-500 font-medium mb-1">Hadir</h3>
                         <p class="text-2xl font-bold"><?= $attendance_summary['hadir'] ?></p>
                         <div class="mt-2 flex items-center">
-                            <div class="w-full bg-gray-700 rounded-full h-1.5">
+                            <div class="w-full bg-gray-100 rounded-full h-1.5">
                                 <div class="bg-green-500 h-1.5 rounded-full" style="width: <?= $attendance_summary['total'] > 0 ? ($attendance_summary['hadir'] / $attendance_summary['total'] * 100) : 0 ?>%"></div>
                             </div>
                         </div>
@@ -369,10 +369,10 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
 
                     <!-- Sick Card -->
                     <div class="glass-effect rounded-lg p-4 border-l-4 border-yellow-500">
-                        <h3 class="text-xs uppercase text-gray-400 font-medium mb-1">Sakit</h3>
+                        <h3 class="text-xs uppercase text-gray-500 font-medium mb-1">Sakit</h3>
                         <p class="text-2xl font-bold"><?= $attendance_summary['sakit'] ?></p>
                         <div class="mt-2 flex items-center">
-                            <div class="w-full bg-gray-700 rounded-full h-1.5">
+                            <div class="w-full bg-gray-100 rounded-full h-1.5">
                                 <div class="bg-yellow-500 h-1.5 rounded-full" style="width: <?= $attendance_summary['total'] > 0 ? ($attendance_summary['sakit'] / $attendance_summary['total'] * 100) : 0 ?>%"></div>
                             </div>
                         </div>
@@ -380,10 +380,10 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
 
                     <!-- Permission Card -->
                     <div class="glass-effect rounded-lg p-4 border-l-4 border-purple-500">
-                        <h3 class="text-xs uppercase text-gray-400 font-medium mb-1">Izin</h3>
+                        <h3 class="text-xs uppercase text-gray-500 font-medium mb-1">Izin</h3>
                         <p class="text-2xl font-bold"><?= $attendance_summary['izin'] ?></p>
                         <div class="mt-2 flex items-center">
-                            <div class="w-full bg-gray-700 rounded-full h-1.5">
+                            <div class="w-full bg-gray-100 rounded-full h-1.5">
                                 <div class="bg-purple-500 h-1.5 rounded-full" style="width: <?= $attendance_summary['total'] > 0 ? ($attendance_summary['izin'] / $attendance_summary['total'] * 100) : 0 ?>%"></div>
                             </div>
                         </div>
@@ -391,10 +391,10 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
 
                     <!-- Late Card -->
                     <div class="glass-effect rounded-lg p-4 border-l-4 border-orange-500">
-                        <h3 class="text-xs uppercase text-gray-400 font-medium mb-1">Terlambat</h3>
+                        <h3 class="text-xs uppercase text-gray-500 font-medium mb-1">Terlambat</h3>
                         <p class="text-2xl font-bold"><?= $attendance_summary['terlambat'] ?></p>
                         <div class="mt-2 flex items-center">
-                            <div class="w-full bg-gray-700 rounded-full h-1.5">
+                            <div class="w-full bg-gray-100 rounded-full h-1.5">
                                 <div class="bg-orange-500 h-1.5 rounded-full" style="width: <?= $attendance_summary['total'] > 0 ? ($attendance_summary['terlambat'] / $attendance_summary['total'] * 100) : 0 ?>%"></div>
                             </div>
                         </div>
@@ -402,10 +402,10 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
 
                     <!-- Alpha Card -->
                     <div class="glass-effect rounded-lg p-4 border-l-4 border-red-500">
-                        <h3 class="text-xs uppercase text-gray-400 font-medium mb-1">Alpha</h3>
+                        <h3 class="text-xs uppercase text-gray-500 font-medium mb-1">Alpha</h3>
                         <p class="text-2xl font-bold"><?= $attendance_summary['alpha'] ?></p>
                         <div class="mt-2 flex items-center">
-                            <div class="w-full bg-gray-700 rounded-full h-1.5">
+                            <div class="w-full bg-gray-100 rounded-full h-1.5">
                                 <div class="bg-red-500 h-1.5 rounded-full" style="width: <?= $attendance_summary['total'] > 0 ? ($attendance_summary['alpha'] / $attendance_summary['total'] * 100) : 0 ?>%"></div>
                             </div>
                         </div>
@@ -416,8 +416,8 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                 <div class="glass-effect p-4 rounded-lg mb-6">
                     <form action="" method="GET" class="flex flex-wrap items-end gap-4 filter-container">
                         <div class="w-full sm:w-auto">
-                            <label for="month" class="block text-xs text-gray-400 mb-1">Bulan</label>
-                            <select id="month" name="month" class="w-full sm:w-auto bg-gray-800 border border-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-purple-500">
+                            <label for="month" class="block text-xs text-gray-500 mb-1">Bulan</label>
+                            <select id="month" name="month" class="w-full sm:w-auto bg-gray-50 border border-gray-300 text-gray-800 rounded-lg px-3 py-2 focus:outline-none focus:border-violet-500">
                                 <?php for ($i = 1; $i <= 12; $i++) : ?>
                                     <option value="<?= sprintf("%02d", $i) ?>" <?= $month == sprintf("%02d", $i) ? 'selected' : '' ?>>
                                         <?= date('F', mktime(0, 0, 0, $i, 1)) ?>
@@ -427,8 +427,8 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                         </div>
 
                         <div class="w-full sm:w-auto">
-                            <label for="year" class="block text-xs text-gray-400 mb-1">Tahun</label>
-                            <select id="year" name="year" class="w-full sm:w-auto bg-gray-800 border border-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-purple-500">
+                            <label for="year" class="block text-xs text-gray-500 mb-1">Tahun</label>
+                            <select id="year" name="year" class="w-full sm:w-auto bg-gray-50 border border-gray-300 text-gray-800 rounded-lg px-3 py-2 focus:outline-none focus:border-violet-500">
                                 <?php
                                 $currentYear = date('Y');
                                 for ($i = $currentYear; $i >= $currentYear - 2; $i--) : ?>
@@ -440,8 +440,8 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                         </div>
 
                         <div class="w-full sm:w-auto">
-                            <label for="status" class="block text-xs text-gray-400 mb-1">Status</label>
-                            <select id="status" name="status" class="w-full sm:w-auto bg-gray-800 border border-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-purple-500">
+                            <label for="status" class="block text-xs text-gray-500 mb-1">Status</label>
+                            <select id="status" name="status" class="w-full sm:w-auto bg-gray-50 border border-gray-300 text-gray-800 rounded-lg px-3 py-2 focus:outline-none focus:border-violet-500">
                                 <option value="">Semua Status</option>
                                 <option value="Hadir" <?= $status == 'Hadir' ? 'selected' : '' ?>>Hadir</option>
                                 <option value="Sakit" <?= $status == 'Sakit' ? 'selected' : '' ?>>Sakit</option>
@@ -452,7 +452,7 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                         </div>
 
                         <div class="w-full sm:w-auto ml-auto mt-2 sm:mt-0">
-                            <button type="submit" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+                            <button type="submit" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-gray-800 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
                                 <i class="fas fa-filter"></i>
                                 <span>Filter</span>
                             </button>
@@ -462,9 +462,9 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
 
                 <!-- Attendance History Table - Make scrollable for mobile -->
                 <div class="glass-effect rounded-lg overflow-hidden">
-                    <div class="bg-gradient-to-r from-purple-900/40 to-indigo-900/40 p-4 border-b border-gray-800">
+                    <div class="bg-gradient-to-r from-violet-50 to-indigo-50 p-4 border-b border-gray-800">
                         <h3 class="font-semibold flex items-center">
-                            <i class="fas fa-list text-purple-500 mr-2"></i>
+                            <i class="fas fa-list text-violet-600 mr-2"></i>
                             Data Absensi
                         </h3>
                     </div>
@@ -473,18 +473,18 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                         <div class="overflow-x-auto no-scrollbar">
                             <table class="w-full table-compact">
                                 <thead>
-                                    <tr class="border-b border-gray-800 bg-gray-900/30">
-                                        <th class="text-left p-4 text-sm font-medium text-gray-300">Tanggal</th>
-                                        <th class="text-left p-4 text-sm font-medium text-gray-300">Jam Masuk</th>
-                                        <th class="text-left p-4 text-sm font-medium text-gray-300">Status</th>
-                                        <th class="text-left p-4 text-sm font-medium text-gray-300">Persetujuan</th>
-                                        <th class="text-left p-4 text-sm font-medium text-gray-300">Keterangan</th>
-                                        <th class="text-left p-4 text-sm font-medium text-gray-300">Bukti</th>
+                                    <tr class="border-b border-gray-800 bg-white/30">
+                                        <th class="text-left p-4 text-sm font-medium text-gray-700">Tanggal</th>
+                                        <th class="text-left p-4 text-sm font-medium text-gray-700">Jam Masuk</th>
+                                        <th class="text-left p-4 text-sm font-medium text-gray-700">Status</th>
+                                        <th class="text-left p-4 text-sm font-medium text-gray-700">Persetujuan</th>
+                                        <th class="text-left p-4 text-sm font-medium text-gray-700">Keterangan</th>
+                                        <th class="text-left p-4 text-sm font-medium text-gray-700">Bukti</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($attendance_records as $record) : ?>
-                                        <tr class="border-b border-gray-800 hover:bg-gray-900/20">
+                                        <tr class="border-b border-gray-800 hover:bg-white/20">
                                             <td class="p-4 text-sm">
                                                 <?= $record['formatted_date'] ?>
                                             </td>
@@ -528,7 +528,7 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                                             </td>
                                             <td class="p-4 text-sm">
                                                 <?php if (!empty($record['bukti_foto'])) : ?>
-                                                    <a href="#" onclick="showImagePreview('../../<?= $record['bukti_foto'] ?>')" class="text-purple-400 hover:text-purple-300 flex items-center gap-1">
+                                                    <a href="#" onclick="showImagePreview('../../<?= $record['bukti_foto'] ?>')" class="text-violet-500 hover:text-purple-300 flex items-center gap-1">
                                                         <i class="fas fa-image"></i>
                                                         <span>Lihat</span>
                                                     </a>
@@ -543,10 +543,10 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                         </div>
                     <?php else : ?>
                         <div class="p-8 text-center">
-                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-800/50 mb-4">
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50/50 mb-4">
                                 <i class="fas fa-calendar-times text-2xl text-gray-500"></i>
                             </div>
-                            <p class="text-gray-400">Tidak ada data absensi untuk periode yang dipilih</p>
+                            <p class="text-gray-500">Tidak ada data absensi untuk periode yang dipilih</p>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -555,9 +555,9 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <!-- Attendance Calendar View -->
                     <div class="glass-effect rounded-lg overflow-hidden">
-                        <div class="bg-gradient-to-r from-purple-900/40 to-indigo-900/40 p-4 border-b border-gray-800">
+                        <div class="bg-gradient-to-r from-violet-50 to-indigo-50 p-4 border-b border-gray-800">
                             <h3 class="font-semibold flex items-center">
-                                <i class="fas fa-calendar-alt text-purple-500 mr-2"></i>
+                                <i class="fas fa-calendar-alt text-violet-600 mr-2"></i>
                                 Kalender Absensi
                             </h3>
                         </div>
@@ -568,13 +568,13 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                                     <h4 class="text-lg font-medium"><?= date('F Y', strtotime($start_date)) ?></h4>
                                 </div>
                                 <div class="grid grid-cols-7 gap-1 text-center mb-2">
-                                    <div class="text-xs font-medium text-gray-400">Min</div>
-                                    <div class="text-xs font-medium text-gray-400">Sen</div>
-                                    <div class="text-xs font-medium text-gray-400">Sel</div>
-                                    <div class="text-xs font-medium text-gray-400">Rab</div>
-                                    <div class="text-xs font-medium text-gray-400">Kam</div>
-                                    <div class="text-xs font-medium text-gray-400">Jum</div>
-                                    <div class="text-xs font-medium text-gray-400">Sab</div>
+                                    <div class="text-xs font-medium text-gray-500">Min</div>
+                                    <div class="text-xs font-medium text-gray-500">Sen</div>
+                                    <div class="text-xs font-medium text-gray-500">Sel</div>
+                                    <div class="text-xs font-medium text-gray-500">Rab</div>
+                                    <div class="text-xs font-medium text-gray-500">Kam</div>
+                                    <div class="text-xs font-medium text-gray-500">Jum</div>
+                                    <div class="text-xs font-medium text-gray-500">Sab</div>
                                 </div>
                                 <div id="calendarGrid" class="grid grid-cols-7 gap-1">
                                     <!-- Calendar days will be filled by JavaScript -->
@@ -604,7 +604,7 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                                     <span class="text-xs">Alpha</span>
                                 </div>
                                 <div class="flex items-center">
-                                    <span class="h-3 w-3 rounded-full bg-gray-600 mr-2"></span>
+                                    <span class="h-3 w-3 rounded-full bg-gray-200 mr-2"></span>
                                     <span class="text-xs">Tidak Ada Data</span>
                                 </div>
                             </div>
@@ -613,9 +613,9 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
 
                     <!-- Attendance Insights/Stats -->
                     <div class="glass-effect rounded-lg overflow-hidden flex flex-col">
-                        <div class="bg-gradient-to-r from-purple-900/40 to-indigo-900/40 p-4 border-b border-gray-800">
+                        <div class="bg-gradient-to-r from-violet-50 to-indigo-50 p-4 border-b border-gray-800">
                             <h3 class="font-semibold flex items-center">
-                                <i class="fas fa-lightbulb text-purple-500 mr-2"></i>
+                                <i class="fas fa-lightbulb text-violet-600 mr-2"></i>
                                 Statistik & Insight
                             </h3>
                         </div>
@@ -623,18 +623,18 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                             <!-- Overall Attendance Percentage -->
                             <div class="mb-4">
                                 <div class="flex justify-between items-center mb-1">
-                                    <span class="text-sm text-gray-400">Tingkat Kehadiran Bulan Ini</span>
-                                    <span class="font-medium text-white"><?= $attendance_percentage ?>%</span>
+                                    <span class="text-sm text-gray-500">Tingkat Kehadiran Bulan Ini</span>
+                                    <span class="font-medium text-gray-800"><?= $attendance_percentage ?>%</span>
                                 </div>
-                                <div class="h-2.5 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
                                     <div class="h-full bg-gradient-to-r from-purple-600 to-indigo-500 rounded-full"
                                         style="width: <?= $attendance_percentage ?>%"></div>
                                 </div>
                                 <div class="mt-2 text-xs">
                                     <?php if ($attendance_percentage >= 90): ?>
-                                        <span class="text-green-400">Sangat baik! Pertahankan kehadiranmu.</span>
+                                        <span class="text-green-600">Sangat baik! Pertahankan kehadiranmu.</span>
                                     <?php elseif ($attendance_percentage >= 75): ?>
-                                        <span class="text-yellow-400">Baik. Tingkatkan kehadiranmu untuk hasil yang lebih baik.</span>
+                                        <span class="text-amber-600">Baik. Tingkatkan kehadiranmu untuk hasil yang lebih baik.</span>
                                     <?php else: ?>
                                         <span class="text-red-400">Perlu ditingkatkan. Kehadiran mempengaruhi nilai akhir.</span>
                                     <?php endif; ?>
@@ -643,7 +643,7 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
 
                             <!-- Day of Week Attendance Pattern -->
                             <div class="mb-4 pb-4 border-b border-gray-800">
-                                <h4 class="text-sm font-medium text-white mb-2">Pola Kehadiran</h4>
+                                <h4 class="text-sm font-medium text-gray-800 mb-2">Pola Kehadiran</h4>
                                 <div style="height: 200px;"> <!-- Fixed height for chart container -->
                                     <canvas id="attendancePatternChart"></canvas>
                                 </div>
@@ -651,10 +651,10 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
 
                             <!-- Quick Stats -->
                             <div class="space-y-3">
-                                <div class="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
+                                <div class="flex items-center justify-between p-3 bg-gray-50/50 rounded-lg">
                                     <div class="flex items-center">
                                         <div class="h-8 w-8 rounded-md bg-purple-500/20 flex items-center justify-center mr-3">
-                                            <i class="fas fa-medal text-purple-400"></i>
+                                            <i class="fas fa-medal text-violet-500"></i>
                                         </div>
                                         <span class="text-sm">Status Terbanyak</span>
                                     </div>
@@ -670,9 +670,9 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                                     }
 
                                     $status_colors = [
-                                        'hadir' => 'text-green-400',
-                                        'sakit' => 'text-yellow-400',
-                                        'izin' => 'text-purple-400',
+                                        'hadir' => 'text-green-600',
+                                        'sakit' => 'text-amber-600',
+                                        'izin' => 'text-violet-500',
                                         'terlambat' => 'text-orange-400',
                                         'alpha' => 'text-red-400'
                                     ];
@@ -683,10 +683,10 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                                     <span class="font-medium <?= $color_class ?>"><?= $status_label ?></span>
                                 </div>
 
-                                <div class="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
+                                <div class="flex items-center justify-between p-3 bg-gray-50/50 rounded-lg">
                                     <div class="flex items-center">
                                         <div class="h-8 w-8 rounded-md bg-purple-500/20 flex items-center justify-center mr-3">
-                                            <i class="fas fa-history text-purple-400"></i>
+                                            <i class="fas fa-history text-violet-500"></i>
                                         </div>
                                         <span class="text-sm">Absensi Terakhir</span>
                                     </div>
@@ -701,10 +701,10 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                                     </span>
                                 </div>
 
-                                <div class="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
+                                <div class="flex items-center justify-between p-3 bg-gray-50/50 rounded-lg">
                                     <div class="flex items-center">
                                         <div class="h-8 w-8 rounded-md bg-purple-500/20 flex items-center justify-center mr-3">
-                                            <i class="fas fa-clock text-purple-400"></i>
+                                            <i class="fas fa-clock text-violet-500"></i>
                                         </div>
                                         <span class="text-sm">Rata-rata Jam Masuk</span>
                                     </div>
@@ -742,7 +742,7 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
     <!-- Image Preview Modal -->
     <div id="imageModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
         <div class="relative max-w-xl w-full">
-            <button onclick="closeImagePreview()" class="absolute -top-10 right-0 text-white hover:text-gray-300">
+            <button onclick="closeImagePreview()" class="absolute -top-10 right-0 text-gray-800 hover:text-gray-700">
                 <i class="fas fa-times text-xl"></i>
             </button>
             <img id="previewImage" src="" alt="Preview" class="w-full rounded-lg">
@@ -858,7 +858,7 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                         cell.appendChild(statusDot);
                     } else {
                         const statusDot = document.createElement('span');
-                        statusDot.className = 'h-2 w-2 rounded-full bg-gray-600 mt-1';
+                        statusDot.className = 'h-2 w-2 rounded-full bg-gray-200 mt-1';
                         cell.appendChild(statusDot);
                     }
 
@@ -929,9 +929,9 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                             },
                             tooltip: {
                                 backgroundColor: 'rgba(17, 24, 39, 0.9)',
-                                titleColor: '#fff',
+                                titleColor: '#1f2937',
                                 bodyColor: '#fff',
-                                borderColor: 'rgba(147, 51, 234, 0.3)',
+                                borderColor: 'rgba(139,92,246,0.3)',
                                 borderWidth: 1
                             },
                         },
@@ -941,7 +941,7 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                                     display: false
                                 },
                                 ticks: {
-                                    color: '#9CA3AF',
+                                    color: '#6b7280',
                                     font: {
                                         size: 10
                                     }
@@ -950,11 +950,11 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                             y: {
                                 beginAtZero: true,
                                 grid: {
-                                    color: 'rgba(255, 255, 255, 0.1)'
+                                    color: 'rgba(139, 92, 246, 0.1)'
                                 },
                                 ticks: {
                                     precision: 0,
-                                    color: '#9CA3AF',
+                                    color: '#6b7280',
                                     font: {
                                         size: 10
                                     }

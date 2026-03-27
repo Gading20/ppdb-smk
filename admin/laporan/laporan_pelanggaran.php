@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 require_once '../../config/database.php';
 
@@ -230,14 +230,14 @@ function buildUrl($page = null, $sort = null, $order = null)
 function getSortIcon($col, $cur, $ord)
 {
     if ($col !== $cur) return '<i class="fas fa-sort text-gray-500 opacity-50"></i>';
-    return $ord === 'ASC' ? '<i class="fas fa-sort-up text-purple-500"></i>' : '<i class="fas fa-sort-down text-purple-500"></i>';
+    return $ord === 'ASC' ? '<i class="fas fa-sort-up text-violet-600"></i>' : '<i class="fas fa-sort-down text-violet-600"></i>';
 }
 function totalPoinColor($poin)
 {
     if ($poin >= 75) return ['bar' => 'bg-red-500',    'text' => 'text-red-400',    'bg' => 'bg-red-500/10 border-red-500/30'];
     if ($poin >= 50) return ['bar' => 'bg-orange-500', 'text' => 'text-orange-400', 'bg' => 'bg-orange-500/10 border-orange-500/30'];
-    if ($poin >= 25) return ['bar' => 'bg-yellow-500', 'text' => 'text-yellow-400', 'bg' => 'bg-yellow-500/10 border-yellow-500/30'];
-    return ['bar' => 'bg-green-500', 'text' => 'text-green-400', 'bg' => 'bg-green-500/10 border-green-500/30'];
+    if ($poin >= 25) return ['bar' => 'bg-yellow-500', 'text' => 'text-amber-600', 'bg' => 'bg-yellow-500/10 border-yellow-500/30'];
+    return ['bar' => 'bg-green-500', 'text' => 'text-green-600', 'bg' => 'bg-green-500/10 border-green-500/30'];
 }
 
 $jenis_colors = [
@@ -258,13 +258,13 @@ $jenis_colors = [
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .glass-effect {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(147, 51, 234, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         body {
-            background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
+            background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
         }
 
         /* Jenis badges */
@@ -289,7 +289,7 @@ $jenis_colors = [
         .status-selesai {
             background: rgba(16, 185, 129, 0.1);
             color: #10B981;
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            border: 1px solid rgba(16, 185, 129, 0.25);
         }
 
         .status-proses {
@@ -395,64 +395,64 @@ $jenis_colors = [
     </style>
 </head>
 
-<body class="min-h-screen text-white bg-fixed">
+<body class="min-h-screen text-gray-800 bg-fixed">
 
     <!-- Mobile Overlay -->
-    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+    <div id="mobile-overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- ══════════════════ SIDEBAR ══════════════════ -->
-    <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-purple-900/30 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
-        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-purple-900/30">
+    <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-violet-200 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
+        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-violet-200">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 lg:h-10 w-auto">
                 <div>
-                    <h1 class="font-semibold text-sm lg:text-base">SMK NURUL ULUM</h1>
-                    <p class="text-xs text-gray-400">Sistem Absensi</p>
+                    <h1 class="font-semibold text-sm lg:text-base text-gray-800">SMK NURUL ULUM</h1>
+                    <p class="text-xs text-gray-500">Sistem Absensi</p>
                 </div>
             </div>
-            <button class="text-gray-400 hover:text-white lg:hidden" onclick="toggleSidebar()"><i class="fas fa-times text-xl"></i></button>
+            <button class="text-gray-600 hover:text-gray-800 lg:hidden" onclick="toggleSidebar()"><i class="fas fa-times text-xl"></i></button>
         </div>
         <nav class="p-4 space-y-2 overflow-y-auto no-scrollbar" style="max-height:calc(100vh - 76px)">
-            <a href="../dashboard/" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors"><i class="fas fa-home"></i><span>Dashboard</span></a>
+            <a href="../dashboard/" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors"><i class="fas fa-home"></i><span>Dashboard</span></a>
             <li class="relative group list-none">
-                <button class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                <button class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
                     <i class="fas fa-calendar-check"></i><span>Monitoring Siswa</span><i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 hidden group-hover:block">
-                    <li><a href="../absensi/index.php" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a></li>
-                    <li><a href="../absensi/pelanggaran.php" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a></li>
-                    <li><a href="../absensi/konseling.php" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a></li>
+                    <li><a href="../absensi/index.php" class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a></li>
+                    <li><a href="../absensi/pelanggaran.php" class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a></li>
+                    <li><a href="../absensi/konseling.php" class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a></li>
                 </ul>
             </li>
-            <a href="../siswa/" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors"><i class="fas fa-users"></i><span>Data Siswa</span></a>
+            <a href="../siswa/" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors"><i class="fas fa-users"></i><span>Data Siswa</span></a>
             <li class="relative group list-none">
-                <button class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                <button class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
                     <i class="fas fa-file-alt"></i><span>Laporan</span><i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 hidden group-hover:block">
-                    <li><a href="../laporan/index.php" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a></li>
-                    <li><a href="../laporan/laporan_pelanggaran.php" class="block p-2 text-purple-400 bg-purple-500/10 rounded-lg">Pelanggaran</a></li>
-                    <li><a href="../laporan/laporan_konseling.php" class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a></li>
+                    <li><a href="../laporan/index.php" class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a></li>
+                    <li><a href="../laporan/laporan_pelanggaran.php" class="block p-2 text-violet-500 bg-purple-500/10 rounded-lg">Pelanggaran</a></li>
+                    <li><a href="../laporan/laporan_konseling.php" class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a></li>
                 </ul>
             </li>
-            <a href="../profil/" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors"><i class="fas fa-user-cog"></i><span>Profil</span></a>
-            <a href="../logout.php" class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors mt-10"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+            <a href="../profil/" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors"><i class="fas fa-user-cog"></i><span>Profil</span></a>
+            <a href="../logout.php" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors mt-10"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
         </nav>
     </aside>
 
     <!-- ══════════════════ MAIN ══════════════════ -->
-    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 transition-all duration-300">
+    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-sky-50 to-indigo-50 transition-all duration-300">
 
         <!-- Mobile Header -->
-        <div class="lg:hidden bg-gray-900/60 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-purple-900/30">
+        <div class="lg:hidden bg-white/90 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-violet-200">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-white p-2 -ml-2 rounded-lg hover:bg-gray-800/60"><i class="fas fa-bars text-lg"></i></button>
+                <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-100"><i class="fas fa-bars text-lg"></i></button>
                 <img src="../../assets/default/logo-smk40.png" alt="SMK" class="h-8 w-auto">
             </div>
             <div class="flex items-center gap-3">
                 <span id="current-time-mobile" class="text-sm font-medium hidden sm:block"></span>
                 <?php $photo_path = $_SESSION['admin_photo'] ?? 'assets/default/avatar.png'; ?>
-                <img src="../../<?= $photo_path ?>" alt="Profile" class="h-8 w-8 rounded-full object-cover border border-purple-500/50">
+                <img src="../../<?= $photo_path ?>" alt="Profile" class="h-8 w-8 rounded-full object-cover border border-violet-300">
             </div>
         </div>
 
@@ -463,7 +463,7 @@ $jenis_colors = [
                 <header class="flex flex-wrap justify-between items-center mb-6 gap-4">
                     <div>
                         <h1 class="text-xl md:text-2xl font-bold">Laporan Pelanggaran</h1>
-                        <p class="text-gray-400 text-sm md:text-base">Statistik dan rekapitulasi data pelanggaran siswa</p>
+                        <p class="text-gray-500 text-sm md:text-base">Statistik dan rekapitulasi data pelanggaran siswa</p>
                     </div>
                     <div class="flex gap-3">
                         <a href="export_pelanggaran.php?format=pdf<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
@@ -485,18 +485,18 @@ $jenis_colors = [
                         <div class="grid grid-cols-1 gap-4">
 
                             <!-- Date Range -->
-                            <div class="bg-gray-800/30 rounded-lg p-4">
-                                <h4 class="text-sm font-medium mb-3 text-purple-400"><i class="fas fa-calendar-alt mr-2"></i>Periode Waktu</h4>
+                            <div class="bg-gray-50/30 rounded-lg p-4">
+                                <h4 class="text-sm font-medium mb-3 text-violet-500"><i class="fas fa-calendar-alt mr-2"></i>Periode Waktu</h4>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div>
-                                        <label class="text-xs text-gray-400 block mb-1">Tanggal Mulai</label>
+                                        <label class="text-xs text-gray-500 block mb-1">Tanggal Mulai</label>
                                         <input type="date" name="start_date" value="<?= $start_date ?>"
-                                            class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white">
+                                            class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800">
                                     </div>
                                     <div>
-                                        <label class="text-xs text-gray-400 block mb-1">Tanggal Akhir</label>
+                                        <label class="text-xs text-gray-500 block mb-1">Tanggal Akhir</label>
                                         <input type="date" name="end_date" value="<?= $end_date ?>"
-                                            class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white">
+                                            class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800">
                                     </div>
                                 </div>
                             </div>
@@ -505,12 +505,12 @@ $jenis_colors = [
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
                                 <!-- Kelas & Jurusan -->
-                                <div class="bg-gray-800/30 rounded-lg p-4">
-                                    <h4 class="text-sm font-medium mb-3 text-purple-400"><i class="fas fa-school mr-2"></i>Kelas & Jurusan</h4>
+                                <div class="bg-gray-50/30 rounded-lg p-4">
+                                    <h4 class="text-sm font-medium mb-3 text-violet-500"><i class="fas fa-school mr-2"></i>Kelas & Jurusan</h4>
                                     <div class="space-y-3">
                                         <div>
-                                            <label class="text-xs text-gray-400 block mb-1">Kelas</label>
-                                            <select name="kelas" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white">
+                                            <label class="text-xs text-gray-500 block mb-1">Kelas</label>
+                                            <select name="kelas" class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800">
                                                 <option value="">Semua Kelas</option>
                                                 <option value="10" <?= $kelas === '10' ? 'selected' : '' ?>>Kelas 10</option>
                                                 <option value="11" <?= $kelas === '11' ? 'selected' : '' ?>>Kelas 11</option>
@@ -518,8 +518,8 @@ $jenis_colors = [
                                             </select>
                                         </div>
                                         <div>
-                                            <label class="text-xs text-gray-400 block mb-1">Jurusan</label>
-                                            <select name="jurusan" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white">
+                                            <label class="text-xs text-gray-500 block mb-1">Jurusan</label>
+                                            <select name="jurusan" class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800">
                                                 <option value="">Semua Jurusan</option>
                                                 <option value="RPL" <?= $jurusan === 'RPL' ? 'selected' : '' ?>>RPL</option>
                                                 <option value="DKV" <?= $jurusan === 'DKV' ? 'selected' : '' ?>>DKV</option>
@@ -532,11 +532,11 @@ $jenis_colors = [
                                 </div>
 
                                 <!-- Jenis Pelanggaran -->
-                                <div class="bg-gray-800/30 rounded-lg p-4">
-                                    <h4 class="text-sm font-medium mb-3 text-purple-400"><i class="fas fa-exclamation-triangle mr-2"></i>Jenis Pelanggaran</h4>
+                                <div class="bg-gray-50/30 rounded-lg p-4">
+                                    <h4 class="text-sm font-medium mb-3 text-violet-500"><i class="fas fa-exclamation-triangle mr-2"></i>Jenis Pelanggaran</h4>
                                     <div>
-                                        <label class="text-xs text-gray-400 block mb-1">Jenis</label>
-                                        <select name="jenis" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white">
+                                        <label class="text-xs text-gray-500 block mb-1">Jenis</label>
+                                        <select name="jenis" class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800">
                                             <option value="">Semua Jenis</option>
                                             <option value="Ringan" <?= $jenis === 'Ringan' ? 'selected' : '' ?>>Ringan</option>
                                             <option value="Sedang" <?= $jenis === 'Sedang' ? 'selected' : '' ?>>Sedang</option>
@@ -546,11 +546,11 @@ $jenis_colors = [
                                 </div>
 
                                 <!-- Status -->
-                                <div class="bg-gray-800/30 rounded-lg p-4">
-                                    <h4 class="text-sm font-medium mb-3 text-purple-400"><i class="fas fa-filter mr-2"></i>Status Tindak Lanjut</h4>
+                                <div class="bg-gray-50/30 rounded-lg p-4">
+                                    <h4 class="text-sm font-medium mb-3 text-violet-500"><i class="fas fa-filter mr-2"></i>Status Tindak Lanjut</h4>
                                     <div>
-                                        <label class="text-xs text-gray-400 block mb-1">Status</label>
-                                        <select name="status" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white">
+                                        <label class="text-xs text-gray-500 block mb-1">Status</label>
+                                        <select name="status" class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800">
                                             <option value="">Semua Status</option>
                                             <option value="Pending" <?= $status === 'Pending' ? 'selected' : '' ?>>Pending</option>
                                             <option value="Proses" <?= $status === 'Proses' ? 'selected' : '' ?>>Proses</option>
@@ -560,11 +560,11 @@ $jenis_colors = [
                                 </div>
 
                                 <!-- Student -->
-                                <div class="bg-gray-800/30 rounded-lg p-4">
-                                    <h4 class="text-sm font-medium mb-3 text-purple-400"><i class="fas fa-user-graduate mr-2"></i>Siswa</h4>
+                                <div class="bg-gray-50/30 rounded-lg p-4">
+                                    <h4 class="text-sm font-medium mb-3 text-violet-500"><i class="fas fa-user-graduate mr-2"></i>Siswa</h4>
                                     <div>
-                                        <label class="text-xs text-gray-400 block mb-1">Pilih Siswa</label>
-                                        <select name="siswa_id" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white">
+                                        <label class="text-xs text-gray-500 block mb-1">Pilih Siswa</label>
+                                        <select name="siswa_id" class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800">
                                             <option value="">Semua Siswa</option>
                                             <?php foreach ($student_list as $st): ?>
                                                 <option value="<?= $st['id'] ?>" <?= $siswa_id == $st['id'] ? 'selected' : '' ?>>
@@ -578,17 +578,17 @@ $jenis_colors = [
                             </div>
                         </div>
 
-                        <div class="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-700">
+                        <div class="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-300">
                             <div class="w-full sm:w-auto">
                                 <?php if (!empty(array_filter([$kelas, $jurusan, $siswa_id, $jenis, $status])) || ($_GET['start_date'] ?? '') !== $default_start_date || ($_GET['end_date'] ?? '') !== $default_end_date): ?>
                                     <button type="button" onclick="resetFilters()"
-                                        class="w-full sm:w-auto px-4 py-2 border border-gray-700 hover:border-gray-600 rounded-lg text-sm text-gray-400 hover:text-white transition-colors">
+                                        class="w-full sm:w-auto px-4 py-2 border border-gray-300 hover:border-gray-300 rounded-lg text-sm text-gray-500 hover:text-gray-800 transition-colors">
                                         <i class="fas fa-redo mr-2"></i>Reset Filter
                                     </button>
                                 <?php endif; ?>
                             </div>
                             <button type="submit"
-                                class="w-full sm:w-auto px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm transition-colors">
+                                class="w-full sm:w-auto px-5 py-2 bg-purple-600 hover:bg-purple-700 text-gray-800 rounded-lg text-sm transition-colors">
                                 <i class="fas fa-filter mr-2"></i>Terapkan Filter
                             </button>
                         </div>
@@ -608,7 +608,7 @@ $jenis_colors = [
                             </div>
                             <div class="text-right">
                                 <span class="text-xl font-bold"><?= $jenis_counts['Ringan'] ?></span>
-                                <?php if ($total_pelanggaran > 0): ?><span class="text-xs text-gray-400 block"><?= round(($jenis_counts['Ringan'] / $total_pelanggaran) * 100, 1) ?>%</span><?php endif; ?>
+                                <?php if ($total_pelanggaran > 0): ?><span class="text-xs text-gray-500 block"><?= round(($jenis_counts['Ringan'] / $total_pelanggaran) * 100, 1) ?>%</span><?php endif; ?>
                             </div>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
@@ -617,38 +617,38 @@ $jenis_colors = [
                             </div>
                             <div class="text-right">
                                 <span class="text-xl font-bold"><?= $jenis_counts['Sedang'] ?></span>
-                                <?php if ($total_pelanggaran > 0): ?><span class="text-xs text-gray-400 block"><?= round(($jenis_counts['Sedang'] / $total_pelanggaran) * 100, 1) ?>%</span><?php endif; ?>
+                                <?php if ($total_pelanggaran > 0): ?><span class="text-xs text-gray-500 block"><?= round(($jenis_counts['Sedang'] / $total_pelanggaran) * 100, 1) ?>%</span><?php endif; ?>
                             </div>
                         </div>
-                        <div class="flex justify-between items-center p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                        <div class="flex justify-between items-center p-3 bg-red-500/10 border border-red-200 rounded-lg">
                             <div class="flex items-center">
                                 <div class="w-3 h-3 bg-red-500 rounded-full mr-3"></div><span>Berat</span>
                             </div>
                             <div class="text-right">
                                 <span class="text-xl font-bold"><?= $jenis_counts['Berat'] ?></span>
-                                <?php if ($total_pelanggaran > 0): ?><span class="text-xs text-gray-400 block"><?= round(($jenis_counts['Berat'] / $total_pelanggaran) * 100, 1) ?>%</span><?php endif; ?>
+                                <?php if ($total_pelanggaran > 0): ?><span class="text-xs text-gray-500 block"><?= round(($jenis_counts['Berat'] / $total_pelanggaran) * 100, 1) ?>%</span><?php endif; ?>
                             </div>
                         </div>
 
-                        <div class="border-t border-gray-700 pt-3">
-                            <p class="text-xs text-gray-400 uppercase tracking-wider mb-2">Status Tindak Lanjut</p>
+                        <div class="border-t border-gray-300 pt-3">
+                            <p class="text-xs text-gray-500 uppercase tracking-wider mb-2">Status Tindak Lanjut</p>
                             <div class="flex flex-col gap-2">
                                 <div class="flex justify-between text-sm">
-                                    <span class="text-gray-400">Pending</span>
+                                    <span class="text-gray-500">Pending</span>
                                     <span class="font-semibold"><?= $status_counts['Pending'] ?></span>
                                 </div>
                                 <div class="flex justify-between text-sm">
-                                    <span class="text-gray-400">Proses</span>
+                                    <span class="text-gray-500">Proses</span>
                                     <span class="font-semibold text-amber-400"><?= $status_counts['Proses'] ?></span>
                                 </div>
                                 <div class="flex justify-between text-sm">
-                                    <span class="text-gray-400">Selesai</span>
-                                    <span class="font-semibold text-green-400"><?= $status_counts['Selesai'] ?></span>
+                                    <span class="text-gray-500">Selesai</span>
+                                    <span class="font-semibold text-green-600"><?= $status_counts['Selesai'] ?></span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="border-t border-gray-700 pt-3 flex justify-between items-center">
+                        <div class="border-t border-gray-300 pt-3 flex justify-between items-center">
                             <span class="font-semibold">Total Pelanggaran</span>
                             <span class="text-xl font-bold"><?= $total_pelanggaran ?></span>
                         </div>
@@ -675,7 +675,7 @@ $jenis_colors = [
                 <div class="glass-effect rounded-xl overflow-hidden">
                     <div class="p-4 sm:p-6 border-b border-gray-800">
                         <h3 class="font-semibold text-lg">Data Detail Pelanggaran</h3>
-                        <p class="text-sm text-gray-400 mt-1">
+                        <p class="text-sm text-gray-500 mt-1">
                             Periode: <?= date('d F Y', strtotime($start_date)) ?> – <?= date('d F Y', strtotime($end_date)) ?>
                         </p>
                     </div>
@@ -684,45 +684,45 @@ $jenis_colors = [
                         <div class="overflow-x-auto table-container">
                             <table class="w-full whitespace-nowrap">
                                 <thead>
-                                    <tr class="bg-gray-800/50 text-gray-300 text-left">
+                                    <tr class="bg-gray-50/50 text-gray-700 text-left">
                                         <th class="px-5 py-3 text-xs font-medium">
-                                            <a href="<?= buildUrl(null, 'tanggal', $sort_column === 'tanggal' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-white">
+                                            <a href="<?= buildUrl(null, 'tanggal', $sort_column === 'tanggal' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-gray-800">
                                                 Tanggal <?= getSortIcon('tanggal', $sort_column, $sort_order) ?>
                                             </a>
                                         </th>
                                         <th class="px-5 py-3 text-xs font-medium">
-                                            <a href="<?= buildUrl(null, 'nis', $sort_column === 'nis' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-white">
+                                            <a href="<?= buildUrl(null, 'nis', $sort_column === 'nis' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-gray-800">
                                                 NIS <?= getSortIcon('nis', $sort_column, $sort_order) ?>
                                             </a>
                                         </th>
                                         <th class="px-5 py-3 text-xs font-medium">
-                                            <a href="<?= buildUrl(null, 'nama_lengkap', $sort_column === 'nama_lengkap' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-white">
+                                            <a href="<?= buildUrl(null, 'nama_lengkap', $sort_column === 'nama_lengkap' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-gray-800">
                                                 Nama Siswa <?= getSortIcon('nama_lengkap', $sort_column, $sort_order) ?>
                                             </a>
                                         </th>
                                         <th class="px-5 py-3 text-xs font-medium">
-                                            <a href="<?= buildUrl(null, 'kelas', $sort_column === 'kelas' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-white">
+                                            <a href="<?= buildUrl(null, 'kelas', $sort_column === 'kelas' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-gray-800">
                                                 Kelas <?= getSortIcon('kelas', $sort_column, $sort_order) ?>
                                             </a>
                                         </th>
                                         <th class="px-5 py-3 text-xs font-medium">
-                                            <a href="<?= buildUrl(null, 'jenis_pelanggaran', $sort_column === 'jenis_pelanggaran' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-white">
+                                            <a href="<?= buildUrl(null, 'jenis_pelanggaran', $sort_column === 'jenis_pelanggaran' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-gray-800">
                                                 Jenis <?= getSortIcon('jenis_pelanggaran', $sort_column, $sort_order) ?>
                                             </a>
                                         </th>
                                         <th class="px-5 py-3 text-xs font-medium">Deskripsi</th>
                                         <th class="px-5 py-3 text-xs font-medium">
-                                            <a href="<?= buildUrl(null, 'poin', $sort_column === 'poin' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-white">
+                                            <a href="<?= buildUrl(null, 'poin', $sort_column === 'poin' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-gray-800">
                                                 Poin <?= getSortIcon('poin', $sort_column, $sort_order) ?>
                                             </a>
                                         </th>
                                         <th class="px-5 py-3 text-xs font-medium">
-                                            <a href="<?= buildUrl(null, 'total_poin', $sort_column === 'total_poin' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-white">
+                                            <a href="<?= buildUrl(null, 'total_poin', $sort_column === 'total_poin' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-gray-800">
                                                 Total Poin <?= getSortIcon('total_poin', $sort_column, $sort_order) ?>
                                             </a>
                                         </th>
                                         <th class="px-5 py-3 text-xs font-medium">
-                                            <a href="<?= buildUrl(null, 'status', $sort_column === 'status' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-white">
+                                            <a href="<?= buildUrl(null, 'status', $sort_column === 'status' && $sort_order === 'ASC' ? 'DESC' : 'ASC') ?>" class="flex items-center gap-1 hover:text-gray-800">
                                                 Status <?= getSortIcon('status', $sort_column, $sort_order) ?>
                                             </a>
                                         </th>
@@ -752,16 +752,16 @@ $jenis_colors = [
                                                 </span>
                                             </td>
                                             <td class="px-5 py-4 text-sm max-w-[160px]">
-                                                <span class="truncate block text-gray-300" title="<?= htmlspecialchars($rec['deskripsi']) ?>">
+                                                <span class="truncate block text-gray-700" title="<?= htmlspecialchars($rec['deskripsi']) ?>">
                                                     <?= htmlspecialchars($rec['deskripsi']) ?>
                                                 </span>
                                             </td>
-                                            <td class="px-5 py-4 text-sm font-semibold <?= $rec['jenis_pelanggaran'] === 'Berat' ? 'text-red-400' : ($rec['jenis_pelanggaran'] === 'Sedang' ? 'text-yellow-400' : 'text-green-400') ?>">
+                                            <td class="px-5 py-4 text-sm font-semibold <?= $rec['jenis_pelanggaran'] === 'Berat' ? 'text-red-400' : ($rec['jenis_pelanggaran'] === 'Sedang' ? 'text-amber-600' : 'text-green-600') ?>">
                                                 <?= $rec['poin'] ?>
                                             </td>
                                             <td class="px-5 py-4">
                                                 <div class="flex flex-col gap-1">
-                                                    <span class="text-sm font-bold <?= $color['text'] ?>"><?= $rec['total_poin'] ?> <span class="font-normal text-xs text-gray-400">poin</span></span>
+                                                    <span class="text-sm font-bold <?= $color['text'] ?>"><?= $rec['total_poin'] ?> <span class="font-normal text-xs text-gray-500">poin</span></span>
                                                     <div class="poin-bar-wrap" title="Akumulasi poin: <?= $tp ?>">
                                                         <div class="poin-bar-fill <?= $color['bar'] ?>" style="width:<?= $pct ?>"></div>
                                                     </div>
@@ -785,13 +785,13 @@ $jenis_colors = [
 
                         <!-- Pagination -->
                         <div class="p-4 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4">
-                            <p class="text-sm text-gray-400 order-2 sm:order-1">
+                            <p class="text-sm text-gray-500 order-2 sm:order-1">
                                 Menampilkan <?= min($offset + 1, $total_detail_items) ?> – <?= min($offset + $items_per_page, $total_detail_items) ?> dari <?= $total_detail_items ?> data
                             </p>
                             <div class="flex space-x-1 order-1 sm:order-2 pagination-compact">
                                 <?php if ($page > 1): ?>
-                                    <a href="<?= buildUrl(1) ?>" class="px-2 sm:px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-sm flex items-center justify-center min-w-[32px]"><i class="fas fa-angle-double-left"></i></a>
-                                    <a href="<?= buildUrl($page - 1) ?>" class="px-2 sm:px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-sm flex items-center justify-center min-w-[32px]"><i class="fas fa-angle-left"></i></a>
+                                    <a href="<?= buildUrl(1) ?>" class="px-2 sm:px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-sm flex items-center justify-center min-w-[32px]"><i class="fas fa-angle-double-left"></i></a>
+                                    <a href="<?= buildUrl($page - 1) ?>" class="px-2 sm:px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-sm flex items-center justify-center min-w-[32px]"><i class="fas fa-angle-left"></i></a>
                                 <?php endif; ?>
                                 <?php
                                 $range = 2;
@@ -800,15 +800,15 @@ $jenis_colors = [
                                 if ($sp > 1) echo '<span class="px-2 sm:px-3 py-1.5 text-gray-500 flex items-center justify-center">...</span>';
                                 for ($i = $sp; $i <= $ep; $i++) {
                                     $cls = $i == $page
-                                        ? 'px-2 sm:px-3 py-1.5 bg-purple-600 rounded text-white text-sm flex items-center justify-center min-w-[32px] current-page page-number'
-                                        : 'px-2 sm:px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-sm flex items-center justify-center min-w-[32px] page-number';
+                                        ? 'px-2 sm:px-3 py-1.5 bg-purple-600 rounded text-gray-800 text-sm flex items-center justify-center min-w-[32px] current-page page-number'
+                                        : 'px-2 sm:px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-sm flex items-center justify-center min-w-[32px] page-number';
                                     echo '<a href="' . buildUrl($i) . '" class="' . $cls . '">' . $i . '</a>';
                                 }
                                 if ($ep < $total_pages) echo '<span class="px-2 sm:px-3 py-1.5 text-gray-500 flex items-center justify-center">...</span>';
                                 ?>
                                 <?php if ($page < $total_pages): ?>
-                                    <a href="<?= buildUrl($page + 1) ?>" class="px-2 sm:px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-sm flex items-center justify-center min-w-[32px]"><i class="fas fa-angle-right"></i></a>
-                                    <a href="<?= buildUrl($total_pages) ?>" class="px-2 sm:px-3 py-1.5 bg-gray-800 rounded hover:bg-gray-700 text-sm flex items-center justify-center min-w-[32px]"><i class="fas fa-angle-double-right"></i></a>
+                                    <a href="<?= buildUrl($page + 1) ?>" class="px-2 sm:px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-sm flex items-center justify-center min-w-[32px]"><i class="fas fa-angle-right"></i></a>
+                                    <a href="<?= buildUrl($total_pages) ?>" class="px-2 sm:px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-sm flex items-center justify-center min-w-[32px]"><i class="fas fa-angle-double-right"></i></a>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -816,7 +816,7 @@ $jenis_colors = [
                     <?php else: ?>
                         <div class="p-10 text-center">
                             <i class="fas fa-shield-alt text-5xl text-gray-600 mb-4"></i>
-                            <p class="text-gray-400">Tidak ada data pelanggaran untuk filter yang dipilih</p>
+                            <p class="text-gray-500">Tidak ada data pelanggaran untuk filter yang dipilih</p>
                             <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm transition-colors">
                                 <i class="fas fa-redo mr-2"></i>Reset Filter
                             </button>
@@ -827,7 +827,7 @@ $jenis_colors = [
                 <?php if (count($top_siswa) > 0): ?>
                     <div class="glass-effect rounded-xl p-4 sm:p-6 mb-6">
                         <h3 class="font-semibold text-lg mb-4">
-                            <i class="fas fa-trophy text-yellow-400 mr-2"></i>
+                            <i class="fas fa-trophy text-amber-600 mr-2"></i>
                             Top 5 Siswa Akumulasi Poin Pelanggaran
                         </h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -843,24 +843,24 @@ $jenis_colors = [
                                     default => 'rank-other'
                                 };
                             ?>
-                                <div class="bg-gray-800/40 border border-gray-700/50 rounded-lg p-4 flex flex-col items-center text-center gap-2 hover:border-purple-500/40 transition-colors">
+                                <div class="bg-gray-50/40 border border-gray-200 rounded-lg p-4 flex flex-col items-center text-center gap-2 hover:border-purple-500/40 transition-colors">
                                     <span class="px-2 py-0.5 rounded-full text-xs font-bold <?= $rankClass ?>">#<?= $rank ?></span>
                                     <img src="../../<?= $ts['foto_profil'] ?: 'assets/default/avatar.png' ?>"
-                                        class="w-12 h-12 rounded-full object-cover border-2 <?= $rank === 1 ? 'border-yellow-400' : 'border-gray-600' ?>">
+                                        class="w-12 h-12 rounded-full object-cover border-2 <?= $rank === 1 ? 'border-yellow-400' : 'border-gray-300' ?>">
                                     <div>
                                         <p class="text-sm font-semibold leading-tight"><?= htmlspecialchars($ts['nama_lengkap']) ?></p>
-                                        <p class="text-xs text-gray-400"><?= $ts['kelas'] ?> <?= $ts['jurusan'] ?></p>
+                                        <p class="text-xs text-gray-500"><?= $ts['kelas'] ?> <?= $ts['jurusan'] ?></p>
                                     </div>
                                     <div class="w-full">
                                         <div class="flex justify-between text-xs mb-1">
-                                            <span class="text-gray-400">Total Poin</span>
+                                            <span class="text-gray-500">Total Poin</span>
                                             <span class="font-bold <?= $color['text'] ?>"><?= $ts['total_poin'] ?></span>
                                         </div>
                                         <div class="poin-bar-wrap w-full" style="width:100%">
                                             <div class="poin-bar-fill <?= $color['bar'] ?>" style="width:<?= $pct ?>"></div>
                                         </div>
                                     </div>
-                                    <p class="text-xs text-gray-400"><?= $ts['jumlah'] ?> pelanggaran</p>
+                                    <p class="text-xs text-gray-500"><?= $ts['jumlah'] ?> pelanggaran</p>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -896,7 +896,7 @@ $jenis_colors = [
                             font: {
                                 size: isMobile ? 10 : 11
                             },
-                            color: '#9CA3AF'
+                            color: '#6b7280'
                         }
                     },
                     tooltip: {
@@ -979,7 +979,7 @@ $jenis_colors = [
                                 color: '#6B7280'
                             },
                             grid: {
-                                color: 'rgba(255,255,255,0.05)'
+                                color: 'rgba(0,0,0,0.05)'
                             }
                         },
                         x: {
@@ -991,7 +991,7 @@ $jenis_colors = [
                                 maxRotation: isMobile ? 45 : 0
                             },
                             grid: {
-                                color: 'rgba(255,255,255,0.05)'
+                                color: 'rgba(0,0,0,0.05)'
                             }
                         }
                     }

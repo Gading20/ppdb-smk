@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 require_once '../../config/database.php';
 
@@ -90,17 +90,17 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         .glass-effect {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(147, 51, 234, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         body {
-            background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
+            background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
         }
 
         .menu-active {
-            background: linear-gradient(to right, rgba(147, 51, 234, 0.2), rgba(147, 51, 234, 0.05));
+            background: linear-gradient(to right, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
             border-left: 4px solid #9333ea;
         }
 
@@ -158,90 +158,90 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
     </style>
 </head>
 
-<body class="min-h-screen text-white bg-fixed">
+<body class="min-h-screen text-gray-800 bg-fixed">
     <!-- Mobile Overlay - only visible when sidebar is open on mobile -->
-    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+    <div id="mobile-overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- Side Navigation -->
     <aside id="sidebar"
-        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-purple-900/30 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
-        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-purple-900/30">
+        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-violet-200 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
+        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-violet-200">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 lg:h-10 w-auto">
                 <div>
-                    <h1 class="font-semibold text-sm lg:text-base">SMK NURUL ULUM</h1>
-                    <p class="text-xs text-gray-400">Sistem Absensi</p>
+                    <h1 class="font-semibold text-sm lg:text-base text-gray-800">SMK NURUL ULUM</h1>
+                    <p class="text-xs text-gray-500">Sistem Absensi</p>
                 </div>
             </div>
             <!-- Close sidebar button - only visible on mobile -->
-            <button class="text-gray-400 hover:text-white lg:hidden" onclick="toggleSidebar()">
+            <button class="text-gray-600 hover:text-gray-800 lg:hidden" onclick="toggleSidebar()">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
 
         <nav class="p-4 space-y-2 overflow-y-auto no-scrollbar" style="max-height: calc(100vh - 76px);">
             <a href="../dashboard/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-home"></i><span>Dashboard</span>
             </a>
             <li class="relative group">
                 <button
-                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
                     <i class="fas fa-calendar-check"></i><span>Monitoring Siswa</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
                     <li><a href="../absensi/index.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
                     </li>
                     <li><a href="../absensi/pelanggaran.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
                     </li>
                     <li><a href="../absensi/konseling.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a>
                     </li>
                 </ul>
             </li>
             <a href="../siswa/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-users"></i><span>Data Siswa</span>
             </a>
             <li class="relative group">
                 <button
-                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
                     <i class="fas fa-file-alt"></i><span>Laporan</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
                     <li><a href="../laporan/index.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
                     </li>
                     <li><a href="../laporan/laporan_pelanggaran.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
                     </li>
                     <li><a href="../laporan/konseling.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a>
                     </li>
                 </ul>
             </li>
             <a href="../profil/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-user-cog"></i><span>Profil</span>
             </a>
             <a href="../logout.php"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors mt-10">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors mt-10">
                 <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>
         </nav>
     </aside>
 
     <!-- Main Content -->
-    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 transition-all duration-300">
+    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-sky-50 to-indigo-50 transition-all duration-300">
         <!-- Mobile Header -->
         <div
-            class="lg:hidden bg-gray-900/60 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-purple-900/30">
+            class="lg:hidden bg-white/90 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-violet-200">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-white p-2 -ml-2 rounded-lg hover:bg-gray-800/60"
+                <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-100"
                     aria-label="Menu">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
@@ -254,7 +254,7 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
                 $photo_path = $_SESSION['admin_photo'] ?? 'assets/default/avatar.png';
                 ?>
                 <img src="../../<?= $photo_path ?>" alt="Profile"
-                    class="h-8 w-8 rounded-full object-cover border border-purple-500/50">
+                    class="h-8 w-8 rounded-full object-cover border border-violet-300">
             </div>
         </div>
 
@@ -262,12 +262,12 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
             <div class="max-w-4xl mx-auto">
                 <!-- Header with back button - enhanced for mobile -->
                 <div class="flex items-center mb-6">
-                    <a href="../laporan/index.php" class="mr-3 p-2 rounded-full hover:bg-gray-800/60 transition-colors">
+                    <a href="../laporan/index.php" class="mr-3 p-2 rounded-full hover:bg-gray-100 transition-colors">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <div>
                         <h1 class="text-xl md:text-2xl font-bold">Detail Absensi</h1>
-                        <p class="text-sm md:text-base text-gray-400">Informasi lengkap kehadiran siswa</p>
+                        <p class="text-sm md:text-base text-gray-500">Informasi lengkap kehadiran siswa</p>
                     </div>
                 </div>
 
@@ -285,7 +285,7 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
                         <div class="relative">
                             <img src="../../<?= htmlspecialchars($absensi['foto_profil'] ?: 'assets/default/avatar.png') ?>"
                                 alt="<?= htmlspecialchars($absensi['nama_lengkap']) ?>"
-                                class="w-20 h-20 md:w-24 md:h-24 rounded-xl object-cover border border-purple-500/30">
+                                class="w-20 h-20 md:w-24 md:h-24 rounded-xl object-cover border border-violet-200">
 
                             <!-- Status indicator on the photo for mobile -->
                             <div
@@ -310,16 +310,16 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 mt-2 md:mt-3">
                                 <div>
-                                    <p class="text-gray-400 text-xs">NIS</p>
+                                    <p class="text-gray-500 text-xs">NIS</p>
                                     <p class="text-sm md:text-base"><?= htmlspecialchars($absensi['nis']) ?></p>
                                 </div>
                                 <div>
-                                    <p class="text-gray-400 text-xs">Kelas</p>
+                                    <p class="text-gray-500 text-xs">Kelas</p>
                                     <p class="text-sm md:text-base"><?= htmlspecialchars($absensi['kelas']) ?>
                                         <?= htmlspecialchars($absensi['jurusan']) ?></p>
                                 </div>
                                 <div class="sm:col-span-2">
-                                    <p class="text-gray-400 text-xs">Email</p>
+                                    <p class="text-gray-500 text-xs">Email</p>
                                     <p class="text-sm md:text-base truncate"><?= htmlspecialchars($absensi['email']) ?>
                                     </p>
                                 </div>
@@ -365,20 +365,20 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
 
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                         <div>
-                            <p class="text-gray-400 text-xs mb-1">Tanggal</p>
+                            <p class="text-gray-500 text-xs mb-1">Tanggal</p>
                             <p class="text-sm md:text-base font-medium">
                                 <?= date('d F Y', strtotime($absensi['tanggal'])) ?></p>
                         </div>
 
                         <div>
-                            <p class="text-gray-400 text-xs mb-1">Jam Masuk</p>
+                            <p class="text-gray-500 text-xs mb-1">Jam Masuk</p>
                             <p class="text-sm md:text-base font-medium">
                                 <?= $absensi['jam_masuk'] !== '00:00:00' ? date('H:i', strtotime($absensi['jam_masuk'])) : '-' ?>
                             </p>
                         </div>
 
                         <div>
-                            <p class="text-gray-400 text-xs mb-1">Dicatat Pada</p>
+                            <p class="text-gray-500 text-xs mb-1">Dicatat Pada</p>
                             <p class="text-sm md:text-base font-medium">
                                 <?= date('d/m/Y H:i', strtotime($absensi['created_at'])) ?>
                             </p>
@@ -386,8 +386,8 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
                     </div>
 
                     <div class="mt-4 md:mt-6">
-                        <p class="text-gray-400 text-xs mb-1">Keterangan</p>
-                        <div class="bg-gray-800/50 rounded-lg p-3 min-h-[60px]">
+                        <p class="text-gray-500 text-xs mb-1">Keterangan</p>
+                        <div class="bg-gray-50/50 rounded-lg p-3 min-h-[60px]">
                             <p class="text-sm">
                                 <?= $absensi['keterangan'] ? nl2br(htmlspecialchars($absensi['keterangan'])) : '<span class="text-gray-500 italic">Tidak ada keterangan</span>' ?>
                             </p>
@@ -403,12 +403,12 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <?php if ($absensi['bukti_foto']): ?>
                                 <div>
-                                    <p class="text-gray-400 text-xs mb-2">Foto Bukti</p>
+                                    <p class="text-gray-500 text-xs mb-2">Foto Bukti</p>
                                     <a href="../../<?= htmlspecialchars($absensi['bukti_foto']) ?>" target="_blank"
                                         class="block rounded-lg overflow-hidden image-preview">
                                         <img src="../../<?= htmlspecialchars($absensi['bukti_foto']) ?>" alt="Bukti Absensi"
                                             class="w-full h-40 md:h-48 object-cover rounded-lg hover:opacity-90 transition-opacity">
-                                        <div class="mt-2 flex justify-center items-center text-xs text-purple-400">
+                                        <div class="mt-2 flex justify-center items-center text-xs text-violet-500">
                                             <i class="fas fa-search-plus mr-1"></i> Tap untuk memperbesar
                                         </div>
                                     </a>
@@ -417,15 +417,15 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
 
                             <?php if ($absensi['bukti_file']): ?>
                                 <div>
-                                    <p class="text-gray-400 text-xs mb-2">File Bukti</p>
+                                    <p class="text-gray-500 text-xs mb-2">File Bukti</p>
                                     <a href="../../<?= htmlspecialchars($absensi['bukti_file']) ?>" target="_blank"
-                                        class="flex items-center p-4 rounded-lg bg-gray-800/50 hover:bg-gray-800 transition-colors">
-                                        <i class="fas fa-file-alt text-purple-500 text-2xl mr-3"></i>
+                                        class="flex items-center p-4 rounded-lg bg-gray-50/50 hover:bg-gray-50 transition-colors">
+                                        <i class="fas fa-file-alt text-violet-600 text-2xl mr-3"></i>
                                         <div class="overflow-hidden">
                                             <p class="truncate font-medium text-sm">Dokumen Pendukung</p>
-                                            <p class="text-xs text-gray-400">Download file</p>
+                                            <p class="text-xs text-gray-500">Download file</p>
                                         </div>
-                                        <i class="fas fa-download ml-auto text-gray-400"></i>
+                                        <i class="fas fa-download ml-auto text-gray-500"></i>
                                     </a>
                                 </div>
                             <?php endif; ?>
@@ -474,7 +474,7 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
                 <!-- Back button on mobile only -->
                 <div class="mt-6 flex justify-center lg:hidden">
                     <a href="index.php"
-                        class="px-4 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center justify-center text-sm transition-colors">
+                        class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center text-sm transition-colors">
                         <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar Absensi
                     </a>
                 </div>
@@ -487,10 +487,10 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
         <div class="fixed inset-0 bg-black bg-opacity-50" onclick="hideDeleteModal()"></div>
         <div class="glass-effect rounded-lg p-6 w-11/12 max-w-md relative z-10 mx-4 my-auto animate-fade-in">
             <h3 class="text-xl font-semibold mb-4">Konfirmasi Hapus</h3>
-            <p class="text-gray-300 mb-6">Apakah Anda yakin ingin menghapus data absensi ini? Tindakan ini tidak dapat
+            <p class="text-gray-700 mb-6">Apakah Anda yakin ingin menghapus data absensi ini? Tindakan ini tidak dapat
                 dibatalkan.</p>
             <div class="flex justify-end gap-3">
-                <button onclick="hideDeleteModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm">
+                <button onclick="hideDeleteModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm">
                     Batal
                 </button>
                 <form method="POST" action="delete.php">

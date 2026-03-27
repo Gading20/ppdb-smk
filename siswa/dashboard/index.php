@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 require_once '../../config/database.php';
 
@@ -314,13 +314,13 @@ foreach ($attendance_stats as $stat) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .glass-effect {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(147, 51, 234, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         .menu-active {
-            background: linear-gradient(to right, rgba(147, 51, 234, 0.2), rgba(147, 51, 234, 0.05));
+            background: linear-gradient(to right, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
             border-left: 4px solid #9333ea;
         }
 
@@ -331,7 +331,7 @@ foreach ($attendance_stats as $stat) {
         }
 
         body {
-            background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
+            background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
         }
 
         @keyframes fadeInUp {
@@ -430,58 +430,58 @@ foreach ($attendance_stats as $stat) {
     </style>
 </head>
 
-<body class="min-h-screen text-white bg-fixed">
+<body class="min-h-screen text-gray-800 bg-fixed">
     <!-- Mobile Overlay - only visible when sidebar is open on mobile -->
-    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+    <div id="mobile-overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- Side Navigation -->
     <aside id="sidebar"
-        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-purple-900/30 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
-        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-purple-900/30">
+        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-violet-200 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
+        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-violet-200">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 lg:h-10 w-auto">
                 <div>
-                    <h1 class="font-semibold text-sm lg:text-base">SMK NURUL ULUM</h1>
-                    <p class="text-xs text-gray-400">Sistem Absensi</p>
+                    <h1 class="font-semibold text-sm lg:text-base text-gray-800">SMK NURUL ULUM</h1>
+                    <p class="text-xs text-gray-500">Sistem Absensi</p>
                 </div>
             </div>
             <!-- Close sidebar button - only visible on mobile -->
-            <button class="text-gray-400 hover:text-white lg:hidden" onclick="toggleSidebar()">
+            <button class="text-gray-600 hover:text-gray-800 lg:hidden" onclick="toggleSidebar()">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
 
-        <div class="p-4 border-b border-purple-900/30">
+        <div class="p-4 border-b border-violet-200">
             <div class="flex items-center gap-3">
                 <img src="../../<?= $_SESSION['siswa_photo'] ?: 'assets/default/photo-profile.png' ?>" alt="Profile"
-                    class="h-10 w-10 rounded-full object-cover border-2 border-purple-500/50">
+                    class="h-10 w-10 rounded-full object-cover border-2 border-violet-300">
                 <div>
                     <h2 class="font-medium text-sm"><?= $_SESSION['siswa_name'] ?></h2>
-                    <p class="text-xs text-gray-400"><?= $_SESSION['siswa_kelas'] ?> <?= $_SESSION['siswa_jurusan'] ?>
+                    <p class="text-xs text-gray-500"><?= $_SESSION['siswa_kelas'] ?> <?= $_SESSION['siswa_jurusan'] ?>
                     </p>
                 </div>
             </div>
         </div>
 
         <nav class="p-4 space-y-2 overflow-y-auto no-scrollbar" style="max-height: calc(100vh - 160px);">
-            <a href="index.php" class="flex items-center gap-3 text-white/90 p-3 rounded-lg menu-active">
-                <i class="fas fa-home text-purple-500"></i>
+            <a href="index.php" class="flex items-center gap-3 text-gray-700 p-3 rounded-lg menu-active">
+                <i class="fas fa-home text-violet-600"></i>
                 <span>Dashboard</span>
             </a>
             <a href="../riwayat/index.php"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-history"></i>
                 <span>Riwayat Absensi</span>
             </a>
             <a href="../profil/index.php"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-user"></i>
                 <span>Profil</span>
             </a>
 
             <div class="pt-4 mt-auto">
                 <a href="../logout.php"
-                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors">
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
                 </a>
@@ -490,12 +490,12 @@ foreach ($attendance_stats as $stat) {
     </aside>
 
     <!-- Main Content -->
-    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 transition-all duration-300">
+    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-sky-50 to-indigo-50 transition-all duration-300">
         <!-- Mobile Header -->
         <div
-            class="lg:hidden bg-gray-900/60 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-purple-900/30">
+            class="lg:hidden bg-white/90 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-violet-200">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-white p-1">
+                <button onclick="toggleSidebar()" class="text-gray-800 p-1">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
                 <img src="../../assets/default/logo-smk40.png" alt="SMKN 40" class="h-8 w-auto">
@@ -503,7 +503,7 @@ foreach ($attendance_stats as $stat) {
             <div class="flex items-center gap-3">
                 <span id="current-time-mobile" class="text-sm font-medium"></span>
                 <img src="../../<?= $_SESSION['siswa_photo'] ?: 'assets/default/photo-profile.png' ?>" alt="Profile"
-                    class="h-8 w-8 rounded-full object-cover border border-purple-500/50">
+                    class="h-8 w-8 rounded-full object-cover border border-violet-300">
             </div>
         </div>
 
@@ -516,12 +516,12 @@ foreach ($attendance_stats as $stat) {
                         <div>
                             <h1 class="text-xl lg:text-2xl font-bold">Selamat Datang,
                                 <?= explode(' ', $_SESSION['siswa_name'])[0] ?>!</h1>
-                            <p class="text-gray-400 text-sm lg:text-base mt-1"><?= date('l, d F Y') ?></p>
+                            <p class="text-gray-500 text-sm lg:text-base mt-1"><?= date('l, d F Y') ?></p>
                         </div>
 
                         <!-- Current Time - Desktop Only -->
                         <div class="hidden lg:flex glass-effect rounded-lg px-4 py-2 items-center gap-2 mt-4 md:mt-0">
-                            <i class="fas fa-clock text-purple-400"></i>
+                            <i class="fas fa-clock text-violet-500"></i>
                             <span id="current-time" class="font-medium"></span>
                         </div>
                     </div>
@@ -543,13 +543,13 @@ foreach ($attendance_stats as $stat) {
                     <!-- Today's Attendance Form -->
                     <div class="glass-effect rounded-xl p-4 lg:p-6 lg:col-span-2">
                         <h3 class="font-semibold text-base lg:text-lg mb-4 flex items-center">
-                            <i class="fas fa-clipboard-check text-purple-500 mr-2"></i>
+                            <i class="fas fa-clipboard-check text-violet-600 mr-2"></i>
                             Absensi Hari Ini
                         </h3>
 
                         <?php if ($today_attendance): ?>
                             <!-- Already submitted attendance -->
-                            <div class="p-3 lg:p-4 border border-gray-700/50 rounded-lg bg-gray-800/50">
+                            <div class="p-3 lg:p-4 border border-gray-200 rounded-lg bg-gray-50/50">
                                 <div class="flex flex-col sm:flex-row justify-between items-start gap-3">
                                     <div>
                                         <div class="mb-3 lg:mb-4 flex items-center flex-wrap gap-2">
@@ -558,19 +558,19 @@ foreach ($attendance_stats as $stat) {
                                             <?php
                                             switch ($today_attendance['status']) {
                                                 case 'Hadir':
-                                                    echo 'bg-green-500/10 text-green-500 border border-green-500/30';
+                                                    echo 'bg-green-50 text-green-600 border border-green-500/30';
                                                     break;
                                                 case 'Sakit':
                                                     echo 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/30';
                                                     break;
                                                 case 'Izin':
-                                                    echo 'bg-purple-500/10 text-purple-500 border border-purple-500/30';
+                                                    echo 'bg-purple-500/10 text-violet-600 border border-violet-200';
                                                     break;
                                                 case 'Terlambat':
                                                     echo 'bg-orange-500/10 text-orange-500 border border-orange-500/30';
                                                     break;
                                                 case 'Alpha':
-                                                    echo 'bg-red-500/10 text-red-500 border border-red-500/30';
+                                                    echo 'bg-red-50 text-red-600 border border-red-200';
                                                     break;
                                                 default:
                                                     echo 'bg-gray-500/10 text-gray-500 border border-gray-500/30';
@@ -586,10 +586,10 @@ foreach ($attendance_stats as $stat) {
                                             <?php
                                             switch ($today_attendance['approval_status']) {
                                                 case 'Approved':
-                                                    echo 'bg-green-500/10 text-green-500 border border-green-500/30';
+                                                    echo 'bg-green-50 text-green-600 border border-green-500/30';
                                                     break;
                                                 case 'Rejected':
-                                                    echo 'bg-red-500/10 text-red-500 border border-red-500/30';
+                                                    echo 'bg-red-50 text-red-600 border border-red-200';
                                                     break;
                                                 default:
                                                     echo 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/30';
@@ -603,7 +603,7 @@ foreach ($attendance_stats as $stat) {
                                             <div class="mb-3 lg:mb-4">
                                                 <span class="text-sm font-medium">Waktu Absen:</span>
                                                 <span
-                                                    class="text-gray-300 ml-2"><?= date('H:i', strtotime($today_attendance['jam_masuk'])) ?>
+                                                    class="text-gray-700 ml-2"><?= date('H:i', strtotime($today_attendance['jam_masuk'])) ?>
                                                     WIB</span>
                                             </div>
                                         <?php endif; ?>
@@ -612,7 +612,7 @@ foreach ($attendance_stats as $stat) {
                                             <div class="mt-4">
                                                 <span class="text-sm font-medium block mb-1">Keterangan:</span>
                                                 <p
-                                                    class="text-gray-400 text-sm bg-gray-800/50 p-3 rounded-lg border border-gray-700/50">
+                                                    class="text-gray-500 text-sm bg-gray-50/50 p-3 rounded-lg border border-gray-200">
                                                     <?= htmlspecialchars($today_attendance['keterangan']) ?>
                                                 </p>
                                             </div>
@@ -623,7 +623,7 @@ foreach ($attendance_stats as $stat) {
                                         <div class="sm:ml-4 shrink-0">
                                             <span class="text-sm font-medium block mb-1">Bukti:</span>
                                             <img src="../../<?= $today_attendance['bukti_foto'] ?>" alt="Bukti"
-                                                class="w-24 h-24 object-cover rounded-lg border border-gray-700/50"
+                                                class="w-24 h-24 object-cover rounded-lg border border-gray-200"
                                                 onclick="showImagePreview('../../<?= $today_attendance['bukti_foto'] ?>')">
                                         </div>
                                     <?php endif; ?>
@@ -631,7 +631,7 @@ foreach ($attendance_stats as $stat) {
                             </div>
                         <?php elseif ($rejected_attendance): ?>
                             <!-- Rejected attendance notification -->
-                            <div class="p-3 lg:p-4 border border-red-500/30 rounded-lg bg-red-500/10 mb-4">
+                            <div class="p-3 lg:p-4 border border-red-200 rounded-lg bg-red-500/10 mb-4">
                                 <div class="flex items-center text-red-500">
                                     <i class="fas fa-exclamation-circle text-xl mr-3"></i>
                                     <div>
@@ -646,11 +646,11 @@ foreach ($attendance_stats as $stat) {
                             <form action="" method="POST" enctype="multipart/form-data" class="space-y-4">
                                 <!-- Camera container for Hadir status -->
                                 <div id="camera-container"
-                                    class="hidden mb-4 p-3 lg:p-4 border border-gray-700/50 rounded-lg bg-gray-800/50">
+                                    class="hidden mb-4 p-3 lg:p-4 border border-gray-200 rounded-lg bg-gray-50/50">
                                     <div class="mb-3">
-                                        <h4 class="text-sm font-medium text-gray-300 mb-2">Ambil Foto Kehadiran <span
+                                        <h4 class="text-sm font-medium text-gray-700 mb-2">Ambil Foto Kehadiran <span
                                                 class="text-red-400">*</span></h4>
-                                        <p class="text-xs text-gray-400 mb-2">Silakan posisikan wajah Anda dengan jelas di
+                                        <p class="text-xs text-gray-500 mb-2">Silakan posisikan wajah Anda dengan jelas di
                                             dalam frame</p>
                                     </div>
 
@@ -672,7 +672,7 @@ foreach ($attendance_stats as $stat) {
                                                 <div
                                                     class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-500">
                                                 </div>
-                                                <p class="text-xs mt-2 text-gray-300">Memuat kamera...</p>
+                                                <p class="text-xs mt-2 text-gray-700">Memuat kamera...</p>
                                             </div>
                                         </div>
                                     </div>
@@ -680,15 +680,15 @@ foreach ($attendance_stats as $stat) {
                                     <!-- Camera controls with better responsive layout -->
                                     <div class="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-between gap-2">
                                         <button type="button" id="switch-camera-btn"
-                                            class="px-2 lg:px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-xs lg:text-sm text-white flex items-center justify-center">
+                                            class="px-2 lg:px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs lg:text-sm text-gray-800 flex items-center justify-center">
                                             <i class="fas fa-sync mr-1 lg:mr-2"></i> Ganti Kamera
                                         </button>
                                         <button type="button" id="capture-btn"
-                                            class="px-2 lg:px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-xs lg:text-sm text-white flex items-center justify-center">
+                                            class="px-2 lg:px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-xs lg:text-sm text-gray-800 flex items-center justify-center">
                                             <i class="fas fa-camera mr-1 lg:mr-2"></i> Ambil Foto
                                         </button>
                                         <button type="button" id="retake-btn"
-                                            class="hidden col-span-2 sm:col-span-1 px-2 lg:px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-xs lg:text-sm text-white flex items-center justify-center">
+                                            class="hidden col-span-2 sm:col-span-1 px-2 lg:px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs lg:text-sm text-gray-800 flex items-center justify-center">
                                             <i class="fas fa-redo mr-1 lg:mr-2"></i> Ulangi Foto
                                         </button>
                                     </div>
@@ -698,13 +698,13 @@ foreach ($attendance_stats as $stat) {
                                 </div>
 
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Status Kehadiran</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Status Kehadiran</label>
                                     <div class="grid grid-cols-3 gap-2 lg:gap-3">
                                         <label class="cursor-pointer">
                                             <input type="radio" name="status" value="Hadir" class="hidden peer" required
                                                 <?= ($rejected_attendance['status'] === 'Hadir') ? 'checked' : '' ?>>
                                             <div
-                                                class="p-2 lg:p-3 border border-gray-700 rounded-lg peer-checked:border-green-500 peer-checked:bg-green-500/10 text-center transition-colors">
+                                                class="p-2 lg:p-3 border border-gray-300 rounded-lg peer-checked:border-green-500 peer-checked:bg-green-500/10 text-center transition-colors">
                                                 <i class="fas fa-check text-green-500 mb-1"></i>
                                                 <p class="text-xs lg:text-sm font-medium">Hadir</p>
                                             </div>
@@ -714,7 +714,7 @@ foreach ($attendance_stats as $stat) {
                                             <input type="radio" name="status" value="Sakit" class="hidden peer"
                                                 <?= ($rejected_attendance['status'] === 'Sakit') ? 'checked' : '' ?>>
                                             <div
-                                                class="p-2 lg:p-3 border border-gray-700 rounded-lg peer-checked:border-yellow-500 peer-checked:bg-yellow-500/10 text-center transition-colors">
+                                                class="p-2 lg:p-3 border border-gray-300 rounded-lg peer-checked:border-yellow-500 peer-checked:bg-yellow-500/10 text-center transition-colors">
                                                 <i class="fas fa-hospital text-yellow-500 mb-1"></i>
                                                 <p class="text-xs lg:text-sm font-medium">Sakit</p>
                                             </div>
@@ -724,8 +724,8 @@ foreach ($attendance_stats as $stat) {
                                             <input type="radio" name="status" value="Izin" class="hidden peer"
                                                 <?= ($rejected_attendance['status'] === 'Izin') ? 'checked' : '' ?>>
                                             <div
-                                                class="p-2 lg:p-3 border border-gray-700 rounded-lg peer-checked:border-purple-500 peer-checked:bg-purple-500/10 text-center transition-colors">
-                                                <i class="fas fa-clipboard-list text-purple-500 mb-1"></i>
+                                                class="p-2 lg:p-3 border border-gray-300 rounded-lg peer-checked:border-purple-500 peer-checked:bg-purple-500/10 text-center transition-colors">
+                                                <i class="fas fa-clipboard-list text-violet-600 mb-1"></i>
                                                 <p class="text-xs lg:text-sm font-medium">Izin</p>
                                             </div>
                                         </label>
@@ -734,26 +734,26 @@ foreach ($attendance_stats as $stat) {
 
                                 <div id="additionalFields" class="hidden space-y-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-300 mb-2">Keterangan</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan</label>
                                         <textarea name="keterangan" rows="3"
-                                            class="w-full px-3 lg:px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-white
-                                            focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500"
+                                            class="w-full px-3 lg:px-4 py-2 rounded-lg bg-gray-50/50 border border-gray-300 text-gray-800
+                                            focus:outline-none focus:ring-2 focus:ring-violet-300 focus:border-violet-500"
                                             placeholder="Masukkan alasan ketidakhadiran..."><?= htmlspecialchars($rejected_attendance['keterangan'] ?? '') ?></textarea>
                                     </div>
 
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-300 mb-2">Bukti (opsional)</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Bukti (opsional)</label>
                                         <input type="file" name="bukti_foto" accept="image/*"
-                                            class="w-full px-3 lg:px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-white
-                                            focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 text-sm">
+                                            class="w-full px-3 lg:px-4 py-2 rounded-lg bg-gray-50/50 border border-gray-300 text-gray-800
+                                            focus:outline-none focus:ring-2 focus:ring-violet-300 focus:border-violet-500 text-sm">
                                         <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, max 2MB.</p>
 
                                         <?php if (!empty($rejected_attendance['bukti_foto'])): ?>
                                             <div class="mt-2 flex items-center gap-2">
-                                                <span class="text-sm text-gray-400">Bukti sebelumnya:</span>
+                                                <span class="text-sm text-gray-500">Bukti sebelumnya:</span>
                                                 <a href="#"
                                                     onclick="showImagePreview('../../<?= $rejected_attendance['bukti_foto'] ?>')"
-                                                    class="text-purple-400 hover:text-purple-300 text-sm flex items-center">
+                                                    class="text-violet-500 hover:text-purple-300 text-sm flex items-center">
                                                     <i class="fas fa-image mr-1"></i> Lihat
                                                 </a>
                                             </div>
@@ -764,7 +764,7 @@ foreach ($attendance_stats as $stat) {
                                 <div class="pt-2">
                                     <button type="submit" name="submit_attendance"
                                         class="px-4 lg:px-6 py-2 lg:py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium 
-                                        text-white transition-colors flex items-center justify-center w-full sm:w-auto text-sm">
+                                        text-gray-800 transition-colors flex items-center justify-center w-full sm:w-auto text-sm">
                                         <i class="fas fa-paper-plane mr-2"></i> Kirim Ulang Absensi
                                     </button>
                                 </div>
@@ -774,11 +774,11 @@ foreach ($attendance_stats as $stat) {
                             <form action="" method="POST" enctype="multipart/form-data" class="space-y-4">
                                 <!-- Add this before the form for camera UI -->
                                 <div id="camera-container"
-                                    class="hidden mb-4 p-3 lg:p-4 border border-gray-700/50 rounded-lg bg-gray-800/50">
+                                    class="hidden mb-4 p-3 lg:p-4 border border-gray-200 rounded-lg bg-gray-50/50">
                                     <div class="mb-3">
-                                        <h4 class="text-sm font-medium text-gray-300 mb-2">Ambil Foto Kehadiran <span
+                                        <h4 class="text-sm font-medium text-gray-700 mb-2">Ambil Foto Kehadiran <span
                                                 class="text-red-400">*</span></h4>
-                                        <p class="text-xs text-gray-400 mb-2">Silakan posisikan wajah Anda dengan jelas di
+                                        <p class="text-xs text-gray-500 mb-2">Silakan posisikan wajah Anda dengan jelas di
                                             dalam frame</p>
                                     </div>
 
@@ -800,7 +800,7 @@ foreach ($attendance_stats as $stat) {
                                                 <div
                                                     class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-500">
                                                 </div>
-                                                <p class="text-xs mt-2 text-gray-300">Memuat kamera...</p>
+                                                <p class="text-xs mt-2 text-gray-700">Memuat kamera...</p>
                                             </div>
                                         </div>
                                     </div>
@@ -808,15 +808,15 @@ foreach ($attendance_stats as $stat) {
                                     <!-- Camera controls -->
                                     <div class="flex flex-wrap justify-between gap-2">
                                         <button type="button" id="switch-camera-btn"
-                                            class="px-2 lg:px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-xs lg:text-sm text-white flex items-center">
+                                            class="px-2 lg:px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs lg:text-sm text-gray-800 flex items-center">
                                             <i class="fas fa-sync mr-1 lg:mr-2"></i> Ganti Kamera
                                         </button>
                                         <button type="button" id="capture-btn"
-                                            class="px-2 lg:px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-xs lg:text-sm text-white flex items-center">
+                                            class="px-2 lg:px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-xs lg:text-sm text-gray-800 flex items-center">
                                             <i class="fas fa-camera mr-1 lg:mr-2"></i> Ambil Foto
                                         </button>
                                         <button type="button" id="retake-btn"
-                                            class="hidden px-2 lg:px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-xs lg:text-sm text-white flex items-center">
+                                            class="hidden px-2 lg:px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs lg:text-sm text-gray-800 flex items-center">
                                             <i class="fas fa-redo mr-1 lg:mr-2"></i> Ulangi Foto
                                         </button>
                                     </div>
@@ -826,13 +826,13 @@ foreach ($attendance_stats as $stat) {
                                 </div>
 
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Status Kehadiran</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Status Kehadiran</label>
                                     <div class="grid grid-cols-3 gap-2 lg:gap-3">
                                         <label class="cursor-pointer">
                                             <input type="radio" name="status" value="Hadir" class="hidden peer" required
                                                 checked>
                                             <div
-                                                class="p-2 lg:p-3 border border-gray-700 rounded-lg peer-checked:border-green-500 peer-checked:bg-green-500/10 text-center transition-colors">
+                                                class="p-2 lg:p-3 border border-gray-300 rounded-lg peer-checked:border-green-500 peer-checked:bg-green-500/10 text-center transition-colors">
                                                 <i class="fas fa-check text-green-500 mb-1"></i>
                                                 <p class="text-xs lg:text-sm font-medium">Hadir</p>
                                             </div>
@@ -841,7 +841,7 @@ foreach ($attendance_stats as $stat) {
                                         <label class="cursor-pointer">
                                             <input type="radio" name="status" value="Sakit" class="hidden peer">
                                             <div
-                                                class="p-2 lg:p-3 border border-gray-700 rounded-lg peer-checked:border-yellow-500 peer-checked:bg-yellow-500/10 text-center transition-colors">
+                                                class="p-2 lg:p-3 border border-gray-300 rounded-lg peer-checked:border-yellow-500 peer-checked:bg-yellow-500/10 text-center transition-colors">
                                                 <i class="fas fa-hospital text-yellow-500 mb-1"></i>
                                                 <p class="text-xs lg:text-sm font-medium">Sakit</p>
                                             </div>
@@ -850,8 +850,8 @@ foreach ($attendance_stats as $stat) {
                                         <label class="cursor-pointer">
                                             <input type="radio" name="status" value="Izin" class="hidden peer">
                                             <div
-                                                class="p-2 lg:p-3 border border-gray-700 rounded-lg peer-checked:border-purple-500 peer-checked:bg-purple-500/10 text-center transition-colors">
-                                                <i class="fas fa-clipboard-list text-purple-500 mb-1"></i>
+                                                class="p-2 lg:p-3 border border-gray-300 rounded-lg peer-checked:border-purple-500 peer-checked:bg-purple-500/10 text-center transition-colors">
+                                                <i class="fas fa-clipboard-list text-violet-600 mb-1"></i>
                                                 <p class="text-xs lg:text-sm font-medium">Izin</p>
                                             </div>
                                         </label>
@@ -860,18 +860,18 @@ foreach ($attendance_stats as $stat) {
 
                                 <div id="additionalFields" class="hidden space-y-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-300 mb-2">Keterangan</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan</label>
                                         <textarea name="keterangan" rows="3"
-                                            class="w-full px-3 lg:px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-white
-                                            focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500"
+                                            class="w-full px-3 lg:px-4 py-2 rounded-lg bg-gray-50/50 border border-gray-300 text-gray-800
+                                            focus:outline-none focus:ring-2 focus:ring-violet-300 focus:border-violet-500"
                                             placeholder="Masukkan alasan ketidakhadiran..."></textarea>
                                     </div>
 
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-300 mb-2">Bukti (opsional)</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Bukti (opsional)</label>
                                         <input type="file" name="bukti_foto" accept="image/*"
-                                            class="w-full px-3 lg:px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-white
-                                            focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 text-sm">
+                                            class="w-full px-3 lg:px-4 py-2 rounded-lg bg-gray-50/50 border border-gray-300 text-gray-800
+                                            focus:outline-none focus:ring-2 focus:ring-violet-300 focus:border-violet-500 text-sm">
                                         <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, max 2MB.</p>
                                     </div>
                                 </div>
@@ -879,7 +879,7 @@ foreach ($attendance_stats as $stat) {
                                 <div>
                                     <button type="submit" name="submit_attendance"
                                         class="px-4 lg:px-6 py-2 lg:py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium 
-                                        text-white transition-colors flex items-center justify-center w-full sm:w-auto text-sm">
+                                        text-gray-800 transition-colors flex items-center justify-center w-full sm:w-auto text-sm">
                                         <i class="fas fa-paper-plane mr-2"></i> Kirim Absensi
                                     </button>
                                 </div>
@@ -890,17 +890,17 @@ foreach ($attendance_stats as $stat) {
                     <!-- Attendance Summary Stats -->
                     <div class="glass-effect rounded-xl p-4 lg:p-6">
                         <h3 class="font-semibold text-base lg:text-lg mb-4 flex items-center">
-                            <i class="fas fa-chart-pie text-purple-500 mr-2"></i>
+                            <i class="fas fa-chart-pie text-violet-600 mr-2"></i>
                             Ringkasan Kehadiran
                         </h3>
 
                         <div class="mb-6">
                             <!-- Attendance Percentage -->
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-sm text-gray-400">Persentase Kehadiran</span>
+                                <span class="text-sm text-gray-500">Persentase Kehadiran</span>
                                 <span class="text-sm font-medium"><?= $attendance_percentage ?>%</span>
                             </div>
-                            <div class="w-full bg-gray-800/60 rounded-full h-2">
+                            <div class="w-full bg-gray-50/60 rounded-full h-2">
                                 <div class="bg-gradient-to-r from-purple-500 to-indigo-500 h-2 rounded-full"
                                     style="width: <?= min($attendance_percentage, 100) ?>%"></div>
                             </div>
@@ -960,9 +960,9 @@ foreach ($attendance_stats as $stat) {
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
                     <!-- Pending Approval Requests -->
                     <div class="glass-effect rounded-xl overflow-hidden">
-                        <div class="bg-gradient-to-r from-purple-900/40 to-indigo-900/40 p-4 border-b border-gray-800">
+                        <div class="bg-gradient-to-r from-violet-50 to-indigo-50 p-4 border-b border-gray-800">
                             <h3 class="font-semibold flex items-center text-base">
-                                <i class="fas fa-clock text-purple-500 mr-2"></i>
+                                <i class="fas fa-clock text-violet-600 mr-2"></i>
                                 Permintaan Menunggu Persetujuan
                             </h3>
                         </div>
@@ -970,7 +970,7 @@ foreach ($attendance_stats as $stat) {
                         <?php if (count($pending_requests) > 0): ?>
                             <div class="divide-y divide-gray-800 max-h-[400px] overflow-y-auto">
                                 <?php foreach ($pending_requests as $request): ?>
-                                    <div class="p-3 lg:p-4 hover:bg-gray-800/30 transition-colors">
+                                    <div class="p-3 lg:p-4 hover:bg-gray-50/30 transition-colors">
                                         <div
                                             class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                                             <div>
@@ -982,7 +982,7 @@ foreach ($attendance_stats as $stat) {
                                                         echo 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/30';
                                                         break;
                                                     case 'Izin':
-                                                        echo 'bg-purple-500/10 text-purple-500 border border-purple-500/30';
+                                                        echo 'bg-purple-500/10 text-violet-600 border border-violet-200';
                                                         break;
                                                     default:
                                                         echo 'bg-gray-500/10 text-gray-500 border border-gray-500/30';
@@ -994,7 +994,7 @@ foreach ($attendance_stats as $stat) {
                                                 </span>
 
                                                 <!-- Date and Time -->
-                                                <div class="mt-2 text-xs text-gray-400">
+                                                <div class="mt-2 text-xs text-gray-500">
                                                     <span class="inline-block mr-3">
                                                         <i class="far fa-calendar-alt mr-1"></i>
                                                         <?= date('d M Y', strtotime($request['tanggal'])) ?>
@@ -1012,7 +1012,7 @@ foreach ($attendance_stats as $stat) {
                                             <?php if ($request['bukti_foto']): ?>
                                                 <div class="shrink-0">
                                                     <img src="../../<?= $request['bukti_foto'] ?>" alt="Bukti"
-                                                        class="w-12 h-12 object-cover rounded-md border border-gray-700"
+                                                        class="w-12 h-12 object-cover rounded-md border border-gray-300"
                                                         onclick="showImagePreview('../../<?= $request['bukti_foto'] ?>')">
                                                 </div>
                                             <?php endif; ?>
@@ -1020,8 +1020,8 @@ foreach ($attendance_stats as $stat) {
 
                                         <!-- Reason if any -->
                                         <?php if ($request['keterangan']): ?>
-                                            <div class="mt-2 text-sm text-gray-300">
-                                                <div class="text-xs text-gray-400 mb-1">Keterangan:</div>
+                                            <div class="mt-2 text-sm text-gray-700">
+                                                <div class="text-xs text-gray-500 mb-1">Keterangan:</div>
                                                 <p class="text-xs"><?= htmlspecialchars($request['keterangan']) ?></p>
                                             </div>
                                         <?php endif; ?>
@@ -1047,19 +1047,19 @@ foreach ($attendance_stats as $stat) {
                         <?php else: ?>
                             <div class="p-8 text-center">
                                 <div
-                                    class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-800/50 mb-4">
-                                    <i class="fas fa-check-circle text-2xl text-gray-400"></i>
+                                    class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50/50 mb-4">
+                                    <i class="fas fa-check-circle text-2xl text-gray-500"></i>
                                 </div>
-                                <p class="text-gray-400">Tidak ada permintaan yang tertunda.</p>
+                                <p class="text-gray-500">Tidak ada permintaan yang tertunda.</p>
                             </div>
                         <?php endif; ?>
                     </div>
 
                     <!-- Recent Attendance Calendar -->
                     <div class="glass-effect rounded-xl overflow-hidden">
-                        <div class="bg-gradient-to-r from-purple-900/40 to-indigo-900/40 p-4 border-b border-gray-800">
+                        <div class="bg-gradient-to-r from-violet-50 to-indigo-50 p-4 border-b border-gray-800">
                             <h3 class="font-semibold flex items-center text-base">
-                                <i class="fas fa-calendar-alt text-purple-500 mr-2"></i>
+                                <i class="fas fa-calendar-alt text-violet-600 mr-2"></i>
                                 Kehadiran Bulan Ini
                             </h3>
                         </div>
@@ -1067,13 +1067,13 @@ foreach ($attendance_stats as $stat) {
                         <div class="p-4">
                             <!-- Calendar Grid -->
                             <div class="grid grid-cols-7 gap-1 text-center mb-2">
-                                <div class="text-xs font-medium text-gray-400">Min</div>
-                                <div class="text-xs font-medium text-gray-400">Sen</div>
-                                <div class="text-xs font-medium text-gray-400">Sel</div>
-                                <div class="text-xs font-medium text-gray-400">Rab</div>
-                                <div class="text-xs font-medium text-gray-400">Kam</div>
-                                <div class="text-xs font-medium text-gray-400">Jum</div>
-                                <div class="text-xs font-medium text-gray-400">Sab</div>
+                                <div class="text-xs font-medium text-gray-500">Min</div>
+                                <div class="text-xs font-medium text-gray-500">Sen</div>
+                                <div class="text-xs font-medium text-gray-500">Sel</div>
+                                <div class="text-xs font-medium text-gray-500">Rab</div>
+                                <div class="text-xs font-medium text-gray-500">Kam</div>
+                                <div class="text-xs font-medium text-gray-500">Jum</div>
+                                <div class="text-xs font-medium text-gray-500">Sab</div>
                             </div>
 
                             <div id="calendarGrid" class="grid grid-cols-7 gap-1">
@@ -1103,7 +1103,7 @@ foreach ($attendance_stats as $stat) {
                                     <span class="text-xs">Alpha</span>
                                 </div>
                                 <div class="flex items-center">
-                                    <span class="h-3 w-3 rounded-full bg-gray-600 mr-2"></span>
+                                    <span class="h-3 w-3 rounded-full bg-gray-200 mr-2"></span>
                                     <span class="text-xs">Belum Absen</span>
                                 </div>
                             </div>
@@ -1117,7 +1117,7 @@ foreach ($attendance_stats as $stat) {
     <!-- Image Preview Modal -->
     <div id="imageModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
         <div class="relative max-w-xl w-full">
-            <button onclick="closeImagePreview()" class="absolute -top-10 right-0 text-white hover:text-gray-300">
+            <button onclick="closeImagePreview()" class="absolute -top-10 right-0 text-gray-800 hover:text-gray-700">
                 <i class="fas fa-times text-xl"></i>
             </button>
             <img id="previewImage" src="" alt="Preview" class="w-full rounded-lg">
@@ -1125,19 +1125,19 @@ foreach ($attendance_stats as $stat) {
     </div>
 
     <!-- Confirmation Modal -->
-    <div id="confirmationModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-effect rounded-xl max-w-md w-full p-6 border border-purple-500/30">
-            <h3 class="text-lg font-semibold mb-4 text-white">Konfirmasi</h3>
-            <p class="text-gray-300 mb-6">Apakah Anda yakin ingin membatalkan pengajuan absensi ini?</p>
+    <div id="confirmationModal" class="fixed inset-0 bg-white/40 z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-effect rounded-xl max-w-md w-full p-6 border border-violet-200">
+            <h3 class="text-lg font-semibold mb-4 text-gray-800">Konfirmasi</h3>
+            <p class="text-gray-700 mb-6">Apakah Anda yakin ingin membatalkan pengajuan absensi ini?</p>
             <form method="POST" id="cancelForm">
                 <input type="hidden" name="request_id" id="requestIdInput">
                 <div class="flex justify-end gap-3">
                     <button type="button" onclick="closeConfirmationModal()"
-                        class="px-4 py-2 bg-gray-600/50 hover:bg-gray-600 rounded-lg text-white transition-colors">
+                        class="px-4 py-2 bg-gray-200/50 hover:bg-gray-200 rounded-lg text-gray-800 transition-colors">
                         <i class="fas fa-times mr-2"></i> Batal
                     </button>
                     <button type="submit" name="cancel_request"
-                        class="px-4 py-2 bg-red-500/80 hover:bg-red-600 rounded-lg text-white transition-colors">
+                        class="px-4 py-2 bg-red-500/80 hover:bg-red-600 rounded-lg text-gray-800 transition-colors">
                         <i class="fas fa-trash-alt mr-2"></i> Hapus
                     </button>
                 </div>
@@ -1220,10 +1220,10 @@ foreach ($attendance_stats as $stat) {
                         },
                         tooltip: {
                             backgroundColor: 'rgba(17, 24, 39, 0.9)',
-                            titleColor: '#fff',
+                            titleColor: '#1f2937',
                             bodyColor: '#fff',
                             padding: 10,
-                            borderColor: 'rgba(147, 51, 234, 0.3)',
+                            borderColor: 'rgba(139,92,246,0.3)',
                             borderWidth: 1,
                             displayColors: true,
                             usePointStyle: true,
@@ -1315,14 +1315,14 @@ foreach ($attendance_stats as $stat) {
                                 cell.title = 'Alpha';
                                 break;
                             default:
-                                statusDot.className = 'h-2 w-2 rounded-full bg-gray-600 mt-1';
+                                statusDot.className = 'h-2 w-2 rounded-full bg-gray-200 mt-1';
                                 cell.title = 'Tidak hadir';
                         }
                         cell.appendChild(statusDot);
                     } else if (isPast && !attendanceMap[day]) {
-                        cell.classList.add('bg-gray-800/30');
+                        cell.classList.add('bg-gray-50/30');
                         const statusDot = document.createElement('span');
-                        statusDot.className = 'h-2 w-2 rounded-full bg-gray-600 mt-1';
+                        statusDot.className = 'h-2 w-2 rounded-full bg-gray-200 mt-1';
                         cell.title = 'Tidak hadir';
                         cell.appendChild(statusDot);
                     }
@@ -1330,11 +1330,11 @@ foreach ($attendance_stats as $stat) {
                     // Style today
                     if (isToday) {
                         cell.classList.add('ring-2', 'ring-purple-500');
-                        dayNumber.classList.add('text-purple-400');
+                        dayNumber.classList.add('text-violet-500');
                     }
 
                     // Add hover effect
-                    cell.classList.add('hover:bg-gray-800/50', 'transition-colors');
+                    cell.classList.add('hover:bg-gray-50/50', 'transition-colors');
 
                     calendarGrid.appendChild(cell);
                 }

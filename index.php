@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
-            color: white;
+            background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
+            color: #1e293b;
             font-family: system-ui, -apple-system, sans-serif;
             display: flex;
             justify-content: center;

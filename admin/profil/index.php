@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 require_once '../../config/database.php';
 
@@ -197,17 +197,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         .glass-effect {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(147, 51, 234, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         body {
-            background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
+            background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
         }
 
         .menu-active {
-            background: linear-gradient(to right, rgba(147, 51, 234, 0.2), rgba(147, 51, 234, 0.05));
+            background: linear-gradient(to right, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
             border-left: 4px solid #9333ea;
         }
 
@@ -301,88 +301,88 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     </style>
 </head>
 
-<body class="min-h-screen text-white bg-fixed">
+<body class="min-h-screen text-gray-800 bg-fixed">
     <!-- Mobile Overlay - only visible when sidebar is open on mobile -->
-    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+    <div id="mobile-overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- Side Navigation -->
-    <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-purple-900/30 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
-        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-purple-900/30">
+    <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-violet-200 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
+        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-violet-200">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 lg:h-10 w-auto">
                 <div>
-                    <h1 class="font-semibold text-sm lg:text-base">SMK NURUL ULUM</h1>
-                    <p class="text-xs text-gray-400">Sistem Absensi</p>
+                    <h1 class="font-semibold text-sm lg:text-base text-gray-800">SMK NURUL ULUM</h1>
+                    <p class="text-xs text-gray-500">Sistem Absensi</p>
                 </div>
             </div>
             <!-- Close sidebar button - only visible on mobile -->
-            <button class="text-gray-400 hover:text-white lg:hidden" onclick="toggleSidebar()">
+            <button class="text-gray-600 hover:text-gray-800 lg:hidden" onclick="toggleSidebar()">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
 
         <nav class="p-4 space-y-2 overflow-y-auto no-scrollbar" style="max-height: calc(100vh - 76px);">
             <a href="../dashboard/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-home"></i><span>Dashboard</span>
             </a>
             <li class="relative group">
                 <button
-                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
                     <i class="fas fa-calendar-check"></i><span>Monitoring Siswa</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
                     <li><a href="../absensi/index.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
                     </li>
                     <li><a href="../absensi/pelanggaran.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
                     </li>
                     <li><a href="../absensi/konseling.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a>
                     </li>
                 </ul>
             </li>
             <a href="../siswa/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-users"></i><span>Data Siswa</span>
             </a>
             <li class="relative group">
                 <button
-                    class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors w-full">
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
                     <i class="fas fa-file-alt"></i><span>Laporan</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
                 <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
                     <li><a href="../laporan/index.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Presensi</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
                     </li>
                     <li><a href="../laporan/laporan_pelanggaran.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Pelanggaran</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
                     </li>
                     <li><a href="../laporan/laporan_konseling.php"
-                            class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">Konseling</a>
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a>
                     </li>
                 </ul>
             </li>
             <a href="../profil/"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-purple-500/10 transition-colors">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
                 <i class="fas fa-user-cog"></i><span>Profil</span>
             </a>
             <a href="../logout.php"
-                class="flex items-center gap-3 text-gray-400 p-3 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors mt-10">
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors mt-10">
                 <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>
         </nav>
     </aside>
 
     <!-- Main Content -->
-    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 transition-all duration-300">
+    <main class="lg:ml-64 min-h-screen bg-gradient-to-br from-sky-50 to-indigo-50 transition-all duration-300">
         <!-- Mobile Header -->
-        <div class="lg:hidden bg-gray-900/60 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-purple-900/30">
+        <div class="lg:hidden bg-white/90 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-violet-200">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-white p-2 -ml-2 rounded-lg hover:bg-gray-800/60" aria-label="Menu">
+                <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-100" aria-label="Menu">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
                 <img src="../../assets/default/logo-smk40.png" alt="SMKN 40" class="h-8 w-auto">
@@ -392,14 +392,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                 <?php
                 $photo_path = !empty($admin['foto_profil']) ? $admin['foto_profil'] : 'assets/default/avatar.png';
                 ?>
-                <img src="../../<?= $photo_path ?>" alt="Profile" class="h-8 w-8 rounded-full object-cover border border-purple-500/50">
+                <img src="../../<?= $photo_path ?>" alt="Profile" class="h-8 w-8 rounded-full object-cover border border-violet-300">
             </div>
         </div>
 
         <div class="p-4 lg:p-8">
             <div class="max-w-4xl mx-auto">
                 <h1 class="text-xl lg:text-2xl font-bold mb-4 lg:mb-6 flex items-center">
-                    <i class="fas fa-user-circle text-purple-500 mr-3 hidden sm:inline"></i>
+                    <i class="fas fa-user-circle text-violet-600 mr-3 hidden sm:inline"></i>
                     Profil Admin
                 </h1>
 
@@ -411,7 +411,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                 <?php endif; ?>
 
                 <?php if ($error): ?>
-                    <div class="bg-red-500/10 border border-red-500/30 text-red-500 rounded-lg p-3 lg:p-4 mb-4 lg:mb-6 flex items-center">
+                    <div class="bg-red-500/10 border border-red-200 text-red-500 rounded-lg p-3 lg:p-4 mb-4 lg:mb-6 flex items-center">
                         <i class="fas fa-exclamation-circle mr-2 lg:mr-3"></i>
                         <p class="text-sm"><?= $error ?></p>
                     </div>
@@ -421,7 +421,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                     <!-- Profile Summary - Improved UI -->
                     <div class="glass-effect rounded-xl overflow-hidden">
                         <!-- Profile Header with Gradient -->
-                        <div class="bg-gradient-to-r from-purple-900/50 to-indigo-900/50 p-6 relative">
+                        <div class="bg-gradient-to-r from-violet-100 to-indigo-900/50 p-6 relative">
                             <!-- Profile Photo with Enhanced Styling -->
                             <div class="w-24 h-24 sm:w-32 sm:h-32 mx-auto rounded-full overflow-hidden border-4 border-white/20 shadow-lg relative z-10 profile-photo">
                                 <?php
@@ -441,28 +441,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
 
                         <!-- Profile Info with Better Typography -->
                         <div class="p-4 sm:p-6 text-center">
-                            <h2 class="text-lg sm:text-xl font-bold text-white mb-1"><?= htmlspecialchars($admin['nama_lengkap']) ?></h2>
-                            <p class="inline-block px-3 py-1 bg-purple-500/10 text-purple-400 rounded-full text-xs font-medium mb-3">
+                            <h2 class="text-lg sm:text-xl font-bold text-gray-800 mb-1"><?= htmlspecialchars($admin['nama_lengkap']) ?></h2>
+                            <p class="inline-block px-3 py-1 bg-purple-500/10 text-violet-500 rounded-full text-xs font-medium mb-3">
                                 Administrator
                             </p>
 
                             <div class="space-y-3 mt-4">
-                                <div class="flex items-center justify-center text-gray-300">
-                                    <i class="fas fa-user-circle text-purple-400 mr-2"></i>
+                                <div class="flex items-center justify-center text-gray-700">
+                                    <i class="fas fa-user-circle text-violet-500 mr-2"></i>
                                     <span><?= htmlspecialchars($admin['username']) ?></span>
                                 </div>
 
-                                <div class="flex items-center justify-center text-gray-300">
-                                    <i class="fas fa-envelope text-purple-400 mr-2"></i>
+                                <div class="flex items-center justify-center text-gray-700">
+                                    <i class="fas fa-envelope text-violet-500 mr-2"></i>
                                     <span class="text-sm break-all"><?= htmlspecialchars($admin['email']) ?></span>
                                 </div>
 
-                                <div class="pt-4 mt-4 border-t border-gray-800/50">
-                                    <div class="flex items-center justify-center text-gray-400">
-                                        <i class="fas fa-clock text-purple-400 mr-2"></i>
+                                <div class="pt-4 mt-4 border-t border-gray-200">
+                                    <div class="flex items-center justify-center text-gray-500">
+                                        <i class="fas fa-clock text-violet-500 mr-2"></i>
                                         <span class="text-sm">
                                             Terakhir login:<br>
-                                            <span class="font-medium text-white">
+                                            <span class="font-medium text-gray-800">
                                                 <?php
                                                 // Properly handle the last_login field with better formatting
                                                 if (!empty($admin['last_login'])) {
@@ -489,14 +489,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                         </div>
 
                         <!-- Account Stats -->
-                        <div class="grid grid-cols-2 divide-x divide-gray-800/50 border-t border-gray-800/50">
+                        <div class="grid grid-cols-2 divide-x divide-gray-200 border-t border-gray-200">
                             <div class="p-4 text-center">
-                                <span class="text-gray-400 text-xs block mb-1">Peran</span>
-                                <span class="text-white font-medium">Admin</span>
+                                <span class="text-gray-500 text-xs block mb-1">Peran</span>
+                                <span class="text-gray-800 font-medium">Admin</span>
                             </div>
                             <div class="p-4 text-center">
-                                <span class="text-gray-400 text-xs block mb-1">Status</span>
-                                <span class="text-green-400 font-medium flex items-center justify-center">
+                                <span class="text-gray-500 text-xs block mb-1">Status</span>
+                                <span class="text-green-600 font-medium flex items-center justify-center">
                                     <i class="fas fa-circle text-xs mr-1"></i> Aktif
                                 </span>
                             </div>
@@ -506,49 +506,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                     <!-- Edit Profile Form -->
                     <div class="glass-effect rounded-xl p-4 lg:p-6 lg:col-span-2 form-container">
                         <h3 class="font-semibold text-lg mb-4 flex items-center">
-                            <i class="fas fa-user-edit text-purple-500 mr-2"></i>
+                            <i class="fas fa-user-edit text-violet-600 mr-2"></i>
                             Edit Profil
                         </h3>
                         <form method="POST" enctype="multipart/form-data" class="mobile-form-spacing">
                             <div class="mb-4">
-                                <label for="username" class="block text-sm text-gray-400 mb-2">Username</label>
+                                <label for="username" class="block text-sm text-gray-500 mb-2">Username</label>
                                 <input type="text" id="username" name="username" value="<?= htmlspecialchars($admin['username']) ?>" required
-                                    class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-purple-500 mobile-touch-target">
+                                    class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2.5 text-gray-800 focus:outline-none focus:border-violet-500 mobile-touch-target">
                             </div>
 
                             <div class="mb-4">
-                                <label for="nama_lengkap" class="block text-sm text-gray-400 mb-2">Nama Lengkap</label>
+                                <label for="nama_lengkap" class="block text-sm text-gray-500 mb-2">Nama Lengkap</label>
                                 <input type="text" id="nama_lengkap" name="nama_lengkap" value="<?= htmlspecialchars($admin['nama_lengkap']) ?>" required
-                                    class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-purple-500 mobile-touch-target">
+                                    class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2.5 text-gray-800 focus:outline-none focus:border-violet-500 mobile-touch-target">
                             </div>
 
                             <div class="mb-4">
-                                <label for="email" class="block text-sm text-gray-400 mb-2">Email</label>
+                                <label for="email" class="block text-sm text-gray-500 mb-2">Email</label>
                                 <input type="email" id="email" name="email" value="<?= htmlspecialchars($admin['email']) ?>" required
-                                    class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-purple-500 mobile-touch-target">
+                                    class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2.5 text-gray-800 focus:outline-none focus:border-violet-500 mobile-touch-target">
                             </div>
 
                             <div class="mb-6">
-                                <label for="foto" class="block text-sm text-gray-400 mb-2">Foto Profil</label>
+                                <label for="foto" class="block text-sm text-gray-500 mb-2">Foto Profil</label>
                                 <input type="file" id="foto" name="foto" accept="image/*" class="hidden">
                                 <div class="file-input-container flex">
                                     <div class="relative flex-grow">
                                         <input type="text" readonly placeholder="Pilih foto..."
-                                            class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-white cursor-pointer mobile-touch-target"
+                                            class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2.5 text-gray-800 cursor-pointer mobile-touch-target"
                                             id="file-name" onclick="document.getElementById('foto').click();">
                                         <div class="absolute inset-y-0 bottom-2 right-0 flex items-center">
                                             <button type="button" onclick="document.getElementById('foto').click();"
-                                                class="h-full px-3 bg-purple-600 hover:bg-purple-700 rounded-r-lg text-white text-sm transition-colors">
+                                                class="h-full px-3 bg-purple-600 hover:bg-purple-700 rounded-r-lg text-gray-800 text-sm transition-colors">
                                                 Browse
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                                <p class="text-xs text-gray-400 mt-1">JPG atau PNG, maks. 2MB</p>
+                                <p class="text-xs text-gray-500 mt-1">JPG atau PNG, maks. 2MB</p>
                             </div>
 
                             <div class="flex justify-end">
-                                <button type="submit" name="update_profile" class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium text-white transition-colors mobile-touch-target btn-hover-effect">
+                                <button type="submit" name="update_profile" class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium text-gray-800 transition-colors mobile-touch-target btn-hover-effect">
                                     <i class="fas fa-save mr-2"></i> Simpan Perubahan
                                 </button>
                             </div>
@@ -558,47 +558,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                     <!-- Change Password Form -->
                     <div class="glass-effect rounded-xl p-4 lg:p-6 lg:col-span-3 form-container">
                         <h3 class="font-semibold text-lg mb-4 flex items-center">
-                            <i class="fas fa-lock text-purple-500 mr-2"></i>
+                            <i class="fas fa-lock text-violet-600 mr-2"></i>
                             Ubah Password
                         </h3>
 
                         <form method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 password-grid mobile-form-spacing">
                             <div>
-                                <label for="current_password" class="block text-sm text-gray-400 mb-2">Password Saat Ini</label>
+                                <label for="current_password" class="block text-sm text-gray-500 mb-2">Password Saat Ini</label>
                                 <div class="relative">
                                     <input type="password" id="current_password" name="current_password" required
-                                        class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-purple-500 pr-10 mobile-touch-target">
-                                    <button type="button" onclick="togglePassword('current_password')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 p-1">
+                                        class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2.5 text-gray-800 focus:outline-none focus:border-violet-500 pr-10 mobile-touch-target">
+                                    <button type="button" onclick="togglePassword('current_password')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 p-1">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </div>
                             </div>
 
                             <div>
-                                <label for="new_password" class="block text-sm text-gray-400 mb-2">Password Baru</label>
+                                <label for="new_password" class="block text-sm text-gray-500 mb-2">Password Baru</label>
                                 <div class="relative">
                                     <input type="password" id="new_password" name="new_password" required
-                                        class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-purple-500 pr-10 mobile-touch-target">
-                                    <button type="button" onclick="togglePassword('new_password')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 p-1">
+                                        class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2.5 text-gray-800 focus:outline-none focus:border-violet-500 pr-10 mobile-touch-target">
+                                    <button type="button" onclick="togglePassword('new_password')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 p-1">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </div>
-                                <p class="text-xs text-gray-400 mt-1">Minimal 6 karakter</p>
+                                <p class="text-xs text-gray-500 mt-1">Minimal 6 karakter</p>
                             </div>
 
                             <div>
-                                <label for="confirm_password" class="block text-sm text-gray-400 mb-2">Konfirmasi Password</label>
+                                <label for="confirm_password" class="block text-sm text-gray-500 mb-2">Konfirmasi Password</label>
                                 <div class="relative">
                                     <input type="password" id="confirm_password" name="confirm_password" required
-                                        class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-purple-500 pr-10 mobile-touch-target">
-                                    <button type="button" onclick="togglePassword('confirm_password')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 p-1">
+                                        class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2.5 text-gray-800 focus:outline-none focus:border-violet-500 pr-10 mobile-touch-target">
+                                    <button type="button" onclick="togglePassword('confirm_password')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 p-1">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </div>
                             </div>
 
                             <div class="md:col-span-3 flex justify-end mt-2">
-                                <button type="submit" name="change_password" class="px-6 py-2.5 bg-yellow-600 hover:bg-yellow-700 rounded-lg font-medium text-white 
+                                <button type="submit" name="change_password" class="px-6 py-2.5 bg-yellow-600 hover:bg-yellow-700 rounded-lg font-medium text-gray-800 
                                 transition-colors mobile-touch-target w-full md:w-auto btn-hover-effect flex items-center justify-center">
                                     <i class="fas fa-key mr-2"></i> Ubah Password
                                 </button>
@@ -609,7 +609,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
 
                 <!-- Back button for mobile -->
                 <div class="mt-6 flex justify-center lg:hidden">
-                    <a href="../dashboard/" class="inline-flex items-center justify-center px-4 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-white transition-colors">
+                    <a href="../dashboard/" class="inline-flex items-center justify-center px-4 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-800 transition-colors">
                         <i class="fas fa-arrow-left mr-2"></i>
                         Kembali ke Dashboard
                     </a>
