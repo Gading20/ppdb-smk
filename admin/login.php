@@ -18,43 +18,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($username) || empty($password)) {
         $error = 'Username dan password tidak boleh kosong.';
     } else {
-        // Check the username in the database
-        $sql = "SELECT * FROM admin WHERE username = :username";
+        // Query dari tabel users dengan role admin
+        $sql = "SELECT * FROM users WHERE username = :username AND role = 'admin'";
         $stmt = $conn->prepare($sql);
         $stmt->execute(['username' => $username]);
         $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($admin) {
-            // Verify the password (in a real app, use password_verify with hashed passwords)
-            if ($password === $admin['password']) {
+            // Verify the password (bcrypt fallback ke plain text)
+            $valid = password_verify($password, $admin['password']) || $password === $admin['password'];
+            if ($valid) {
                 // Set session variables
                 $_SESSION['admin_id'] = $admin['id'];
                 $_SESSION['admin_username'] = $admin['username'];
                 $_SESSION['admin_name'] = $admin['nama_lengkap'];
                 $_SESSION['admin_email'] = $admin['email'];
-                $_SESSION['admin_photo'] = $admin['foto_profil']; // Changed from 'foto' to 'foto_profil'
+                $_SESSION['admin_photo'] = $admin['foto_profil'];
                 $_SESSION['admin_last_login'] = $admin['last_login'];
+                $_SESSION['role'] = 'admin';
 
                 // Record this login time
                 $current_time = date('Y-m-d H:i:s');
-                $update_sql = "UPDATE admin SET last_login = :login_time WHERE id = :admin_id";
-                $update_stmt = $conn->prepare($update_sql);
-                $update_stmt->execute([
-                    'login_time' => $current_time,
-                    'admin_id' => $admin['id']
-                ]);
+                $conn->prepare("UPDATE users SET last_login = :login_time WHERE id = :id")
+                    ->execute(['login_time' => $current_time, 'id' => $admin['id']]);
 
                 // Store the current login time in session
                 $_SESSION['admin_last_login'] = $current_time;
 
                 // Log activity
-                $log_sql = "INSERT INTO activity_log (user_type, user_id, activity_type, description) 
-                            VALUES ('admin', :user_id, 'login', :description)";
-                $log_stmt = $conn->prepare($log_sql);
-                $log_stmt->execute([
-                    'user_id' => $admin['id'],
-                    'description' => "Admin {$admin['nama_lengkap']} login ke sistem"
-                ]);
+                $conn->prepare("INSERT INTO activity_log (user_type, user_id, activity_type, description) 
+                                VALUES ('admin', :user_id, 'login', :description)")
+                    ->execute([
+                        'user_id' => $admin['id'],
+                        'description' => "Admin {$admin['nama_lengkap']} login ke sistem"
+                    ]);
 
                 // Redirect to dashboard
                 header("Location: dashboard/index.php");

@@ -17,10 +17,10 @@ if (!$id) {
 $stmt = $conn->prepare(
     "SELECT k.*, 
             s.nama_lengkap, s.nis, s.kelas, s.jurusan, s.foto_profil,
-            a.username as nama_admin
+            u.username as nama_admin
      FROM konseling k
      JOIN siswa s ON k.siswa_id = s.id
-     LEFT JOIN admin a ON k.created_by = a.id
+     LEFT JOIN users u ON k.created_by = u.id
      WHERE k.id = :id"
 );
 $stmt->execute(['id' => $id]);

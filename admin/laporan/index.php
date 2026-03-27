@@ -524,7 +524,7 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
                     </li>
                     <li>
-                        <a href="../absensi/laporan_pelanggaran.php"
+                        <a href="../absensi/pelanggaran.php"
                             class="block p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg">
                             Pelanggaran
                         </a>
@@ -749,7 +749,7 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                     </form>
                 </div>
 
-               
+
 
                 <!-- Data Table - Made responsive with horizontal scrolling -->
                 <div class="glass-effect rounded-xl overflow-hidden">

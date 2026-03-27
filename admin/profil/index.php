@@ -11,7 +11,7 @@ $error = '';
 $success = '';
 
 // Get admin data
-$sql = "SELECT * FROM admin WHERE id = :id";
+$sql = "SELECT * FROM users WHERE id = :id AND role = 'admin'";
 $stmt = $conn->prepare($sql);
 $stmt->execute(['id' => $_SESSION['admin_id']]);
 $admin = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         $conn->beginTransaction();
 
         // Check if username is taken by another admin
-        $check_sql = "SELECT COUNT(*) FROM admin WHERE username = :username AND id != :id";
+        $check_sql = "SELECT COUNT(*) FROM users WHERE username = :username AND id != :id AND role = 'admin'";
         $check_stmt = $conn->prepare($check_sql);
         $check_stmt->execute(['username' => $username, 'id' => $_SESSION['admin_id']]);
 
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         }
 
         // Check if email is taken by another admin
-        $check_sql = "SELECT COUNT(*) FROM admin WHERE email = :email AND id != :id";
+        $check_sql = "SELECT COUNT(*) FROM users WHERE email = :email AND id != :id AND role = 'admin'";
         $check_stmt = $conn->prepare($check_sql);
         $check_stmt->execute(['email' => $email, 'id' => $_SESSION['admin_id']]);
 
@@ -82,11 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         }
 
         // Update admin profile
-        $sql = "UPDATE admin SET 
+        $sql = "UPDATE users SET 
                 username = :username, 
                 nama_lengkap = :nama_lengkap, 
                 email = :email, 
-                foto_profil = :foto_profil  /* Changed from 'foto' to 'foto_profil' */
+                foto_profil = :foto_profil
                 WHERE id = :id";
 
         $stmt = $conn->prepare($sql);
@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         $success = "Profil berhasil diperbarui";
 
         // Refresh admin data
-        $sql = "SELECT * FROM admin WHERE id = :id";
+        $sql = "SELECT * FROM users WHERE id = :id AND role = 'admin'";
         $stmt = $conn->prepare($sql);
         $stmt->execute(['id' => $_SESSION['admin_id']]);
         $admin = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -138,19 +138,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     } else {
         try {
             // First check if current password is correct
-            $sql = "SELECT password FROM admin WHERE id = :id";
+            $sql = "SELECT password FROM users WHERE id = :id AND role = 'admin'";
             $stmt = $conn->prepare($sql);
             $stmt->execute(['id' => $_SESSION['admin_id']]);
             $admin_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // For this simplified version, we're comparing passwords directly
-            // In a real application, you should use password_verify with hashed passwords
-            if ($admin_data && $admin_data['password'] === $current_password) {
+            $pwd_valid = $admin_data && (
+                password_verify($current_password, $admin_data['password'])
+                || $admin_data['password'] === $current_password
+            );
+            if ($pwd_valid) {
                 // Start transaction before updating
                 $conn->beginTransaction();
 
                 // Update password
-                $sql = "UPDATE admin SET password = :password WHERE id = :id";
+                $sql = "UPDATE users SET password = :password WHERE id = :id";
                 $stmt = $conn->prepare($sql);
                 $stmt->execute([
                     'password' => $new_password,

@@ -137,11 +137,11 @@ $sql = "SELECT a.id, s.nama_lengkap, s.foto_profil, a.status, a.created_at, a.bu
 $notifications = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
 // Get recent activities
-$sql = "SELECT al.*, COALESCE(a.nama_lengkap, s.nama_lengkap, 'System') as user_name,
-        COALESCE(a.foto_profil, s.foto_profil, 'assets/default/photo-profile.png') as user_photo,
+$sql = "SELECT al.*, COALESCE(u.nama_lengkap, s.nama_lengkap, 'System') as user_name,
+        COALESCE(u.foto_profil, s.foto_profil, 'assets/default/photo-profile.png') as user_photo,
         DATE_FORMAT(al.created_at, '%H:%i') as time
         FROM activity_log al
-        LEFT JOIN admin a ON al.user_type = 'admin' AND al.user_id = a.id
+        LEFT JOIN users u ON al.user_type IN ('admin','kepsek','wali_kelas') AND al.user_id = u.id
         LEFT JOIN siswa s ON al.user_type = 'siswa' AND al.user_id = s.id
         ORDER BY al.created_at DESC LIMIT 10";
 $activities = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);

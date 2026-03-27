@@ -18,32 +18,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($nis) || empty($password)) {
         $error = 'NIS dan password tidak boleh kosong.';
     } else {
-        // Check the NIS in the database
+        // Login siswa tetap via tabel siswa (NIS-based)
         $sql = "SELECT * FROM siswa WHERE nis = :nis";
         $stmt = $conn->prepare($sql);
         $stmt->execute(['nis' => $nis]);
         $siswa = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($siswa) {
-            // Verify the password (in a real app, use password_verify with hashed passwords)
-            if ($password === $siswa['password']) {
+            $valid = password_verify($password, $siswa['password']) || $password === $siswa['password'];
+            if ($valid) {
                 // Set session variables
-                $_SESSION['siswa_id'] = $siswa['id'];
-                $_SESSION['siswa_nis'] = $siswa['nis'];
-                $_SESSION['siswa_name'] = $siswa['nama_lengkap'];
-                $_SESSION['siswa_kelas'] = $siswa['kelas'];
+                $_SESSION['siswa_id']      = $siswa['id'];
+                $_SESSION['siswa_nis']     = $siswa['nis'];
+                $_SESSION['siswa_name']    = $siswa['nama_lengkap'];
+                $_SESSION['siswa_kelas']   = $siswa['kelas'];
                 $_SESSION['siswa_jurusan'] = $siswa['jurusan'];
-                $_SESSION['siswa_email'] = $siswa['email'];
-                $_SESSION['siswa_photo'] = $siswa['foto_profil'];
+                $_SESSION['siswa_email']   = $siswa['email'];
+                $_SESSION['siswa_photo']   = $siswa['foto_profil'];
+                $_SESSION['role']          = 'siswa';
+
+                // Update last_login di users jika ada user_id
+                if (!empty($siswa['user_id'])) {
+                    $conn->prepare("UPDATE users SET last_login = :t WHERE id = :id")
+                        ->execute(['t' => date('Y-m-d H:i:s'), 'id' => $siswa['user_id']]);
+                }
 
                 // Record login activity
-                $log_sql = "INSERT INTO activity_log (user_type, user_id, activity_type, description) 
-                           VALUES ('siswa', :user_id, 'login', :description)";
-                $log_stmt = $conn->prepare($log_sql);
-                $log_stmt->execute([
-                    'user_id' => $siswa['id'],
-                    'description' => "Siswa {$siswa['nama_lengkap']} login ke sistem"
-                ]);
+                $conn->prepare("INSERT INTO activity_log (user_type, user_id, activity_type, description) 
+                               VALUES ('siswa', :user_id, 'login', :description)")
+                    ->execute([
+                        'user_id'     => $siswa['id'],
+                        'description' => "Siswa {$siswa['nama_lengkap']} login ke sistem"
+                    ]);
 
                 // Redirect to dashboard
                 header("Location: dashboard/");

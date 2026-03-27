@@ -17,7 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($username) || empty($password)) {
         $error = 'Username dan password tidak boleh kosong.';
     } else {
-        $sql  = "SELECT * FROM kepsek WHERE username = :username";
+        // Query dari tabel users dengan role kepsek
+        $sql  = "SELECT * FROM users WHERE username = :username AND role = 'kepsek'";
         $stmt = $conn->prepare($sql);
         $stmt->execute(['username' => $username]);
         $kepsek = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -29,18 +30,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($valid) {
                 // Set session
-                $_SESSION['kepsek_id']       = $kepsek['id'];
-                $_SESSION['kepsek_username']  = $kepsek['username'];
-                $_SESSION['kepsek_name']      = $kepsek['nama_lengkap'];
-                $_SESSION['kepsek_email']     = $kepsek['email'];
-                $_SESSION['kepsek_nip']       = $kepsek['nip'];
-                $_SESSION['kepsek_photo']     = $kepsek['foto_profil'];
+                $_SESSION['kepsek_id']        = $kepsek['id'];
+                $_SESSION['kepsek_username']   = $kepsek['username'];
+                $_SESSION['kepsek_name']       = $kepsek['nama_lengkap'];
+                $_SESSION['kepsek_email']      = $kepsek['email'];
+                $_SESSION['kepsek_nip']        = $kepsek['nip'];
+                $_SESSION['kepsek_photo']      = $kepsek['foto_profil'];
                 $_SESSION['kepsek_last_login'] = $kepsek['last_login'];
-                $_SESSION['role']             = 'kepsek';
+                $_SESSION['role']              = 'kepsek';
 
-                // Update last_login
+                // Update last_login di tabel users
                 $current_time = date('Y-m-d H:i:s');
-                $conn->prepare("UPDATE kepsek SET last_login = :t WHERE id = :id")
+                $conn->prepare("UPDATE users SET last_login = :t WHERE id = :id")
                     ->execute(['t' => $current_time, 'id' => $kepsek['id']]);
 
                 $_SESSION['kepsek_last_login'] = $current_time;

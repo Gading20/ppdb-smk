@@ -16,13 +16,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($username) || empty($password)) {
         $error = 'Username dan password tidak boleh kosong.';
     } else {
-        $stmt = $conn->prepare("SELECT * FROM wali_kelas WHERE username = :username");
+        // Query users + join wali_kelas untuk mendapatkan data kelas
+        $stmt = $conn->prepare(
+            "SELECT u.*, wk.id AS wk_id, wk.kelas, wk.tingkat, wk.rombel, wk.jurusan
+             FROM users u
+             LEFT JOIN wali_kelas wk ON wk.user_id = u.id
+             WHERE u.username = :username AND u.role = 'wali_kelas'"
+        );
         $stmt->execute(['username' => $username]);
         $walikelas = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($walikelas) {
-            if ($password === $walikelas['password']) {
-                $_SESSION['walikelas_id']       = $walikelas['id'];
+            $valid = password_verify($password, $walikelas['password'])
+                  || $password === $walikelas['password'];
+
+            if ($valid) {
+                // walikelas_id tetap mengacu ke wali_kelas.id agar FK internal tidak rusak
+                $_SESSION['walikelas_id']        = $walikelas['wk_id'] ?? $walikelas['id'];
+                $_SESSION['walikelas_user_id']   = $walikelas['id'];
                 $_SESSION['walikelas_username']  = $walikelas['username'];
                 $_SESSION['walikelas_name']      = $walikelas['nama_lengkap'];
                 $_SESSION['walikelas_email']     = $walikelas['email'];
@@ -33,12 +44,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['walikelas_jurusan']   = $walikelas['jurusan'];
                 $_SESSION['walikelas_photo']     = $walikelas['foto_profil'];
                 $_SESSION['walikelas_last_login'] = $walikelas['last_login'];
+                $_SESSION['role']                = 'wali_kelas';
 
                 $current_time = date('Y-m-d H:i:s');
-                $conn->prepare("UPDATE wali_kelas SET last_login = :t WHERE id = :id")
+                // Update last_login di users dan wali_kelas
+                $conn->prepare("UPDATE users SET last_login = :t WHERE id = :id")
+                    ->execute(['t' => $current_time, 'id' => $walikelas['id']]);
+                $conn->prepare("UPDATE wali_kelas SET last_login = :t WHERE user_id = :id")
                     ->execute(['t' => $current_time, 'id' => $walikelas['id']]);
 
                 $_SESSION['walikelas_last_login'] = $current_time;
+
+                // Log activity
+                $conn->prepare(
+                    "INSERT INTO activity_log (user_type, user_id, activity_type, description)
+                     VALUES ('wali_kelas', :uid, 'login', :desc)"
+                )->execute([
+                    'uid'  => $walikelas['id'],
+                    'desc' => "Wali Kelas {$walikelas['nama_lengkap']} login ke sistem"
+                ]);
 
                 header("Location: dashboard/index.php");
                 exit();

@@ -84,13 +84,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $default_date = date('Y-m-d');
 
-// Ambil nama admin sebagai default konselor
-// Ambil semua kolom lalu cari kolom nama yang tersedia
-$admin_stmt = $conn->prepare("SELECT * FROM admin WHERE id = :id");
+// Ambil nama admin sebagai default konselor dari tabel users
+$admin_stmt = $conn->prepare("SELECT * FROM users WHERE id = :id AND role = 'admin'");
 $admin_stmt->execute(['id' => $_SESSION['admin_id']]);
 $admin_row = $admin_stmt->fetch(PDO::FETCH_ASSOC);
 $default_konselor = $admin_row['nama_lengkap']
-    ?? $admin_row['nama']
     ?? $admin_row['username']
     ?? '';
 ?>

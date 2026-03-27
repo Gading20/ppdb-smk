@@ -16,10 +16,10 @@ $id = $_GET['id'];
 
 // Get detailed pelanggaran information
 $sql = "SELECT p.*, s.nama_lengkap, s.nis, s.kelas, s.jurusan, s.foto_profil, s.email,
-               a.username as nama_admin
+               u.username as nama_admin
         FROM pelanggaran p
         JOIN siswa s ON p.siswa_id = s.id
-        LEFT JOIN admin a ON p.dicatat_oleh = a.id
+        LEFT JOIN users u ON p.dicatat_oleh = u.id
         WHERE p.id = :id";
 $stmt = $conn->prepare($sql);
 $stmt->execute(['id' => $id]);
