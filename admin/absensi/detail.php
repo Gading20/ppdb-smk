@@ -373,7 +373,9 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
                         <div>
                             <p class="text-gray-500 text-xs mb-1">Jam Masuk</p>
                             <p class="text-sm md:text-base font-medium">
-                                <?= $absensi['jam_masuk'] !== '00:00:00' ? date('H:i', strtotime($absensi['jam_masuk'])) : '-' ?>
+                                <?= !empty($absensi['jam_masuk']) && $absensi['jam_masuk'] !== '00:00:00'
+                                    ? date('H:i', strtotime($absensi['jam_masuk']))
+                                    : '-' ?>
                             </p>
                         </div>
 
