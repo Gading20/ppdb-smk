@@ -521,11 +521,11 @@ $jenis_colors = [
                                             <label class="text-xs text-gray-500 block mb-1">Jurusan</label>
                                             <select name="jurusan" class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800">
                                                 <option value="">Semua Jurusan</option>
-                                                <option value="RPL" <?= $jurusan === 'RPL' ? 'selected' : '' ?>>RPL</option>
-                                                <option value="DKV" <?= $jurusan === 'DKV' ? 'selected' : '' ?>>DKV</option>
-                                                <option value="AK" <?= $jurusan === 'AK' ? 'selected' : '' ?>>AK</option>
-                                                <option value="BR" <?= $jurusan === 'BR' ? 'selected' : '' ?>>BR</option>
+                                                <option value="TKJ" <?= $jurusan === 'TKJ' ? 'selected' : '' ?>>TKJ</option>
                                                 <option value="MP" <?= $jurusan === 'MP' ? 'selected' : '' ?>>MP</option>
+                                                <option value="AKL" <?= $jurusan === 'AKL' ? 'selected' : '' ?>>AKL</option>
+                                                <option value="TSM" <?= $jurusan === 'TSM' ? 'selected' : '' ?>>TSM</option>
+                                                <option value="TKR" <?= $jurusan === 'TKR' ? 'selected' : '' ?>>TKR</option>
                                             </select>
                                         </div>
                                     </div>

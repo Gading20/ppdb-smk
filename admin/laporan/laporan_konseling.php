@@ -415,12 +415,12 @@ $jenis_colors = [
                     </div>
                     <div class="flex gap-3">
                         <a href="export_konseling.php?format=pdf<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
-                            class="px-3 py-2 sm:px-4 sm:py-2 bg-red-600 hover:bg-red-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
+                            class="px-3 py-2 sm:px-4 sm:py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
                             <i class="fas fa-file-pdf"></i>
                             <span class="hidden sm:inline">Cetak PDF</span>
                         </a>
                         <a href="export_konseling.php?format=excel<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
-                            class="px-3 py-2 sm:px-4 sm:py-2 bg-green-600 hover:bg-green-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
+                            class="px-3 py-2 sm:px-4 sm:py-2 text-white bg-green-600 hover:bg-green-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
                             <i class="fas fa-file-excel"></i> <span class="hidden sm:inline">Export Excel</span>
                         </a>
                     </div>
@@ -473,11 +473,11 @@ $jenis_colors = [
                                             <label class="text-xs text-gray-500 block mb-1">Jurusan</label>
                                             <select name="jurusan" class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800">
                                                 <option value="">Semua Jurusan</option>
-                                                <option value="RPL" <?= $jurusan === 'RPL' ? 'selected' : '' ?>>RPL</option>
-                                                <option value="DKV" <?= $jurusan === 'DKV' ? 'selected' : '' ?>>DKV</option>
-                                                <option value="AK" <?= $jurusan === 'AK' ? 'selected' : '' ?>>AK</option>
-                                                <option value="BR" <?= $jurusan === 'BR' ? 'selected' : '' ?>>BR</option>
+                                                <option value="TKJ" <?= $jurusan === 'TKJ' ? 'selected' : '' ?>>TKJ</option>
                                                 <option value="MP" <?= $jurusan === 'MP' ? 'selected' : '' ?>>MP</option>
+                                                <option value="AKL" <?= $jurusan === 'AKL' ? 'selected' : '' ?>>AKL</option>
+                                                <option value="TSM" <?= $jurusan === 'TSM' ? 'selected' : '' ?>>TSM</option>
+                                                <option value="TKR" <?= $jurusan === 'TKR' ? 'selected' : '' ?>>TKR</option>
                                             </select>
                                         </div>
                                     </div>
@@ -564,7 +564,7 @@ $jenis_colors = [
                                 <?php endif; ?>
                             </div>
                             <button type="submit"
-                                class="w-full sm:w-auto px-5 py-2 bg-purple-600 hover:bg-purple-700 text-gray-800 rounded-lg text-sm transition-colors">
+                                class="w-full sm:w-auto px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm transition-colors">
                                 <i class="fas fa-filter mr-2"></i>Terapkan Filter
                             </button>
                         </div>
