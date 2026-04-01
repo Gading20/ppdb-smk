@@ -481,7 +481,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                             <div class="mt-6">
                                 <button type="button" onclick="document.getElementById('foto').click();"
                                     class="px-4 py-2.5 bg-purple-600/30 hover:bg-purple-600/50 rounded-lg text-sm 
-                                        text-purple-300 transition-colors w-full flex items-center justify-center
+                                        text-purple-300 transition-colors text-white w-full flex items-center justify-center
                                         mobile-touch-target btn-hover-effect">
                                     <i class="fas fa-camera mr-2"></i> Ubah Foto
                                 </button>
@@ -536,9 +536,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                                         <input type="text" readonly placeholder="Pilih foto..."
                                             class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2.5 text-gray-800 cursor-pointer mobile-touch-target"
                                             id="file-name" onclick="document.getElementById('foto').click();">
-                                        <div class="absolute inset-y-0 bottom-2 right-0 flex items-center">
+                                        <div class="absolute inset-y-0 bottom right-0 flex items-center">
                                             <button type="button" onclick="document.getElementById('foto').click();"
-                                                class="h-full px-3 bg-purple-600 hover:bg-purple-700 rounded-r-lg text-gray-800 text-sm transition-colors">
+                                                class="h-full px-3 bg-purple-600 hover:bg-purple-700 rounded-r-lg text-white text-sm transition-colors">
                                                 Browse
                                             </button>
                                         </div>
@@ -548,7 +548,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                             </div>
 
                             <div class="flex justify-end">
-                                <button type="submit" name="update_profile" class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium text-gray-800 transition-colors mobile-touch-target btn-hover-effect">
+                                <button type="submit" name="update_profile" class="px-6 py-2.5 bg-purple-600 text-white hover:bg-purple-700 rounded-lg font-medium text-gray-800 transition-colors mobile-touch-target btn-hover-effect">
                                     <i class="fas fa-save mr-2"></i> Simpan Perubahan
                                 </button>
                             </div>
@@ -598,7 +598,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                             </div>
 
                             <div class="md:col-span-3 flex justify-end mt-2">
-                                <button type="submit" name="change_password" class="px-6 py-2.5 bg-yellow-600 hover:bg-yellow-700 rounded-lg font-medium text-gray-800 
+                                <button type="submit" name="change_password" class="px-6 py-2.5 bg-yellow-600 hover:bg-yellow-700 rounded-lg font-medium text-white
                                 transition-colors mobile-touch-target w-full md:w-auto btn-hover-effect flex items-center justify-center">
                                     <i class="fas fa-key mr-2"></i> Ubah Password
                                 </button>

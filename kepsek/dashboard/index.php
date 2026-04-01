@@ -97,16 +97,16 @@ $topPelanggar = $conn->query(
         .glass {
             background: rgba(17, 24, 39, .72);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(16, 185, 129, .25);
+            border: 1px solid rgba(217, 119, 6, .25);
         }
 
         .menu-active {
-            background: linear-gradient(to right, rgba(16, 185, 129, .18), rgba(16, 185, 129, .04));
-            border-left: 4px solid #10b981;
+            background: linear-gradient(to right, rgba(217, 119, 6, .18), rgba(217, 119, 6, .04));
+            border-left: 4px solid #d97706;
         }
 
         body {
-            background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
         }
 
         input:-webkit-autofill,
@@ -125,7 +125,7 @@ $topPelanggar = $conn->query(
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(16, 185, 129, .45);
+            background: rgba(217, 119, 6, .45);
             border-radius: 3px;
         }
 
@@ -153,13 +153,17 @@ $topPelanggar = $conn->query(
     <div id="overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- ── SIDEBAR ───────────────────────────────────────────────────────────── -->
-    <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass border-r border-emerald-200 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0">
-        <div class="flex items-center justify-between p-5 border-b border-emerald-200">
+    <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 
+bg-white/80 backdrop-blur-md 
+border-r border-amber-100 
+z-50 transition-transform duration-300 
+-translate-x-full lg:translate-x-0">
+        <div class="flex items-center justify-between p-5 border-b border-amber-200">
             <div class="flex items-center gap-3">
                 <img src="../../assets/default/logosmk.png" class="h-10 w-auto" alt="Logo">
                 <div>
                     <p class="font-semibold text-sm leading-tight">SMK NURUL ULUM</p>
-                    <p class="text-xs text-emerald-400">Kepala Sekolah</p>
+                    <p class="text-xs text-amber-400">Kepala Sekolah</p>
                 </div>
             </div>
             <button class="lg:hidden text-gray-500 hover:text-gray-800" onclick="toggleSidebar()">
@@ -169,21 +173,21 @@ $topPelanggar = $conn->query(
 
         <nav class="p-4 space-y-1 overflow-y-auto custom-scrollbar" style="max-height:calc(100vh - 76px)">
             <a href="index.php" class="flex items-center gap-3 p-3 rounded-lg menu-active text-gray-800">
-                <i class="fas fa-home text-emerald-400"></i><span>Dashboard</span>
+                <i class="fas fa-home text-amber-400"></i><span>Dashboard</span>
             </a>
 
             <!-- Monitoring Siswa (accordion) -->
             <div x-data="{open:true}" class="group">
                 <button onclick="toggleMenu(this)"
-                    class="flex items-center gap-3 w-full p-3 rounded-lg text-gray-700 hover:bg-emerald-500/10 transition-colors">
-                    <i class="fas fa-calendar-check text-emerald-400"></i>
+                    class="flex items-center gap-3 w-full p-3 rounded-lg text-gray-700 hover:bg-amber-500/10 transition-colors">
+                    <i class="fas fa-calendar-check text-amber-400"></i>
                     <span>Monitoring Siswa</span>
                     <i class="fas fa-chevron-down ml-auto text-xs transition-transform duration-200 rotate-icon"></i>
                 </button>
                 <ul class="ml-8 mt-1 sub-menu space-y-1">
-                    <li><a href="presensi.php" class="block p-2 text-gray-600 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Presensi</a></li>
-                    <li><a href="pelanggaran.php" class="block p-2 text-gray-600 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Pelanggaran</a></li>
-                    <li><a href="konseling.php" class="block p-2 text-gray-600 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg text-sm">Konseling</a></li>
+                    <li><a href="presensi.php" class="block p-2 text-gray-600 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg text-sm">Presensi</a></li>
+                    <li><a href="pelanggaran.php" class="block p-2 text-gray-600 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg text-sm">Pelanggaran</a></li>
+                    <li><a href="konseling.php" class="block p-2 text-gray-600 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg text-sm">Konseling</a></li>
                 </ul>
             </div>
 
@@ -194,7 +198,7 @@ $topPelanggar = $conn->query(
                 <p class="text-xs text-gray-500 uppercase tracking-wider mb-3">Info Cepat</p>
                 <div class="space-y-2 text-xs">
                     <div class="flex justify-between"><span class="text-gray-500">Total Siswa</span><span class="font-semibold"><?= $total_students ?></span></div>
-                    <div class="flex justify-between"><span class="text-gray-500">Hadir Hari Ini</span><span class="font-semibold text-emerald-400"><?= $stats['hadir'] ?></span></div>
+                <div class="flex justify-between"><span class="text-gray-500">Hadir Hari Ini</span><span class="font-semibold text-amber-400"><?= $stats['hadir'] ?></span></div>
                     <div class="flex justify-between"><span class="text-gray-500">Alpha Hari Ini</span><span class="font-semibold text-red-400"><?= $stats['alpha'] ?></span></div>
                 </div>
             </div> -->
@@ -210,7 +214,7 @@ $topPelanggar = $conn->query(
     <main class="lg:ml-64 min-h-screen">
 
         <!-- Mobile topbar -->
-        <div class="lg:hidden sticky top-0 z-30 glass px-4 py-3 flex items-center justify-between border-b border-emerald-200">
+        <div class="lg:hidden sticky top-0 z-30 glass px-4 py-3 flex items-center justify-between border-b border-amber-200">
             <div class="flex items-center gap-3">
                 <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-50/50">
                     <i class="fas fa-bars"></i>
@@ -218,7 +222,7 @@ $topPelanggar = $conn->query(
                 <span class="text-sm font-medium">Dashboard Kepsek</span>
             </div>
             <img src="../../<?= $_SESSION['kepsek_photo'] ?: 'assets/default/photo-profile.png' ?>"
-                class="h-8 w-8 rounded-full object-cover border border-emerald-500/50" alt="Foto">
+                class="h-8 w-8 rounded-full object-cover border border-amber-500/50" alt="Foto">
         </div>
 
         <div class="p-5 md:p-8">
@@ -227,19 +231,25 @@ $topPelanggar = $conn->query(
                 <!-- Header -->
                 <header class="flex flex-wrap justify-between items-center mb-8 fade-up">
                     <div>
-                        <h1 class="text-2xl font-bold">Selamat Datang, <?= htmlspecialchars($_SESSION['kepsek_name']) ?> 👋</h1>
-                        <p class="text-gray-500 text-sm mt-1">
-                            <i class="fas fa-calendar-alt text-emerald-400 mr-1"></i>
+                        <h1 class="text-2xl font-bold text-gray-800">
+                            Selamat Datang, <?= htmlspecialchars($_SESSION['kepsek_name']) ?> 👋
+                        </h1>
+                        <p class="text-gray-600 text-sm mt-1">
+                            <i class="fas fa-calendar-alt text-blue-500 mr-1"></i>
                             <?= date('l, d F Y') ?> &nbsp;|&nbsp;
-                            <span id="clock" class="text-emerald-300 font-medium"></span>
+                            <span id="clock" class="text-blue-600 font-medium"></span>
                         </p>
                     </div>
-                    <div class="hidden lg:flex items-center gap-3 px-4 py-2 glass rounded-xl mt-3 lg:mt-0">
+
+                    <div class="hidden lg:flex items-center gap-3 px-4 py-2 bg-white/80 backdrop-blur-md border border-gray-200 rounded-xl shadow-sm mt-3 lg:mt-0">
                         <img src="../../<?= $_SESSION['kepsek_photo'] ?: 'assets/default/photo-profile.png' ?>"
-                            class="h-9 w-9 rounded-full object-cover border border-emerald-500/50" alt="Foto">
+                            class="h-9 w-9 rounded-full object-cover border border-blue-400/50" alt="Foto">
+
                         <div class="text-sm">
-                            <p class="font-medium"><?= htmlspecialchars($_SESSION['kepsek_name']) ?></p>
-                            <p class="text-emerald-400 text-xs">Kepala Sekolah</p>
+                            <p class="font-medium text-gray-800">
+                                <?= htmlspecialchars($_SESSION['kepsek_name']) ?>
+                            </p>
+                            <p class="text-xs text-amber-400">Kepala Sekolah</p>
                         </div>
                     </div>
                 </header>
@@ -248,7 +258,7 @@ $topPelanggar = $conn->query(
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
                     <?php
                     $cards = [
-                        ['label' => 'Hadir',     'key' => 'hadir',     'icon' => 'fa-check',      'color' => 'emerald'],
+                        ['label' => 'Hadir',     'key' => 'hadir',     'icon' => 'fa-check',      'color' => 'amber'],
                         ['label' => 'Sakit',     'key' => 'sakit',     'icon' => 'fa-hospital',   'color' => 'yellow'],
                         ['label' => 'Izin',      'key' => 'izin',      'icon' => 'fa-clipboard',  'color' => 'blue'],
                         ['label' => 'Terlambat', 'key' => 'terlambat', 'icon' => 'fa-clock',      'color' => 'orange'],
@@ -257,19 +267,30 @@ $topPelanggar = $conn->query(
                     foreach ($cards as $i => $c):
                         $change = $pct[$c['key']];
                     ?>
-                        <div class="glass rounded-xl p-4 hover:scale-[1.02] transition-all duration-300 cursor-default fade-up"
+                        <div class="bg-white/80 backdrop-blur-md border border-gray-100 rounded-xl p-4 
+                    hover:shadow-lg hover:scale-[1.02] transition-all duration-300 
+                    cursor-default fade-up"
                             style="animation-delay:<?= $i * 0.06 ?>s">
+
                             <div class="flex justify-between items-start mb-3">
                                 <p class="text-gray-500 text-xs font-medium"><?= $c['label'] ?></p>
-                                <div class="h-8 w-8 rounded-lg bg-<?= $c['color'] ?>-500/20 flex items-center justify-center">
-                                    <i class="fas <?= $c['icon'] ?> text-<?= $c['color'] ?>-400 text-sm"></i>
+
+                                <div class="h-8 w-8 rounded-lg bg-<?= $c['color'] ?>-100 flex items-center justify-center">
+                                    <i class="fas <?= $c['icon'] ?> text-<?= $c['color'] ?>-500 text-sm"></i>
                                 </div>
                             </div>
-                            <p class="text-2xl font-bold"><?= $stats[$c['key']] ?></p>
-                            <p class="text-xs mt-1 <?= $change > 0 ? 'text-emerald-400' : ($change < 0 ? 'text-red-400' : 'text-gray-500') ?>">
-                                <?php if ($change > 0): ?><i class="fas fa-arrow-up mr-1"></i>+<?= $change ?>%
-                                <?php elseif ($change < 0): ?><i class="fas fa-arrow-down mr-1"></i><?= $change ?>%
-                                <?php else: ?><i class="fas fa-minus mr-1"></i>Sama kemarin
+
+                            <p class="text-2xl font-bold text-gray-800"><?= $stats[$c['key']] ?></p>
+
+                            <p class="text-xs mt-1 
+                <?= $change > 0 ? 'text-amber-500' : ($change < 0 ? 'text-red-500' : 'text-gray-400') ?>">
+
+                                <?php if ($change > 0): ?>
+                                    <i class="fas fa-arrow-up mr-1"></i>+<?= $change ?>%
+                                <?php elseif ($change < 0): ?>
+                                    <i class="fas fa-arrow-down mr-1"></i><?= $change ?>%
+                                <?php else: ?>
+                                    <i class="fas fa-minus mr-1"></i>Sama kemarin
                                 <?php endif; ?>
                             </p>
                         </div>
@@ -280,9 +301,9 @@ $topPelanggar = $conn->query(
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
 
                     <!-- Weekly Chart -->
-                    <div class="glass rounded-xl p-5 lg:col-span-2 fade-up" style="animation-delay:.15s">
-                        <h3 class="font-semibold mb-4 flex items-center gap-2">
-                            <i class="fas fa-chart-line text-emerald-400"></i> Statistik Kehadiran Mingguan
+                    <div class="bg-white rounded-xl p-5 lg:col-span-2 shadow-sm border border-gray-200 fade-up" style="animation-delay:.15s">
+                        <h3 class="font-semibold mb-4 flex items-center gap-2 text-gray-800">
+                            <i class="fas fa-chart-line text-blue-500"></i> Statistik Kehadiran Mingguan
                         </h3>
                         <div class="relative h-72">
                             <canvas id="weeklyChart"></canvas>
@@ -290,12 +311,13 @@ $topPelanggar = $conn->query(
                     </div>
 
                     <!-- Top Pelanggar -->
-                    <div class="glass rounded-xl overflow-hidden fade-up" style="animation-delay:.2s">
-                        <div class="bg-gradient-to-r from-red-900/30 to-orange-900/20 px-5 py-4 border-b border-gray-200">
-                            <h3 class="font-semibold flex items-center gap-2 text-sm">
-                                <i class="fas fa-exclamation-triangle text-red-400"></i> Top 5 Pelanggaran
+                    <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 fade-up" style="animation-delay:.2s">
+                        <div class="bg-gradient-to-r from-red-100 to-orange-100 px-5 py-4 border-b border-gray-200">
+                            <h3 class="font-semibold flex items-center gap-2 text-sm text-gray-800">
+                                <i class="fas fa-exclamation-triangle text-red-500"></i> Top 5 Pelanggaran
                             </h3>
                         </div>
+
                         <div class="divide-y divide-gray-200">
                             <?php if (!empty($topPelanggar)): ?>
                                 <?php foreach ($topPelanggar as $i => $s):
@@ -304,13 +326,24 @@ $topPelanggar = $conn->query(
                                 ?>
                                     <div class="px-4 py-3 flex items-center gap-3 hover:bg-gray-50 transition-colors">
                                         <span class="text-xs font-bold text-gray-500 w-4"><?= $i + 1 ?></span>
+
                                         <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium truncate"><?= htmlspecialchars($s['nama_lengkap']) ?></p>
-                                            <p class="text-xs text-gray-500"><?= htmlspecialchars($s['kelas'] ?? '-') ?></p>
+                                            <p class="text-sm font-medium text-gray-800 truncate">
+                                                <?= htmlspecialchars($s['nama_lengkap']) ?>
+                                            </p>
+                                            <p class="text-xs text-gray-500">
+                                                <?= htmlspecialchars($s['kelas'] ?? '-') ?>
+                                            </p>
                                         </div>
+
                                         <div class="text-right shrink-0">
-                                            <p class="text-sm font-bold text-amber-600"><?= $s['total_poin'] ?> poin</p>
-                                            <span class="text-xs px-2 py-0.5 rounded-full bg-<?= $cat[1] ?>-500/10 text-<?= $cat[1] ?>-400 border border-<?= $cat[1] ?>-500/20">
+                                            <p class="text-sm font-bold text-blue-600">
+                                                <?= $s['total_poin'] ?> poin
+                                            </p>
+                                            <span class="text-xs px-2 py-0.5 rounded-full 
+                                bg-<?= $cat[1] ?>-100 
+                                text-<?= $cat[1] ?>-600 
+                                border border-<?= $cat[1] ?>-200">
                                                 <?= $cat[0] ?>
                                             </span>
                                         </div>
@@ -318,28 +351,33 @@ $topPelanggar = $conn->query(
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <div class="p-8 text-center text-gray-500 text-sm">
-                                    <i class="fas fa-check-circle text-2xl text-emerald-500/40 mb-2 block"></i>
+                                    <i class="fas fa-check-circle text-2xl text-green-400 mb-2 block"></i>
                                     Belum ada data pelanggaran
                                 </div>
                             <?php endif; ?>
                         </div>
                     </div>
+
                 </div>
 
                 <!-- ── TABEL ABSENSI HARI INI ──────────────────────────────────────── -->
-                <div class="glass rounded-xl overflow-hidden fade-up" style="animation-delay:.25s">
-                    <div class="bg-gradient-to-r from-emerald-900/30 to-teal-900/20 px-5 py-4 border-b border-gray-200 flex flex-wrap justify-between items-center gap-3">
-                        <h3 class="font-semibold flex items-center gap-2">
-                            <i class="fas fa-clipboard-list text-emerald-400"></i>
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 fade-up" style="animation-delay:.25s">
+
+                    <div class="bg-gradient-to-r from-blue-100 to-indigo-100 px-5 py-4 border-b border-gray-200 flex flex-wrap justify-between items-center gap-3">
+                        <h3 class="font-semibold flex items-center gap-2 text-gray-800">
+                            <i class="fas fa-clipboard-list text-blue-500"></i>
                             Data Absensi Hari Ini
                             <span class="text-xs text-gray-500 font-normal">(<?= date('d F Y') ?>)</span>
                         </h3>
+
                         <!-- Filter -->
                         <div class="flex gap-2 flex-wrap">
                             <?php foreach (['Semua', 'Hadir', 'Sakit', 'Izin', 'Terlambat', 'Alpha'] as $f): ?>
                                 <button onclick="filterTable('<?= $f ?>')"
                                     class="filter-btn text-xs px-3 py-1.5 rounded-full border transition-colors
-                     <?= $f === 'Semua' ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300' : 'border-gray-300 text-gray-500 hover:border-emerald-500/40 hover:text-gray-800' ?>"
+                    <?= $f === 'Semua'
+                                    ? 'bg-blue-100 border-blue-300 text-blue-600'
+                                    : 'border-gray-300 text-gray-600 hover:border-blue-400 hover:text-gray-800 hover:bg-blue-50' ?>"
                                     data-filter="<?= $f ?>">
                                     <?= $f ?>
                                 </button>
@@ -350,7 +388,7 @@ $topPelanggar = $conn->query(
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm" id="absensiTable">
                             <thead>
-                                <tr class="text-gray-500 text-xs uppercase border-b border-gray-200 bg-gray-50 bg-white/30">
+                                <tr class="text-gray-500 text-xs uppercase border-b border-gray-200 bg-gray-50">
                                     <th class="px-4 py-3 text-left">Siswa</th>
                                     <th class="px-4 py-3 text-left">NIS</th>
                                     <th class="px-4 py-3 text-left">Kelas</th>
@@ -360,47 +398,61 @@ $topPelanggar = $conn->query(
                                     <th class="px-4 py-3 text-left">Keterangan</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-800/40">
+
+                            <tbody class="divide-y divide-gray-200">
                                 <?php if (!empty($absensi_hari_ini)): ?>
                                     <?php foreach ($absensi_hari_ini as $row):
                                         $statusColor = match (strtolower($row['status'])) {
-                                            'hadir'     => 'emerald',
+                                            'hadir'     => 'green',
                                             'sakit'     => 'yellow',
                                             'izin'      => 'blue',
                                             'terlambat' => 'orange',
                                             default     => 'red'
                                         };
                                         $approvalColor = match (strtolower($row['approval_status'] ?? '')) {
-                                            'approved' => 'emerald',
+                                            'approved' => 'green',
                                             'rejected' => 'red',
                                             default    => 'yellow'
                                         };
                                     ?>
-                                        <tr class="hover:bg-gray-50 transition-colors absensi-row" data-status="<?= htmlspecialchars($row['status']) ?>">
+
+                                        <tr class="hover:bg-blue-50 transition-colors absensi-row" data-status="<?= htmlspecialchars($row['status']) ?>">
                                             <td class="px-4 py-3">
                                                 <div class="flex items-center gap-3">
                                                     <img src="../../<?= $row['foto_profil'] ?: 'assets/default/photo-profile.png' ?>"
                                                         class="h-8 w-8 rounded-full object-cover border border-gray-300" alt="">
-                                                    <span class="font-medium"><?= htmlspecialchars($row['nama_lengkap']) ?></span>
+                                                    <span class="font-medium text-gray-800">
+                                                        <?= htmlspecialchars($row['nama_lengkap']) ?>
+                                                    </span>
                                                 </div>
                                             </td>
-                                            <td class="px-4 py-3 text-gray-500"><?= htmlspecialchars($row['nis']) ?></td>
-                                            <td class="px-4 py-3 text-gray-500"><?= htmlspecialchars($row['kelas']) ?></td>
+
+                                            <td class="px-4 py-3 text-gray-600"><?= htmlspecialchars($row['nis']) ?></td>
+                                            <td class="px-4 py-3 text-gray-600"><?= htmlspecialchars($row['kelas']) ?></td>
                                             <td class="px-4 py-3 text-gray-700"><?= $row['jam_masuk'] ?? '-' ?></td>
+
                                             <td class="px-4 py-3 text-center">
-                                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-<?= $statusColor ?>-500/10 text-<?= $statusColor ?>-400 border border-<?= $statusColor ?>-500/20">
+                                                <span class="px-2 py-1 rounded-full text-xs font-medium
+                                bg-<?= $statusColor ?>-100
+                                text-<?= $statusColor ?>-600
+                                border border-<?= $statusColor ?>-200">
                                                     <?= htmlspecialchars($row['status']) ?>
                                                 </span>
                                             </td>
+
                                             <td class="px-4 py-3 text-center">
-                                                <span class="px-2 py-1 rounded-full text-xs bg-<?= $approvalColor ?>-500/10 text-<?= $approvalColor ?>-400">
+                                                <span class="px-2 py-1 rounded-full text-xs
+                                bg-<?= $approvalColor ?>-100
+                                text-<?= $approvalColor ?>-600">
                                                     <?= htmlspecialchars($row['approval_status'] ?? 'Pending') ?>
                                                 </span>
                                             </td>
-                                            <td class="px-4 py-3 text-gray-500 max-w-[160px] truncate">
+
+                                            <td class="px-4 py-3 text-gray-600 max-w-[160px] truncate">
                                                 <?= htmlspecialchars($row['keterangan'] ?? '-') ?>
                                             </td>
                                         </tr>
+
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
@@ -455,9 +507,9 @@ $topPelanggar = $conn->query(
         function filterTable(status) {
             document.querySelectorAll('.filter-btn').forEach(b => {
                 const active = b.dataset.filter === status;
-                b.classList.toggle('bg-emerald-500/20', active);
-                b.classList.toggle('border-emerald-500/50', active);
-                b.classList.toggle('text-emerald-300', active);
+                b.classList.toggle('bg-amber-500/20', active);
+                b.classList.toggle('border-amber-500/50', active);
+                b.classList.toggle('text-amber-300', active);
                 b.classList.toggle('border-gray-300', !active);
                 b.classList.toggle('text-gray-500', !active);
             });

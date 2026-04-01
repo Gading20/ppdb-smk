@@ -423,7 +423,7 @@ if (isset($_GET['delete'])) {
                         <h1 class="text-xl md:text-2xl font-bold">Data Konseling</h1>
                         <p class="text-gray-500 text-sm md:text-base">Kelola data konseling siswa</p>
                     </div>
-                    <a href="addk.php" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
+                    <a href="addk.php" class="px-4 py-2 bg-purple-600 text-white hover:bg-purple-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
                         <i class="fas fa-plus"></i> Tambah Konseling
                     </a>
                 </header>
@@ -556,7 +556,7 @@ if (isset($_GET['delete'])) {
                         </div>
 
                         <div class="mt-6 flex justify-end">
-                            <button type="submit" class="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-gray-800 rounded-lg transition-colors text-sm">
+                            <button type="submit" class="px-5 py-2.5 bg-purple-600 text-white hover:bg-purple-700 text-gray-800 rounded-lg transition-colors text-sm">
                                 <i class="fas fa-filter mr-2"></i>Terapkan Filter
                             </button>
                         </div>

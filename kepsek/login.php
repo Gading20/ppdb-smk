@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .glass-effect {
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(16, 185, 129, 0.25);
+            border: 1px solid rgba(217, 119, 6, 0.25);
         }
 
         input:-webkit-autofill,
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-sky-100 via-violet-50 to-indigo-100 flex items-center justify-center bg-[url('../assets/default/bg-pattern.png')] bg-repeat">
+<body class="min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-100 flex items-center justify-center bg-[url('../assets/default/bg-pattern.png')] bg-repeat">
 
     <!-- Green Gradient Overlay -->
     
@@ -103,15 +103,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Logo & Title -->
         <div class="text-center mb-8">
             <img src="../assets/default/logosmk.png" alt="SMK NURUL ULUM"
-                class="h-24 mx-auto mb-4 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
-            <h2 class="text-3xl font-bold text-gray-800 mb-2 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">
+                class="h-24 mx-auto mb-4 drop-shadow-[0_0_15px_rgba(217,119,6,0.5)]">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">
                 Login Kepala Sekolah
             </h2>
             <p class="text-gray-500">Sistem Absensi SMK NURUL ULUM</p>
         </div>
 
         <!-- Login Form -->
-        <div class="glass-effect rounded-xl shadow-xl p-8 shadow-emerald-200">
+        <div class="glass-effect rounded-xl shadow-xl p-8 shadow-amber-200">
 
             <?php if ($error): ?>
                 <div class="bg-red-500/10 border border-red-300 text-red-400 px-4 py-3 rounded-lg mb-6 flex items-center" role="alert">
@@ -126,12 +126,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <!-- Username -->
                     <div>
                         <label class="text-gray-700 text-sm font-medium mb-2 block">
-                            <i class="fas fa-user-tie text-emerald-500 mr-2"></i>Username
+                            <i class="fas fa-user-tie text-amber-600 mr-2"></i>Username
                         </label>
                         <input type="text" name="username" required
                             value="<?= htmlspecialchars($_POST['username'] ?? '') ?>"
-                            class="w-full px-5 py-4 rounded-lg bg-gray-50/80 border border-emerald-200 text-gray-800 
-                                   focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 
+                            class="w-full px-5 py-4 rounded-lg bg-gray-50/80 border border-amber-200 text-gray-800 
+                                   focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200 
                                    transition-all duration-300 placeholder-gray-400"
                             placeholder="Masukkan username">
                     </div>
@@ -139,16 +139,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <!-- Password -->
                     <div>
                         <label class="text-gray-700 text-sm font-medium mb-2 block">
-                            <i class="fas fa-lock text-emerald-500 mr-2"></i>Password
+                            <i class="fas fa-lock text-amber-600 mr-2"></i>Password
                         </label>
                         <div class="relative">
                             <input type="password" name="password" id="password" required
-                                class="w-full px-5 py-4 rounded-lg bg-gray-50/80 border border-emerald-200 text-gray-800 
-                                       focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200
+                                class="w-full px-5 py-4 rounded-lg bg-gray-50/80 border border-amber-200 text-gray-800 
+                                       focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200
                                        transition-all duration-300 placeholder-gray-400"
                                 placeholder="Masukkan password">
                             <button type="button" onclick="togglePassword()"
-                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-emerald-500 transition-colors duration-300">
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-amber-500 transition-colors duration-300">
                                 <i class="fas fa-eye text-lg" id="toggleIcon"></i>
                             </button>
                         </div>
@@ -158,17 +158,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <!-- Submit -->
                 <button type="submit"
-                    class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-gray-800 font-medium py-4 px-4 
+                    class="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white font-medium py-4 px-4 
                            rounded-lg transition duration-300 hover:opacity-90 transform hover:-translate-y-0.5
-                           focus:outline-none focus:ring-2 focus:ring-emerald-200 flex items-center justify-center
-                           shadow-lg shadow-emerald-200">
+                           focus:outline-none focus:ring-2 focus:ring-amber-200 flex items-center justify-center
+                           shadow-lg shadow-amber-200">
                     <i class="fas fa-sign-in-alt mr-2"></i>
                     Login sebagai Kepala Sekolah
                 </button>
 
                 <!-- Back to main page -->
                 <div class="text-center pt-2">
-                    <a href="../index.php" class="text-gray-500 hover:text-emerald-400 text-sm transition-colors duration-200">
+                    <a href="../index.php" class="text-gray-500 hover:text-amber-500 text-sm transition-colors duration-200">
                         <i class="fas fa-arrow-left mr-1"></i> Kembali ke Halaman Utama
                     </a>
                 </div>

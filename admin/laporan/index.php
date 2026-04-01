@@ -618,7 +618,7 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="flex gap-3">
                         <a href="export_absensi.php?format=pdf<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
-                            class="px-3 py-2 sm:px-4 sm:py-2 bg-red-600 hover:bg-red-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
+                            class="px-3 py-2 sm:px-4 sm:py-2 bg-red-600 text-white hover:bg-red-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
                             <i class="fas fa-file-pdf"></i> <span class="hidden sm:inline">Export PDF</span>
                         </a>
                     </div>
@@ -742,7 +742,7 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php endif; ?>
                             </div>
                             <button type="submit"
-                                class="w-full sm:w-auto px-5 py-2 bg-purple-600 hover:bg-purple-700 text-gray-800 rounded-lg text-sm transition-colors">
+                                class="w-full sm:w-auto px-5 py-2 text-white bg-purple-600 hover:bg-purple-700 text-gray-800 rounded-lg text-sm transition-colors">
                                 <i class="fas fa-filter mr-2"></i> Terapkan Filter
                             </button>
                         </div>
@@ -824,7 +824,9 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <?= $data['kelas'] ?> <?= $data['jurusan'] ?>
                                             </td>
                                             <td class="px-6 py-4 text-sm">
-                                                <?= $data['jam_masuk'] !== '00:00:00' ? date('H:i', strtotime($data['jam_masuk'])) : '-' ?>
+                                                <?= (!empty($data['jam_masuk']) && $data['jam_masuk'] !== '00:00:00')
+                                                    ? date('H:i', strtotime($data['jam_masuk']))
+                                                    : '-' ?>
                                             </td>
                                             <td class="px-6 py-4">
                                                 <span
