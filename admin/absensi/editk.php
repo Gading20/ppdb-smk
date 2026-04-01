@@ -420,23 +420,30 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
                     <div class="lg:col-span-2">
                         <form method="POST" class="space-y-5">
 
-                            <!-- Baris 1: Tanggal + Jenis -->
-                            <div class="glass-effect rounded-xl p-5 animate-fade-in">
-                                <h3 class="font-semibold text-sm mb-4 flex items-center gap-2">
-                                    <i class="fas fa-info-circle text-violet-500"></i> Informasi Dasar
+                            <!-- Baris 1 -->
+                            <div class="bg-white rounded-xl p-5 shadow-md">
+                                <h3 class="font-semibold text-base mb-4 flex items-center gap-2 text-gray-800">
+                                    <i class="fas fa-info-circle text-violet-600"></i> Informasi Dasar
                                 </h3>
+
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
                                     <div>
-                                        <label class="form-label"><i class="fas fa-calendar-alt mr-1"></i> Tanggal
-                                            Konseling</label>
-                                        <input type="date" name="tanggal" class="form-input"
-                                            value="<?= htmlspecialchars($_POST['tanggal'] ?? $k['tanggal']) ?>"
-                                            required>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                            <i class="fas fa-calendar-alt mr-1"></i> Tanggal Konseling
+                                        </label>
+                                        <input type="date" name="tanggal"
+                                            class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-violet-500"
+                                            value="<?= htmlspecialchars($_POST['tanggal'] ?? $k['tanggal']) ?>" required>
                                     </div>
+
                                     <div>
-                                        <label class="form-label"><i class="fas fa-tag mr-1"></i> Jenis
-                                            Konseling</label>
-                                        <select name="jenis_konseling" class="form-input" required>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                            <i class="fas fa-tag mr-1"></i> Jenis Konseling
+                                        </label>
+                                        <select name="jenis_konseling"
+                                            class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-violet-500"
+                                            required>
                                             <option value="">-- Pilih Jenis --</option>
                                             <?php foreach ($jenis_list as $j): ?>
                                                 <option value="<?= $j ?>" <?= (($_POST['jenis_konseling'] ?? $k['jenis_konseling']) === $j) ? 'selected' : '' ?>>
@@ -445,16 +452,24 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
+
                                     <div>
-                                        <label class="form-label"><i class="fas fa-user-tie mr-1"></i> Konselor</label>
-                                        <input type="text" name="konselor" class="form-input"
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                            <i class="fas fa-user-tie mr-1"></i> Konselor
+                                        </label>
+                                        <input type="text" name="konselor"
+                                            class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-violet-500"
                                             placeholder="Nama konselor..."
-                                            value="<?= htmlspecialchars($_POST['konselor'] ?? $k['konselor']) ?>"
-                                            required>
+                                            value="<?= htmlspecialchars($_POST['konselor'] ?? $k['konselor']) ?>" required>
                                     </div>
+
                                     <div>
-                                        <label class="form-label"><i class="fas fa-flag mr-1"></i> Status</label>
-                                        <select name="status" class="form-input" required>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                            <i class="fas fa-flag mr-1"></i> Status
+                                        </label>
+                                        <select name="status"
+                                            class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-violet-500"
+                                            required>
                                             <?php foreach ($status_list as $s): ?>
                                                 <option value="<?= $s ?>" <?= (($_POST['status'] ?? $k['status']) === $s) ? 'selected' : '' ?>>
                                                     <?= $s ?>
@@ -462,60 +477,51 @@ $status_list = ['Proses', 'Selesai', 'Ditunda'];
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
+
                                 </div>
                             </div>
 
                             <!-- Masalah -->
-                            <div class="glass-effect rounded-xl p-5 animate-fade-in-d1">
-                                <h3 class="font-semibold text-sm mb-4 flex items-center gap-2">
-                                    <span
-                                        class="w-5 h-5 rounded bg-red-500/20 text-red-400 flex items-center justify-center text-xs">
-                                        <i class="fas fa-exclamation"></i>
-                                    </span>
-                                    Uraian Masalah <span class="text-red-400 ml-1">*</span>
+                            <div class="bg-white rounded-xl p-5 shadow-md">
+                                <h3 class="font-semibold text-base mb-3 text-red-600 flex items-center gap-2">
+                                    <i class="fas fa-exclamation-circle"></i> Uraian Masalah *
                                 </h3>
-                                <textarea name="masalah" rows="5" class="form-input resize-y"
+                                <textarea name="masalah" rows="5"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-red-400"
                                     placeholder="Jelaskan masalah yang dialami siswa..."
                                     required><?= htmlspecialchars($_POST['masalah'] ?? $k['masalah']) ?></textarea>
                             </div>
 
                             <!-- Solusi -->
-                            <div class="glass-effect rounded-xl p-5 animate-fade-in-d1">
-                                <h3 class="font-semibold text-sm mb-4 flex items-center gap-2">
-                                    <span
-                                        class="w-5 h-5 rounded bg-green-500/20 text-green-600 flex items-center justify-center text-xs">
-                                        <i class="fas fa-lightbulb"></i>
-                                    </span>
-                                    Solusi / Rekomendasi
-                                    <span class="text-gray-500 text-xs font-normal">(opsional)</span>
+                            <div class="bg-white rounded-xl p-5 shadow-md">
+                                <h3 class="font-semibold text-base mb-3 text-green-600 flex items-center gap-2">
+                                    <i class="fas fa-lightbulb"></i> Solusi / Rekomendasi
                                 </h3>
-                                <textarea name="solusi" rows="4" class="form-input resize-y"
-                                    placeholder="Tuliskan solusi atau rekomendasi yang diberikan..."><?= htmlspecialchars($_POST['solusi'] ?? $k['solusi'] ?? '') ?></textarea>
+                                <textarea name="solusi" rows="4"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-green-400"
+                                    placeholder="Tuliskan solusi..."><?= htmlspecialchars($_POST['solusi'] ?? $k['solusi'] ?? '') ?></textarea>
                             </div>
 
                             <!-- Tindak Lanjut -->
-                            <div class="glass-effect rounded-xl p-5 animate-fade-in-d2">
-                                <h3 class="font-semibold text-sm mb-4 flex items-center gap-2">
-                                    <span
-                                        class="w-5 h-5 rounded bg-blue-50 text-blue-600 flex items-center justify-center text-xs">
-                                        <i class="fas fa-forward"></i>
-                                    </span>
-                                    Tindak Lanjut
-                                    <span class="text-gray-500 text-xs font-normal">(opsional)</span>
+                            <div class="bg-white rounded-xl p-5 shadow-md">
+                                <h3 class="font-semibold text-base mb-3 text-blue-600 flex items-center gap-2">
+                                    <i class="fas fa-forward"></i> Tindak Lanjut
                                 </h3>
-                                <textarea name="tindak_lanjut" rows="4" class="form-input resize-y"
-                                    placeholder="Tuliskan tindak lanjut yang akan dilakukan..."><?= htmlspecialchars($_POST['tindak_lanjut'] ?? $k['tindak_lanjut'] ?? '') ?></textarea>
+                                <textarea name="tindak_lanjut" rows="4"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-blue-400"
+                                    placeholder="Tuliskan tindak lanjut..."><?= htmlspecialchars($_POST['tindak_lanjut'] ?? $k['tindak_lanjut'] ?? '') ?></textarea>
                             </div>
 
-                            <!-- Tombol Aksi -->
-                            <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+                            <!-- Tombol -->
+                            <div class="flex justify-between">
                                 <a href="konseling.php?id=<?= $id ?>"
-                                    class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center gap-2 text-sm transition-colors">
-                                    <i class="fas fa-times"></i> Batal
+                                    class="px-5 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm font-medium">
+                                    Batal
                                 </a>
+
                                 <button type="submit"
-                                    class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 rounded-lg flex items-center gap-2 text-sm font-semibold transition-colors shadow-lg shadow-violet-200">
-                                    <i class="fas fa-save"></i> Simpan Perubahan
+                                    class="px-6 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-sm font-semibold shadow">
+                                    Simpan Perubahan
                                 </button>
                             </div>
 

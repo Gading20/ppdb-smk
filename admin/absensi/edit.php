@@ -242,7 +242,7 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                     <li><a href="../absensi/pelanggaran.php"
                             class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
                     </li>
-                    <li><a href="../absensi/konseling"
+                    <li><a href="../absensi/konseling.php"
                             class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a>
                     </li>
                 </ul>
@@ -261,10 +261,10 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                     <li><a href="../laporan/index.php"
                             class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
                     </li>
-                    <li><a href="../laporan/pelanggaran"
+                    <li><a href="../laporan/laporan_pelanggaran.php"
                             class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
                     </li>
-                    <li><a href="../laporan/konseling"
+                    <li><a href="../laporan/konseling.php"
                             class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a>
                     </li>
                 </ul>

@@ -252,12 +252,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div id="mobile-overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- Side Navigation -->
-    <aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-violet-200 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
+    <aside id="sidebar"
+        class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-violet-200 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
         <div class="flex items-center justify-between p-4 lg:p-6 border-b border-violet-200">
             <div class="flex items-center gap-3">
-                <img src="../../assets/default/logo-smk40.png" alt="SMKN 40" class="h-8 lg:h-10 w-auto">
+                <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 lg:h-10 w-auto">
                 <div>
-                    <h1 class="font-semibold text-sm lg:text-base text-gray-800">SMKN 40</h1>
+                    <h1 class="font-semibold text-sm lg:text-base text-gray-800">SMK NURUL ULUM</h1>
                     <p class="text-xs text-gray-500">Sistem Absensi</p>
                 </div>
             </div>
@@ -268,29 +269,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <nav class="p-4 space-y-2 overflow-y-auto no-scrollbar" style="max-height: calc(100vh - 76px);">
-            <a href="../dashboard/" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
-                <i class="fas fa-home"></i>
-                <span>Dashboard</span>
+            <a href="../dashboard/"
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
+                <i class="fas fa-home"></i><span>Dashboard</span>
             </a>
-            <a href="../absensi/" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
-                <i class="fas fa-calendar-check"></i>
-                <span>Absensi</span>
+            <li class="relative group">
+                <button
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
+                    <i class="fas fa-calendar-check"></i><span>Monitoring Siswa</span>
+                    <i class="fas fa-chevron-down ml-auto text-sm"></i>
+                </button>
+                <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
+                    <li><a href="../absensi/index.php"
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
+                    </li>
+                    <li><a href="../absensi/pelanggaran.php"
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
+                    </li>
+                    <li><a href="../absensi/konseling.php"
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a>
+                    </li>
+                </ul>
+            </li>
+            <a href="../siswa/"
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
+                <i class="fas fa-users"></i><span>Data Siswa</span>
             </a>
-            <a href="index.php" class="flex items-center gap-3 text-gray-700 p-3 rounded-lg menu-active">
-                <i class="fas fa-users text-violet-600"></i>
-                <span>Data Siswa</span>
+            <li class="relative group">
+                <button
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
+                    <i class="fas fa-file-alt"></i><span>Laporan</span>
+                    <i class="fas fa-chevron-down ml-auto text-sm"></i>
+                </button>
+                <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
+                    <li><a href="../laporan/index.php"
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
+                    </li>
+                    <li><a href="../laporan/laporan_pelanggaran.php"
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
+                    </li>
+                    <li><a href="../laporan/konseling.php"
+                            class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Konseling</a>
+                    </li>
+                </ul>
+            </li>
+            <a href="../profil/"
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
+                <i class="fas fa-user-cog"></i><span>Profil</span>
             </a>
-            <a href="../laporan/" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
-                <i class="fas fa-file-alt"></i>
-                <span>Laporan</span>
-            </a>
-            <a href="../profil/" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
-                <i class="fas fa-user-cog"></i>
-                <span>Profil</span>
-            </a>
-            <a href="../logout.php" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors mt-10">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
+            <a href="../logout.php"
+                class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors mt-10">
+                <i class="fas fa-sign-out-alt"></i><span>Logout</span>
             </a>
         </nav>
     </aside>
@@ -397,11 +426,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <label for="jurusan" class="block text-sm text-gray-500 mb-2">Jurusan</label>
                                 <select id="jurusan" name="jurusan" required
                                     class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-3 md:py-2 text-gray-800 focus:outline-none focus:border-violet-500 touch-target">
-                                    <option value="RPL" <?= $siswa['jurusan'] === 'RPL' ? 'selected' : '' ?>>RPL</option>
-                                    <option value="DKV" <?= $siswa['jurusan'] === 'DKV' ? 'selected' : '' ?>>DKV</option>
-                                    <option value="AK" <?= $siswa['jurusan'] === 'AK' ? 'selected' : '' ?>>AK</option>
-                                    <option value="BR" <?= $siswa['jurusan'] === 'BR' ? 'selected' : '' ?>>BR</option>
+                                    <option value="TKJ" <?= $siswa['jurusan'] === 'TKJ' ? 'selected' : '' ?>>TKJ</option>
                                     <option value="MP" <?= $siswa['jurusan'] === 'MP' ? 'selected' : '' ?>>MP</option>
+                                    <option value="AKL" <?= $siswa['jurusan'] === 'AKL' ? 'selected' : '' ?>>AKL</option>
+                                    <option value="TSM" <?= $siswa['jurusan'] === 'TSM' ? 'selected' : '' ?>>TSM</option>
+                                    <option value="TKR" <?= $siswa['jurusan'] === 'TKR' ? 'selected' : '' ?>>TKR</option>
                                 </select>
                             </div>
 
@@ -428,7 +457,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <!-- Submit button - Full width on mobile -->
                         <div class="flex justify-end mt-6 md:mt-8">
-                            <button type="submit" class="w-full md:w-auto px-6 py-3 md:py-2 bg-purple-600 hover:bg-purple-700 text-gray-800 rounded-lg transition-colors font-medium">
+                            <button type="submit" class="w-full md:w-auto px-6 py-3 md:py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-medium">
                                 <i class="fas fa-save mr-2"></i> Simpan Perubahan
                             </button>
                         </div>

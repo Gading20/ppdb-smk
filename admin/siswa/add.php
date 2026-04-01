@@ -8,106 +8,127 @@ if (!isset($_SESSION['admin_id'])) {
 }
 
 $error = '';
-$success = false;
 
-// Process form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        // Get form data
-        $nis = $_POST['nis'];
-        $nama_lengkap = $_POST['nama_lengkap'];
-        $kelas = $_POST['kelas'];
-        $jurusan = $_POST['jurusan'];
-        $email = $_POST['email'];
-        $password = !empty($_POST['password']) ? $_POST['password'] : "siswa_$nis";
+        $nis          = trim($_POST['nis']);
+        $nama_lengkap = trim($_POST['nama_lengkap']);
+        $kelas        = trim($_POST['kelas']);
+        $jurusan      = trim($_POST['jurusan']);
+        $email        = trim($_POST['email']);
+        $raw_password = !empty($_POST['password']) ? $_POST['password'] : "siswa_$nis";
+        $password     = password_hash($raw_password, PASSWORD_BCRYPT);
 
-        // Start transaction
+        if (empty($nis) || empty($nama_lengkap) || empty($kelas) || empty($jurusan) || empty($email)) {
+            throw new Exception("Semua field wajib diisi.");
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new Exception("Format email tidak valid.");
+        }
+
         $conn->beginTransaction();
 
-        // Check if NIS already exists
-        $check_sql = "SELECT COUNT(*) FROM siswa WHERE nis = :nis";
-        $check_stmt = $conn->prepare($check_sql);
+        // Cek duplikat NIS
+        $check_stmt = $conn->prepare("SELECT COUNT(*) FROM siswa WHERE nis = :nis");
         $check_stmt->execute(['nis' => $nis]);
-
         if ($check_stmt->fetchColumn() > 0) {
             throw new Exception("NIS sudah digunakan oleh siswa lain.");
         }
 
-        // Check if email already exists
-        $check_sql = "SELECT COUNT(*) FROM siswa WHERE email = :email";
-        $check_stmt = $conn->prepare($check_sql);
+        // Cek duplikat email
+        $check_stmt = $conn->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
         $check_stmt->execute(['email' => $email]);
-
         if ($check_stmt->fetchColumn() > 0) {
-            throw new Exception("Email sudah digunakan oleh siswa lain.");
+            throw new Exception("Email sudah digunakan.");
         }
 
-        // Handle profile photo upload
-        $foto_profil = 'assets/default/photo-profile.png'; // Default photo
+        // Cek duplikat username
+        $username = strtolower(str_replace(' ', '_', $nama_lengkap));
+        $check_stmt = $conn->prepare("SELECT COUNT(*) FROM users WHERE username = :username");
+        $check_stmt->execute(['username' => $username]);
+        if ($check_stmt->fetchColumn() > 0) {
+            // Tambahkan NIS agar username unik
+            $username = $username . '_' . $nis;
+        }
 
-        if (isset($_FILES['foto_profil']) && $_FILES['foto_profil']['error'] === 0) {
+        // Handle upload foto profil
+        $foto_profil = 'assets/default/photo-profile.png';
+
+        if (isset($_FILES['foto_profil']) && $_FILES['foto_profil']['error'] === UPLOAD_ERR_OK) {
             $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
-            $file_type = $_FILES['foto_profil']['type'];
+            $file_type     = mime_content_type($_FILES['foto_profil']['tmp_name']);
 
             if (!in_array($file_type, $allowed_types)) {
                 throw new Exception("Format file tidak didukung. Gunakan JPG atau PNG.");
             }
 
-            $max_size = 2 * 1024 * 1024; // 2MB
-            if ($_FILES['foto_profil']['size'] > $max_size) {
+            if ($_FILES['foto_profil']['size'] > 2 * 1024 * 1024) {
                 throw new Exception("Ukuran file terlalu besar. Maksimum 2MB.");
             }
 
-            // Create upload directory if it doesn't exist
             $upload_dir = '../../uploads/profile/';
             if (!file_exists($upload_dir)) {
                 mkdir($upload_dir, 0777, true);
             }
 
-            $file_extension = pathinfo($_FILES['foto_profil']['name'], PATHINFO_EXTENSION);
-            $filename = 'profile_' . $nis . '_' . time() . '.' . $file_extension;
-            $target_file = $upload_dir . $filename;
+            $file_extension = strtolower(pathinfo($_FILES['foto_profil']['name'], PATHINFO_EXTENSION));
+            $filename       = 'profile_' . $nis . '_' . time() . '.' . $file_extension;
+            $target_file    = $upload_dir . $filename;
 
-            if (move_uploaded_file($_FILES['foto_profil']['tmp_name'], $target_file)) {
-                $foto_profil = 'uploads/profile/' . $filename;
-            } else {
+            if (!move_uploaded_file($_FILES['foto_profil']['tmp_name'], $target_file)) {
                 throw new Exception("Gagal mengunggah foto profil.");
             }
+
+            $foto_profil = 'uploads/profile/' . $filename;
         }
 
-        // Insert student data
-        $sql = "INSERT INTO siswa (nis, nama_lengkap, kelas, jurusan, email, password, foto_profil) 
-                VALUES (:nis, :nama_lengkap, :kelas, :jurusan, :email, :password, :foto_profil)";
+        // ✅ INSERT ke tabel users (untuk login)
+        $sql_user = "INSERT INTO users (username, email, password, nama_lengkap, role, foto_profil, nis, kelas, jurusan) 
+                     VALUES (:username, :email, :password, :nama_lengkap, 'siswa', :foto_profil, :nis, :kelas, :jurusan)";
+        $stmt_user = $conn->prepare($sql_user);
+        $stmt_user->execute([
+            'username'     => $username,
+            'email'        => $email,
+            'password'     => $password,
+            'nama_lengkap' => $nama_lengkap,
+            'foto_profil'  => $foto_profil,
+            'nis'          => $nis,
+            'kelas'        => $kelas,
+            'jurusan'      => $jurusan,
+        ]);
+        $user_id = $conn->lastInsertId(); // ✅ Ambil user_id
 
+        // ✅ INSERT ke tabel siswa (dengan user_id)
+        $sql = "INSERT INTO siswa (user_id, nis, nama_lengkap, kelas, jurusan, email, password, foto_profil) 
+                VALUES (:user_id, :nis, :nama_lengkap, :kelas, :jurusan, :email, :password, :foto_profil)";
         $stmt = $conn->prepare($sql);
         $stmt->execute([
-            'nis' => $nis,
+            'user_id'      => $user_id,
+            'nis'          => $nis,
             'nama_lengkap' => $nama_lengkap,
-            'kelas' => $kelas,
-            'jurusan' => $jurusan,
-            'email' => $email,
-            'password' => $password,
-            'foto_profil' => $foto_profil
+            'kelas'        => $kelas,
+            'jurusan'      => $jurusan,
+            'email'        => $email,
+            'password'     => $password,
+            'foto_profil'  => $foto_profil
         ]);
 
         $student_id = $conn->lastInsertId();
 
-        // Log activity
+        // Log aktivitas
         $sql = "INSERT INTO activity_log (user_type, user_id, activity_type, description) 
                 VALUES ('admin', :admin_id, 'create', :description)";
         $stmt = $conn->prepare($sql);
         $stmt->execute([
-            'admin_id' => $_SESSION['admin_id'],
+            'admin_id'    => $_SESSION['admin_id'],
             'description' => "Admin menambahkan siswa baru: $nama_lengkap ($nis)"
         ]);
 
         $conn->commit();
-        $success = true;
 
-        if ($success) {
-            header("Location: detail.php?id=$new_id&created=true");
-            exit();
-        }
+        header("Location: detail.php?id=$student_id&created=true");
+        exit();
     } catch (Exception $e) {
         $conn->rollBack();
         $error = $e->getMessage();
@@ -229,32 +250,102 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </button>
         </div>
 
-        <nav class="p-4 space-y-2 overflow-y-auto no-scrollbar" style="max-height: calc(100vh - 76px);">
-            <a href="../dashboard/" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
-                <i class="fas fa-home"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="../absensi/" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
-                <i class="fas fa-calendar-check"></i>
-                <span>Absensi</span>
-            </a>
-            <a href="index.php" class="flex items-center gap-3 text-gray-700 p-3 rounded-lg menu-active">
-                <i class="fas fa-users text-violet-600"></i>
-                <span>Data Siswa</span>
-            </a>
-            <a href="../laporan/" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
-                <i class="fas fa-file-alt"></i>
-                <span>Laporan</span>
-            </a>
-            <a href="../profil/" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
-                <i class="fas fa-user-cog"></i>
-                <span>Profil</span>
-            </a>
-            <a href="../logout.php" class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors mt-10">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
-            </a>
-        </nav>
+        <aside id="sidebar"
+            class="fixed top-0 left-0 h-screen w-64 glass-effect border-r border-violet-200 z-50 sidebar-transition -translate-x-full lg:translate-x-0">
+            <div class="flex items-center justify-between p-4 lg:p-6 border-b border-violet-200">
+                <div class="flex items-center gap-3">
+                    <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 lg:h-10 w-auto">
+                    <div>
+                        <h1 class="font-semibold text-sm lg:text-base text-gray-800">SMK NURUL ULUM</h1>
+                        <p class="text-xs text-gray-500">Sistem Absensi</p>
+                    </div>
+                </div>
+                <!-- Close sidebar button - only visible on mobile -->
+                <button class="text-gray-600 hover:text-gray-800 lg:hidden" onclick="toggleSidebar()">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <nav class="p-4 space-y-2 overflow-y-auto no-scrollbar" style="max-height: calc(100vh - 76px);">
+                <a href="../dashboard/"
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <li class="relative group">
+                    <button
+                        class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Monitoring Siswa</span>
+                        <i class="fas fa-chevron-down ml-auto text-sm"></i>
+                    </button>
+
+                    <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
+                        <li>
+                            <a href="../absensi/index.php"
+                                class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">
+                                Presensi
+                            </a>
+                        </li>
+                        <li>
+                            <a href="../absensi/pelanggaran.php"
+                                class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">
+                                Pelanggaran
+                            </a>
+                        </li>
+                        <li>
+                            <a href="../absensi/konseling.php"
+                                class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">
+                                Konseling
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <a href="index.php" class="flex items-center gap-3 text-gray-700 p-3 rounded-lg menu-active">
+                    <i class="fas fa-users text-violet-600"></i>
+                    <span>Data Siswa</span>
+                </a>
+                <li class="relative group">
+                    <button
+                        class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors w-full">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Laporan</span>
+                        <i class="fas fa-chevron-down ml-auto text-sm"></i>
+                    </button>
+
+                    <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
+                        <li>
+                            <a href="../laporan/index.php"
+                                class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">
+                                Presensi
+                            </a>
+                        </li>
+                        <li>
+                            <a href="../laporan/laporan_pelanggaran.php"
+                                class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">
+                                Pelanggaran
+                            </a>
+                        </li>
+                        <li>
+                            <a href="../laporan/laporan_konseling.php"
+                                class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">
+                                Konseling
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <a href="../profil/"
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-violet-100 transition-colors">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Profil</span>
+                </a>
+                <a href="../logout.php"
+                    class="flex items-center gap-3 text-gray-600 p-3 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors mt-10">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
     </aside>
 
     <!-- Main Content -->
@@ -351,11 +442,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <label for="jurusan" class="block text-sm text-gray-500 mb-2">Jurusan</label>
                                 <select id="jurusan" name="jurusan" required
                                     class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-3 md:py-2 text-gray-800 focus:outline-none focus:border-violet-500 touch-target">
-                                    <option value="RPL">RPL</option>
-                                    <option value="DKV">DKV</option>
-                                    <option value="AK">AK</option>
-                                    <option value="BR">BR</option>
+                                    <option value="TKJ">TKJ</option>
                                     <option value="MP">MP</option>
+                                    <option value="AKL">AKL</option>
+                                    <option value="TSM">TSM</option>
+                                    <option value="TKR">TKR</option>
                                 </select>
                             </div>
 
@@ -384,7 +475,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <!-- Submit button - Full width on mobile -->
                         <div class="flex justify-end mt-6 md:mt-8">
-                            <button type="submit" class="w-full md:w-auto px-6 py-3 md:py-2 bg-purple-600 hover:bg-purple-700 text-gray-800 rounded-lg transition-colors font-medium">
+                            <button type="submit" class="w-full md:w-auto px-6 py-3 md:py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-medium">
                                 <i class="fas fa-save mr-2"></i> Simpan Data Siswa
                             </button>
                         </div>

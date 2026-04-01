@@ -380,11 +380,11 @@ function jenisIcon($j)
                             <i class="fas fa-print"></i> Cetak
                         </button>
                         <a href="editk.php?id=<?= $k['id'] ?>"
-                            class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg flex items-center gap-2 text-sm transition-colors">
+                            class="px-4 py-2 bg-yellow-600 text-white hover:bg-yellow-700 rounded-lg flex items-center gap-2 text-sm transition-colors">
                             <i class="fas fa-edit"></i> Edit
                         </a>
                         <button onclick="confirmDelete(<?= $k['id'] ?>)"
-                            class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg flex items-center gap-2 text-sm transition-colors">
+                            class="px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded-lg flex items-center gap-2 text-sm transition-colors">
                             <i class="fas fa-trash"></i> Hapus
                         </button>
                     </div>
@@ -443,10 +443,10 @@ function jenisIcon($j)
                                                 </p>
                                             </div>
                                             <span class="text-xs flex-shrink-0 <?= match ($r['status']) {
-                                                'Selesai' => 'text-green-600',
-                                                'Ditunda' => 'text-red-400',
-                                                default => 'text-blue-400'
-                                            } ?>">
+                                                                                    'Selesai' => 'text-green-600',
+                                                                                    'Ditunda' => 'text-red-400',
+                                                                                    default => 'text-blue-400'
+                                                                                } ?>">
                                                 <?= $r['status'] ?>
                                             </span>
                                         </a>
@@ -464,118 +464,107 @@ function jenisIcon($j)
                         <div class="glass-effect rounded-xl p-5 animate-fade-in">
                             <div class="flex flex-wrap items-start justify-between gap-4">
                                 <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-12 h-12 rounded-xl <?= jenisClass($k['jenis_konseling']) ?> flex items-center justify-center flex-shrink-0">
+                                    <div class="w-12 h-12 rounded-xl <?= jenisClass($k['jenis_konseling']) ?> flex items-center justify-center flex-shrink-0">
                                         <i class="fas <?= jenisIcon($k['jenis_konseling']) ?> text-lg"></i>
                                     </div>
                                     <div>
-                                        <span
-                                            class="text-xs font-bold px-2 py-0.5 rounded <?= jenisClass($k['jenis_konseling']) ?>">
+                                        <span class="text-xs font-bold px-2 py-0.5 rounded <?= jenisClass($k['jenis_konseling']) ?>">
                                             <?= htmlspecialchars($k['jenis_konseling']) ?>
                                         </span>
-                                        <p class="text-lg font-bold mt-1">Konseling
-                                            <?= htmlspecialchars($k['jenis_konseling']) ?></p>
-                                        <p class="text-gray-500 text-sm"><?= date('d F Y', strtotime($k['tanggal'])) ?>
-                                        </p>
+                                        <!-- ✅ Ganti text-black → text-gray-800 agar kontras di semua bg -->
+                                        <p class="text-lg font-bold mt-1 text-gray-800">Konseling <?= htmlspecialchars($k['jenis_konseling']) ?></p>
+                                        <p class="text-gray-500 text-sm"><?= date('d F Y', strtotime($k['tanggal'])) ?></p>
                                     </div>
                                 </div>
                                 <div class="flex flex-col items-end gap-2">
-                                    <span
-                                        class="px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-1.5 <?= statusClass($k['status']) ?>">
+                                    <span class="px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-1.5 <?= statusClass($k['status']) ?>">
                                         <i class="fas <?= statusIcon($k['status']) ?> text-xs"></i>
                                         <?= $k['status'] ?>
                                     </span>
-                                    <!-- Inline status update -->
-                                    <div class="status-wrapper relative no-print">
+                                    <!-- <div class="status-wrapper relative no-print">
                                         <select id="status-select"
-                                            class="text-xs bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-gray-700 focus:outline-none focus:border-violet-500 cursor-pointer"
+                                            class="text-xs bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-gray-700 focus:outline-none focus:border-violet-500 cursor-pointer"
                                             onchange="updateStatus(this, <?= $k['id'] ?>)">
-                                            <option value="Proses" <?= $k['status'] === 'Proses' ? 'selected' : '' ?>>⏳
-                                                Ubah ke Proses</option>
-                                            <option value="Selesai" <?= $k['status'] === 'Selesai' ? 'selected' : '' ?>>✅
-                                                Ubah ke Selesai</option>
-                                            <option value="Ditunda" <?= $k['status'] === 'Ditunda' ? 'selected' : '' ?>>⏸
-                                                Ubah ke Ditunda</option>
+                                            <option value="Proses" <?= $k['status'] === 'Proses' ? 'selected' : '' ?>>⏳ Ubah ke Proses</option>
+                                            <option value="Selesai" <?= $k['status'] === 'Selesai' ? 'selected' : '' ?>>✅ Ubah ke Selesai</option>
+                                            <option value="Ditunda" <?= $k['status'] === 'Ditunda' ? 'selected' : '' ?>>⏸ Ubah ke Ditunda</option>
                                         </select>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
 
                             <!-- Meta info -->
-                            <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-gray-800">
+                            <!-- ✅ Ganti border-gray-800 → border-gray-200 agar border tidak terlalu gelap -->
+                            <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-gray-200">
                                 <div>
-                                    <p class="section-label"><i class="fas fa-user-tie"></i> Konselor</p>
-                                    <p class="section-value font-medium"><?= htmlspecialchars($k['konselor']) ?></p>
+                                    <p class="text-xs text-gray-500 mb-1"><i class="fas fa-user-tie mr-1"></i> Konselor</p>
+                                    <p class="text-sm font-semibold text-gray-800"><?= htmlspecialchars($k['konselor']) ?></p>
                                 </div>
                                 <div>
-                                    <p class="section-label"><i class="fas fa-calendar-alt"></i> Tanggal</p>
-                                    <p class="section-value"><?= date('d/m/Y', strtotime($k['tanggal'])) ?></p>
+                                    <p class="text-xs text-gray-500 mb-1"><i class="fas fa-calendar-alt mr-1"></i> Tanggal</p>
+                                    <p class="text-sm font-semibold text-gray-800"><?= date('d/m/Y', strtotime($k['tanggal'])) ?></p>
                                 </div>
                                 <div>
-                                    <p class="section-label"><i class="fas fa-user-shield"></i> Dicatat Oleh</p>
-                                    <p class="section-value"><?= htmlspecialchars($k['nama_admin'] ?? 'Admin') ?></p>
+                                    <p class="text-xs text-gray-500 mb-1"><i class="fas fa-user-shield mr-1"></i> Dicatat Oleh</p>
+                                    <p class="text-sm font-semibold text-gray-800"><?= htmlspecialchars($k['nama_admin'] ?? 'Admin') ?></p>
                                 </div>
                                 <div>
-                                    <p class="section-label"><i class="fas fa-clock"></i> Dibuat</p>
-                                    <p class="section-value"><?= date('d/m/Y H:i', strtotime($k['created_at'])) ?></p>
+                                    <p class="text-xs text-gray-500 mb-1"><i class="fas fa-clock mr-1"></i> Dibuat</p>
+                                    <p class="text-sm font-semibold text-gray-800"><?= date('d/m/Y H:i', strtotime($k['created_at'])) ?></p>
                                 </div>
                                 <div class="col-span-2">
-                                    <p class="section-label"><i class="fas fa-sync"></i> Terakhir Update</p>
-                                    <p class="section-value"><?= date('d/m/Y H:i', strtotime($k['updated_at'])) ?></p>
+                                    <p class="text-xs text-gray-500 mb-1"><i class="fas fa-sync mr-1"></i> Terakhir Update</p>
+                                    <p class="text-sm font-semibold text-gray-800"><?= date('d/m/Y H:i', strtotime($k['updated_at'])) ?></p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Masalah -->
                         <div class="glass-effect rounded-xl p-5 animate-fade-in-d1">
-                            <h3 class="font-semibold text-sm mb-3 flex items-center gap-2">
-                                <span
-                                    class="w-5 h-5 rounded bg-red-500/20 text-red-400 flex items-center justify-center text-xs">
+                            <h3 class="font-semibold text-sm text-gray-700 mb-3 flex items-center gap-2">
+                                <span class="w-5 h-5 rounded bg-red-100 text-red-500 flex items-center justify-center text-xs">
                                     <i class="fas fa-exclamation"></i>
                                 </span>
                                 Uraian Masalah
                             </h3>
-                            <div class="section-card">
-                                <p class="section-value leading-relaxed whitespace-pre-line">
-                                    <?= $k['masalah'] ? nl2br(htmlspecialchars($k['masalah'])) : '<span class="empty-value">Tidak ada uraian masalah</span>' ?>
+                            <!-- ✅ bg-gray-50 + text-gray-700 agar tulisan jelas di atas background -->
+                            <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
+                                    <?= $k['masalah'] ? nl2br(htmlspecialchars($k['masalah'])) : '<span class="text-gray-400 italic">Tidak ada uraian masalah</span>' ?>
                                 </p>
                             </div>
                         </div>
 
                         <!-- Solusi -->
                         <div class="glass-effect rounded-xl p-5 animate-fade-in-d2">
-                            <h3 class="font-semibold text-sm mb-3 flex items-center gap-2">
-                                <span
-                                    class="w-5 h-5 rounded bg-green-500/20 text-green-600 flex items-center justify-center text-xs">
+                            <h3 class="font-semibold text-sm text-gray-700 mb-3 flex items-center gap-2">
+                                <span class="w-5 h-5 rounded bg-green-100 text-green-600 flex items-center justify-center text-xs">
                                     <i class="fas fa-lightbulb"></i>
                                 </span>
                                 Solusi / Rekomendasi
                             </h3>
-                            <div class="section-card">
+                            <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
                                 <?php if ($k['solusi']): ?>
-                                    <p class="section-value leading-relaxed whitespace-pre-line">
-                                        <?= nl2br(htmlspecialchars($k['solusi'])) ?></p>
+                                    <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-line"><?= nl2br(htmlspecialchars($k['solusi'])) ?></p>
                                 <?php else: ?>
-                                    <p class="empty-value">Belum ada solusi yang dicatat</p>
+                                    <p class="text-gray-400 italic text-sm">Belum ada solusi yang dicatat</p>
                                 <?php endif; ?>
                             </div>
                         </div>
 
                         <!-- Tindak Lanjut -->
                         <div class="glass-effect rounded-xl p-5 animate-fade-in-d3">
-                            <h3 class="font-semibold text-sm mb-3 flex items-center gap-2">
-                                <span
-                                    class="w-5 h-5 rounded bg-blue-50 text-blue-600 flex items-center justify-center text-xs">
+                            <h3 class="font-semibold text-sm text-gray-700 mb-3 flex items-center gap-2">
+                                <span class="w-5 h-5 rounded bg-blue-100 text-blue-600 flex items-center justify-center text-xs">
                                     <i class="fas fa-forward"></i>
                                 </span>
                                 Tindak Lanjut
                             </h3>
-                            <div class="section-card">
+                            <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
                                 <?php if ($k['tindak_lanjut']): ?>
-                                    <p class="section-value leading-relaxed whitespace-pre-line">
-                                        <?= nl2br(htmlspecialchars($k['tindak_lanjut'])) ?></p>
+                                    <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-line"><?= nl2br(htmlspecialchars($k['tindak_lanjut'])) ?></p>
                                 <?php else: ?>
-                                    <p class="empty-value">Belum ada tindak lanjut yang dicatat</p>
+                                    <p class="text-gray-400 italic text-sm">Belum ada tindak lanjut yang dicatat</p>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -583,11 +572,11 @@ function jenisIcon($j)
                         <!-- Navigasi bawah -->
                         <div class="flex flex-wrap justify-between gap-3 pt-2 no-print">
                             <a href="konseling.php"
-                                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center gap-2 text-sm transition-colors">
+                                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center gap-2 text-sm text-gray-700 transition-colors">
                                 <i class="fas fa-arrow-left"></i> Kembali ke Daftar
                             </a>
                             <a href="editk.php?id=<?= $k['id'] ?>"
-                                class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg flex items-center gap-2 text-sm transition-colors">
+                                class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg flex items-center gap-2 text-sm transition-colors">
                                 <i class="fas fa-edit"></i> Edit Konseling
                             </a>
                         </div>
@@ -652,9 +641,21 @@ function jenisIcon($j)
                 if (data.success) {
                     showToast('✅ Status diubah ke ' + newStatus, 'success');
                     const badgeMap = {
-                        Proses: { cls: 'status-proses', icon: 'fa-spinner', label: 'Proses' },
-                        Selesai: { cls: 'status-selesai', icon: 'fa-check-circle', label: 'Selesai' },
-                        Ditunda: { cls: 'status-ditunda', icon: 'fa-pause-circle', label: 'Ditunda' },
+                        Proses: {
+                            cls: 'status-proses',
+                            icon: 'fa-spinner',
+                            label: 'Proses'
+                        },
+                        Selesai: {
+                            cls: 'status-selesai',
+                            icon: 'fa-check-circle',
+                            label: 'Selesai'
+                        },
+                        Ditunda: {
+                            cls: 'status-ditunda',
+                            icon: 'fa-pause-circle',
+                            label: 'Ditunda'
+                        },
                     };
                     const badge = document.querySelector('.px-3.py-1\\.5.rounded-full.text-sm.font-semibold');
                     if (badge && badgeMap[newStatus]) {

@@ -303,11 +303,11 @@ $status_colors = [
                             <!-- Action buttons with better touch targets -->
                             <div class="flex mt-4 sm:mt-5 gap-3">
                                 <a href="edit.php?id=<?= $id ?>"
-                                    class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-center py-2.5 sm:py-2 rounded-lg text-sm font-medium transition-colors touch-effect">
+                                    class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white text-center py-2.5 sm:py-2 rounded-lg text-sm font-medium transition-colors touch-effect">
                                     <i class="fas fa-edit mr-2"></i>Edit
                                 </a>
                                 <button onclick="confirmDelete(<?= $id ?>)"
-                                    class="flex-1 bg-red-600 hover:bg-red-700 text-center py-2.5 sm:py-2 rounded-lg text-sm font-medium transition-colors touch-effect">
+                                    class="flex-1 bg-red-600 hover:bg-red-700 text-white text-center py-2.5 sm:py-2 rounded-lg text-sm font-medium transition-colors touch-effect">
                                     <i class="fas fa-trash mr-2"></i>Hapus
                                 </button>
                             </div>
