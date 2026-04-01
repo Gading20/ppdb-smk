@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($walikelas) {
             $valid = password_verify($password, $walikelas['password'])
-                  || $password === $walikelas['password'];
+                || $password === $walikelas['password'];
 
             if ($valid) {
                 // walikelas_id tetap mengacu ke wali_kelas.id agar FK internal tidak rusak
@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .glass-effect {
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(16, 185, 129, 0.25);
+            border: 1px solid rgba(20, 184, 166, 0.25);
         }
 
         input:-webkit-autofill,
@@ -100,34 +100,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .input-field {
-            border-color: rgba(16, 185, 129, 0.3);
+            border-color: rgba(20, 184, 166, 0.3);
         }
 
         .input-field:focus {
-            border-color: #10b981;
-            --tw-ring-color: rgba(16, 185, 129, 0.3);
+            border-color: #14b8a6;
+            --tw-ring-color: rgba(20, 184, 166, 0.3);
         }
     </style>
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-sky-100 via-violet-50 to-indigo-100 flex items-center justify-center bg-[url('../assets/default/bg-pattern.png')] bg-repeat">
+<body class="min-h-screen bg-gradient-to-br from-teal-50 via-green-50 to-emerald-100 flex items-center justify-center bg-[url('../assets/default/bg-pattern.png')] bg-repeat">
     <!-- Emerald Gradient Overlay -->
-    
+
 
     <div class="max-w-md w-full mx-4 relative z-10">
 
         <!-- Logo & Title -->
         <div class="text-center mb-8">
             <img src="../assets/default/logosmk.png" alt="SMK NURUL ULUM"
-                class="h-24 mx-auto mb-4 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
-            <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600 mb-2">
+                class="h-24 mx-auto mb-4 drop-shadow-[0_0_15px_rgba(20,184,166,0.5)]">
+            <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-600 mb-2">
                 Login Wali Kelas
             </h2>
             <p class="text-gray-500">Sistem Absensi SMK NURUL ULUM</p>
         </div>
 
         <!-- Login Card -->
-        <div class="glass-effect rounded-xl shadow-xl shadow-emerald-200 p-8">
+        <div class="glass-effect rounded-xl shadow-xl shadow-teal-200 p-8">
 
             <?php if ($error): ?>
                 <div class="bg-red-500/10 border border-red-300 text-red-400 px-4 py-3 rounded-lg mb-6 flex items-center gap-2" role="alert">
@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <!-- Username -->
                     <div>
                         <label class="text-gray-700 text-sm font-medium mb-2 block">
-                            <i class="fas fa-chalkboard-teacher text-emerald-500 mr-2"></i>Username
+                            <i class="fas fa-chalkboard-teacher text-teal-600 mr-2"></i>Username
                         </label>
                         <input type="text" name="username" required autofocus
                             value="<?= htmlspecialchars($_POST['username'] ?? '') ?>"
@@ -154,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <!-- Password -->
                     <div>
                         <label class="text-gray-700 text-sm font-medium mb-2 block">
-                            <i class="fas fa-lock text-emerald-500 mr-2"></i>Password
+                            <i class="fas fa-lock text-teal-600 mr-2"></i>Password
                         </label>
                         <div class="relative">
                             <input type="password" name="password" id="password" required
@@ -162,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                        focus:outline-none focus:ring-2 transition-all duration-300 placeholder-gray-400"
                                 placeholder="Masukkan password">
                             <button type="button" onclick="togglePassword()"
-                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-emerald-400 transition-colors duration-300">
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-teal-500 transition-colors duration-300">
                                 <i class="fas fa-eye text-lg" id="toggleIcon"></i>
                             </button>
                         </div>
@@ -171,21 +171,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <!-- Submit -->
                 <button type="submit"
-                    class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:opacity-90
-                           text-gray-800 font-medium py-4 px-4 rounded-lg transition duration-300
+                    class="w-full bg-gradient-to-r from-teal-500 to-emerald-600 hover:opacity-90
+                           text-white font-medium py-4 px-4 rounded-lg transition duration-300
                            transform hover:-translate-y-0.5 focus:outline-none focus:ring-2
-                           focus:ring-emerald-500/30 flex items-center justify-center gap-2
-                           shadow-lg shadow-emerald-200">
+                           focus:ring-teal-500/30 flex items-center justify-center gap-2
+                           shadow-lg shadow-teal-200">
                     <i class="fas fa-sign-in-alt"></i>
                     Masuk
                 </button>
+                <div class="text-center pt-2">
+                    <a href="../index.php" class="text-gray-500 hover:text-green-800 text-sm transition-colors duration-200">
+                        <i class="fas fa-arrow-left mr-1"></i> Kembali ke Halaman Utama
+                    </a>
+                </div>
             </form>
-
-            <!-- Info kelas badge -->
-            <div class="mt-6 flex items-center justify-center gap-2 text-xs text-gray-500">
-                <i class="fas fa-info-circle text-emerald-600"></i>
-                <span>Akses khusus untuk Wali Kelas</span>
-            </div>
         </div>
 
         <!-- Footer -->

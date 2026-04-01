@@ -79,35 +79,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .glass-effect {
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(139, 92, 246, 0.25);
-        }
-
-        /* Fix autofill untuk light theme */
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover,
-        input:-webkit-autofill:focus {
-            -webkit-text-fill-color: #1f2937;
-            -webkit-box-shadow: 0 0 0px 1000px #fff inset;
-            transition: background-color 5000s ease-in-out 0s;
+            border: 1px solid rgba(37, 99, 235, 0.25);
         }
     </style>
 </head>
 
-<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-100 via-sky-50 to-indigo-100">
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-slate-50 to-blue-100">
 
     <div class="max-w-md w-full mx-4 relative z-10">
         <!-- Logo & Title -->
         <div class="text-center mb-8">
             <img src="../assets/default/logosmk.png" alt="SMK NURUL ULUM"
                 class="h-24 mx-auto mb-4 drop-shadow-lg">
-            <h2 class="text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-indigo-600">
+            <h2 class="text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-900">
                 Login Admin
             </h2>
             <p class="text-gray-500">Sistem Absensi SMK NURUL ULUM</p>
         </div>
 
         <!-- Login Form -->
-        <div class="glass-effect rounded-2xl shadow-xl shadow-violet-200 p-8">
+        <div class="glass-effect rounded-2xl shadow-xl shadow-blue-200 p-8">
             <?php if ($error): ?>
                 <div class="bg-red-50 border border-red-300 text-red-600 px-4 py-3 rounded-lg relative mb-6 flex items-center" role="alert">
                     <i class="fas fa-exclamation-circle mr-2"></i>
@@ -119,27 +110,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="space-y-4">
                     <div class="group">
                         <label class="text-gray-700 text-sm font-medium mb-2 block">
-                            <i class="fas fa-user text-violet-500 mr-2"></i>Username
+                            <i class="fas fa-user text-blue-600 mr-2"></i>Username
                         </label>
                         <input type="text" name="username" required
-                            class="w-full px-5 py-4 rounded-lg bg-white border border-violet-300 text-gray-800 
-                            focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-200 
+                            class="w-full px-5 py-4 rounded-lg bg-white border border-blue-300 text-gray-800 
+                            focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 
                             transition-all duration-300 placeholder-gray-400"
                             placeholder="Masukkan username">
                     </div>
 
                     <div class="group">
                         <label class="text-gray-700 text-sm font-medium mb-2 block">
-                            <i class="fas fa-lock text-violet-500 mr-2"></i>Password
+                            <i class="fas fa-lock text-blue-600 mr-2"></i>Password
                         </label>
                         <div class="relative">
                             <input type="password" name="password" required id="password"
-                                class="w-full px-5 py-4 rounded-lg bg-white border border-violet-300 text-gray-800 
-                                focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-200
+                                class="w-full px-5 py-4 rounded-lg bg-white border border-blue-300 text-gray-800 
+                                focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200
                                 transition-all duration-300 placeholder-gray-400"
                                 placeholder="Masukkan password">
                             <button type="button" onclick="togglePassword()"
-                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-violet-500
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-500
                                 transition-colors duration-300">
                                 <i class="fas fa-eye text-lg" id="toggleIcon"></i>
                             </button>
@@ -148,13 +139,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-gradient-to-r from-violet-500 to-indigo-600 text-gray-800 font-semibold py-4 px-4 
+                    class="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white font-semibold py-4 px-4 
                     rounded-lg transition duration-300 hover:opacity-90 transform hover:-translate-y-0.5
-                    focus:outline-none focus:ring-2 focus:ring-violet-300 flex items-center justify-center
-                    shadow-lg shadow-violet-300">
+                    focus:outline-none focus:ring-2 focus:ring-blue-300 flex items-center justify-center
+                    shadow-lg shadow-blue-300">
                     <i class="fas fa-sign-in-alt mr-2"></i>
                     Login
                 </button>
+
+                <div class="text-center pt-2">
+                    <a href="../index.php" class="text-gray-500 hover:text-blue-500 text-sm transition-colors duration-200">
+                        <i class="fas fa-arrow-left mr-1"></i> Kembali ke Halaman Utama
+                    </a>
+                </div>
             </form>
         </div>
 

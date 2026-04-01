@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .glass-effect {
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(6, 182, 212, 0.3);
         }
 
         /* Fix white background in autofill */
@@ -90,12 +90,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             transition: background-color 5000s ease-in-out 0s;
         }
 
-        body {
-            
-        }
+        body {}
 
         .animated-gradient {
-            background: linear-gradient(-45deg, #6941c6, #9333ea, #4338ca, #7e22ce);
+            background: linear-gradient(-45deg, #0891b2, #06b6d4, #0284c7, #0c4a6e);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
         }
@@ -115,24 +113,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .login-btn {
-            background-image: linear-gradient(to right, #7c3aed, #4f46e5);
+            background-image: linear-gradient(to right, #06b6d4, #0284c7);
             transition: all 0.3s ease;
         }
 
         .login-btn:hover {
-            background-image: linear-gradient(to right, #7c3aed, #4f46e5, #4338ca);
+            background-image: linear-gradient(to right, #06b6d4, #0284c7, #0369a1);
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px -10px rgba(124, 58, 237, 0.6);
+            box-shadow: 0 10px 20px -10px rgba(6, 182, 212, 0.6);
         }
     </style>
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-sky-100 via-violet-50 to-indigo-100 flex items-center justify-center">
+<body class="min-h-screen bg-gradient-to-br from-cyan-50 via-blue-50 to-sky-100 flex items-center justify-center">
     <!-- Purple Gradient Overlay -->
-    
+
 
     <!-- Grid Pattern Overlay -->
-    
+
 
     <div class="max-w-md w-full mx-4 relative z-10">
         <!-- Login Card -->
@@ -141,17 +139,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <img src="../assets/default/logosmk.png" alt="SMK NURUL ULUM LEBAKSIU"
                 class="h-24 mx-auto drop-shadow-lg">
 
-            <!-- Animated Badge -->
-            <div class="inline-block mt-4 mb-2 animated-gradient text-gray-800 py-1 px-4 rounded-full text-xs font-medium tracking-wider">
-                SISTEM ABSENSI SISWA
-            </div>
-
-            <h2 class="text-3xl font-bold text-gray-800 mt-2">Login Siswa</h2>
+            <h2 class="text-3xl font-bold text-blue-700 mt-2">Login Siswa</h2>
             <p class="text-gray-700 mt-2">Masuk ke akun siswa Anda</p>
         </div>
 
         <!-- Login Form -->
-        <div class="glass-effect rounded-2xl shadow-xl p-8 border border-violet-200 shadow-violet-200">
+        <div class="glass-effect rounded-2xl shadow-xl p-8 border border-cyan-200 shadow-cyan-200">
             <?php if ($error): ?>
                 <div class="bg-red-500/10 border border-red-300 text-red-500 px-4 py-3 rounded-lg relative mb-6 flex items-center" role="alert">
                     <i class="fas fa-exclamation-circle mr-2"></i>
@@ -162,12 +155,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST" class="space-y-6">
                 <div>
                     <label class="block text-gray-700 text-sm font-medium mb-2">
-                        <i class="fas fa-id-card text-violet-600 mr-2"></i>NIS
+                        <i class="fas fa-id-card text-cyan-600 mr-2"></i>NIS
                     </label>
                     <div class="relative">
                         <input type="text" name="nis"
-                            class="w-full px-4 py-3 rounded-lg bg-gray-50/80 border border-violet-200 text-gray-800 
-                            focus:outline-none focus:ring-2 focus:ring-violet-300 focus:border-violet-500 
+                            class="w-full px-4 py-3 rounded-lg bg-gray-50/80 border border-cyan-200 text-gray-800 
+                            focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:border-cyan-500 
                             transition-all duration-300 placeholder-gray-400"
                             placeholder="Masukkan NIS" autofocus>
                     </div>
@@ -175,16 +168,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div>
                     <label class="block text-gray-700 text-sm font-medium mb-2">
-                        <i class="fas fa-lock text-violet-600 mr-2"></i>Password
+                        <i class="fas fa-lock text-cyan-600 mr-2"></i>Password
                     </label>
                     <div class="relative">
                         <input type="password" name="password" id="password"
-                            class="w-full px-4 py-3 rounded-lg bg-gray-50/80 border border-violet-200 text-gray-800 
-                            focus:outline-none focus:ring-2 focus:ring-violet-300 focus:border-violet-500 
+                            class="w-full px-4 py-3 rounded-lg bg-gray-50/80 border border-cyan-200 text-gray-800 
+                            focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:border-cyan-500 
                             transition-all duration-300 placeholder-gray-400"
                             placeholder="Masukkan password">
                         <button type="button" onclick="togglePassword()"
-                            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-violet-600 focus:outline-none">
+                            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-cyan-600 focus:outline-none">
                             <i class="fas fa-eye text-lg" id="toggleIcon"></i>
                         </button>
                     </div>
@@ -192,9 +185,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <button type="submit"
-                    class="w-full login-btn text-gray-800 font-medium py-3 px-4 rounded-lg
-                    focus:outline-none focus:ring-2 focus:ring-purple-500/30 flex items-center justify-center
-                    shadow-xl shadow-violet-200">
+                    class="w-full login-btn text-white font-medium py-3 px-4 rounded-lg
+                    focus:outline-none focus:ring-2 focus:ring-cyan-500/30 flex items-center justify-center
+                    shadow-xl shadow-cyan-200">
                     <i class="fas fa-sign-in-alt mr-2"></i>
                     Login
                 </button>
@@ -209,13 +202,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="text-center mt-8 text-gray-500 text-sm">
             <p>&copy; <?= date('Y') ?> SMK NURUL ULUM LEBAKSIU</p>
             <p class="mt-1 text-gray-500">Sistem Informasi Absensi Siswa</p>
-        </div>
-
-        <!-- Admin Link -->
-        <div class="text-center mt-4">
-            <a href="../admin/login.php" class="text-xs text-violet-500 hover:text-purple-300 transition-colors flex items-center justify-center">
-                <i class="fas fa-user-shield mr-1"></i> Admin Login
-            </a>
         </div>
     </div>
 
