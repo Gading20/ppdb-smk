@@ -329,7 +329,7 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                 <button onclick="toggleSidebar()" class="text-gray-800 p-1">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
-                <img src="../../assets/default/logo-smk40.png" alt="SMKN 40" class="h-8 w-auto">
+                <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 w-auto">
             </div>
             <div class="flex items-center gap-3">
                 <span id="current-time-mobile" class="text-sm font-medium"></span>

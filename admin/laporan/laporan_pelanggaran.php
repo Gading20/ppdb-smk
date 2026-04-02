@@ -447,7 +447,7 @@ $jenis_colors = [
         <div class="lg:hidden bg-white/90 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-violet-200">
             <div class="flex items-center gap-3">
                 <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-100"><i class="fas fa-bars text-lg"></i></button>
-                <img src="../../assets/default/logo-smk40.png" alt="SMK" class="h-8 w-auto">
+                <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 w-auto">
             </div>
             <div class="flex items-center gap-3">
                 <span id="current-time-mobile" class="text-sm font-medium hidden sm:block"></span>
@@ -467,12 +467,12 @@ $jenis_colors = [
                     </div>
                     <div class="flex gap-3">
                         <a href="export_pelanggaran.php?format=pdf<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
-                            class="px-3 py-2 sm:px-4 sm:py-2 bg-red-600 hover:bg-red-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
+                            class="px-3 py-2 sm:px-4 sm:py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
                             <i class="fas fa-file-pdf"></i>
                             <span class="hidden sm:inline">Cetak PDF</span>
                         </a>
                         <a href="export_pelanggaran.php?format=excel<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
-                            class="px-3 py-2 sm:px-4 sm:py-2 bg-green-600 hover:bg-green-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
+                            class="px-3 py-2 sm:px-4 sm:py-2 text-white bg-green-600 hover:bg-green-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
                             <i class="fas fa-file-excel"></i> <span class="hidden sm:inline">Export Excel</span>
                         </a>
                     </div>
@@ -588,7 +588,7 @@ $jenis_colors = [
                                 <?php endif; ?>
                             </div>
                             <button type="submit"
-                                class="w-full sm:w-auto px-5 py-2 bg-purple-600 hover:bg-purple-700 text-gray-800 rounded-lg text-sm transition-colors">
+                                class="w-full sm:w-auto px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm transition-colors">
                                 <i class="fas fa-filter mr-2"></i>Terapkan Filter
                             </button>
                         </div>

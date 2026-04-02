@@ -270,54 +270,6 @@ if ($format === 'excel') {
     } else {
         $rK = max($r, $r2) + 2;
     }
-
-    // ── Detail Data ──
-    $rD = $rK + 2;
-    $sheet->mergeCells("A$rD:K$rD");
-    $sheet->setCellValue("A$rD", 'DATA DETAIL ABSENSI');
-    $sheet->getStyle("A$rD")->applyFromArray(['font' => ['bold' => true, 'size' => 12]]);
-    $rD += 2;
-
-    foreach (['A' => 'No', 'B' => 'Tanggal', 'C' => 'NIS', 'D' => 'Nama Siswa', 'E' => 'Kelas', 'F' => 'Jam Masuk', 'G' => 'Status', 'H' => 'Keterangan', 'I' => 'Bukti', 'J' => 'Approval', 'K' => 'Tgl Input'] as $col => $hdr)
-        $sheet->setCellValue("$col$rD", $hdr);
-    $sheet->getStyle("A$rD:K$rD")->applyFromArray($greenHdr);
-    $sheet->getRowDimension($rD)->setRowHeight(18);
-    $rD++;
-
-    foreach ($data as $idx => $rec) {
-        $bukti = ($rec['bukti_foto'] || $rec['bukti_file']) ? 'Ada' : '-';
-        $sheet->setCellValue("A$rD", $idx + 1);
-        $sheet->setCellValue("B$rD", date('d/m/Y', strtotime($rec['tanggal'])));
-        $sheet->setCellValue("C$rD", $rec['nis']);
-        $sheet->setCellValue("D$rD", $rec['nama_lengkap']);
-        $sheet->setCellValue("E$rD", $rec['kelas'] . ' ' . $rec['jurusan']);
-        $sheet->setCellValue("F$rD", ($rec['jam_masuk'] && $rec['jam_masuk'] !== '00:00:00') ? date('H:i', strtotime($rec['jam_masuk'])) : '-');
-        $sheet->setCellValue("G$rD", $rec['status']);
-        $sheet->setCellValue("H$rD", $rec['keterangan'] ?? '-');
-        $sheet->setCellValue("I$rD", $bukti);
-        $sheet->setCellValue("J$rD", $rec['approval_status']);
-        $sheet->setCellValue("K$rD", date('d/m/Y', strtotime($rec['created_at'])));
-        $sheet->getStyle("A$rD:B$rD")->applyFromArray($center);
-        $sheet->getStyle("E$rD:G$rD")->applyFromArray($center);
-        $sheet->getStyle("I$rD:K$rD")->applyFromArray($center);
-        if ($idx % 2 === 0) $sheet->getStyle("A$rD:K$rD")->applyFromArray(['fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'ECFDF5']]]);
-        $rD++;
-    }
-
-    foreach (['A' => 5, 'B' => 13, 'C' => 14, 'D' => 28, 'E' => 13, 'F' => 11, 'G' => 12, 'H' => 35, 'I' => 9, 'J' => 12, 'K' => 13] as $col => $w)
-        $sheet->getColumnDimension($col)->setWidth($w);
-
-    $rD++;
-    $sheet->mergeCells("A$rD:K$rD");
-    $sheet->setCellValue("A$rD", 'Laporan ini digenerate otomatis oleh Sistem Absensi SMK NURUL ULUM');
-    $sheet->getStyle("A$rD")->applyFromArray(['font' => ['italic' => true, 'size' => 9], 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]]);
-
-    $writer = new Xlsx($spreadsheet);
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="Laporan_Absensi_' . date('Y-m-d') . '.xlsx"');
-    header('Cache-Control: max-age=0');
-    $writer->save('php://output');
-    exit;
 }
 
 // ================================================================
@@ -567,6 +519,39 @@ ob_start();
     <p class="subtitle"><?= htmlspecialchars($subtitle) ?></p>
     <p class="print-date">Diekspor pada: <?= date('d/m/Y H:i') ?></p>
 
+    <!-- REKAP TOP SISWA -->
+    <?php if (!empty($top_rekap)): ?>
+        <div class="sec">REKAP KESELURUHAN KEHADIRAN SISWA</div>
+        <table class="rekap-tbl">
+            <tr>
+                <th style="width:25px">No</th>
+                <th>Nama Siswa</th>
+                <th style="width:58px">NIS</th>
+                <th style="width:40px">Kelas</th>
+                <th style="width:38px">Hadir</th>
+                <th style="width:34px">Sakit</th>
+                <th style="width:30px">Izin</th>
+                <th style="width:52px">Terlambat</th>
+                <th style="width:38px">Alpha</th>
+                <th style="width:36px">Total</th>
+            </tr>
+            <?php foreach ($top_rekap as $idx => $tk): ?>
+                <tr>
+                    <td class="tc"><?= $idx + 1 ?></td>
+                    <td><?= htmlspecialchars($tk['nama_lengkap']) ?></td>
+                    <td class="tc"><?= htmlspecialchars($tk['nis']) ?></td>
+                    <td class="tc"><?= $tk['kelas'] . ' ' . $tk['jurusan'] ?></td>
+                    <td class="tc" style="color:#065F46;font-weight:bold"><?= $tk['hadir'] ?></td>
+                    <td class="tc" style="color:#854D0E"><?= $tk['sakit'] ?></td>
+                    <td class="tc" style="color:#5B21B6"><?= $tk['izin'] ?></td>
+                    <td class="tc" style="color:#9A3412;font-weight:bold"><?= $tk['terlambat'] ?></td>
+                    <td class="tc" style="color:#991B1B;font-weight:bold"><?= $tk['alpha'] ?></td>
+                    <td class="tc"><?= $tk['total'] ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php endif; ?>
+
     <!-- RINGKASAN -->
     <div class="sec">RINGKASAN KEHADIRAN</div>
     <table class="sum-wrap">
@@ -657,87 +642,6 @@ ob_start();
             </tr>
         </tbody>
     </table>
-
-    <!-- REKAP TOP SISWA -->
-    <?php if (!empty($top_rekap)): ?>
-        <div class="sec">REKAP KEHADIRAN SISWA (TOP 10 ALPHA &amp; TERLAMBAT)</div>
-        <table class="rekap-tbl">
-            <tr>
-                <th style="width:25px">No</th>
-                <th>Nama Siswa</th>
-                <th style="width:58px">NIS</th>
-                <th style="width:40px">Kelas</th>
-                <th style="width:38px">Hadir</th>
-                <th style="width:34px">Sakit</th>
-                <th style="width:30px">Izin</th>
-                <th style="width:52px">Terlambat</th>
-                <th style="width:38px">Alpha</th>
-                <th style="width:36px">Total</th>
-            </tr>
-            <?php foreach ($top_rekap as $idx => $tk): ?>
-                <tr>
-                    <td class="tc"><?= $idx + 1 ?></td>
-                    <td><?= htmlspecialchars($tk['nama_lengkap']) ?></td>
-                    <td class="tc"><?= htmlspecialchars($tk['nis']) ?></td>
-                    <td class="tc"><?= $tk['kelas'] . ' ' . $tk['jurusan'] ?></td>
-                    <td class="tc" style="color:#065F46;font-weight:bold"><?= $tk['hadir'] ?></td>
-                    <td class="tc" style="color:#854D0E"><?= $tk['sakit'] ?></td>
-                    <td class="tc" style="color:#5B21B6"><?= $tk['izin'] ?></td>
-                    <td class="tc" style="color:#9A3412;font-weight:bold"><?= $tk['terlambat'] ?></td>
-                    <td class="tc" style="color:#991B1B;font-weight:bold"><?= $tk['alpha'] ?></td>
-                    <td class="tc"><?= $tk['total'] ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php endif; ?>
-
-    <!-- DETAIL ABSENSI -->
-    <div class="sec">DETAIL ABSENSI</div>
-    <?php if (count($data) > 0): ?>
-        <table class="dt">
-            <tr>
-                <th style="width:22px">No</th>
-                <th style="width:55px">Tanggal</th>
-                <th style="width:58px">NIS</th>
-                <th style="width:85px">Nama Siswa</th>
-                <th style="width:40px">Kelas</th>
-                <th style="width:38px">Jam</th>
-                <th style="width:50px">Status</th>
-                <th>Keterangan</th>
-                <th style="width:32px">Bukti</th>
-                <th style="width:50px">Approval</th>
-            </tr>
-            <?php foreach ($data as $no => $rec):
-                $ss    = $statusStyle[$rec['status']]            ?? ['bg' => '#F3F4F6', 'text' => '#374151', 'border' => '#D1D5DB'];
-                $as    = $approvalStyle[$rec['approval_status']] ?? ['bg' => '#F3F4F6', 'text' => '#374151'];
-                $jam   = ($rec['jam_masuk'] && $rec['jam_masuk'] !== '00:00:00') ? date('H:i', strtotime($rec['jam_masuk'])) : '-';
-                $bukti = ($rec['bukti_foto'] || $rec['bukti_file']) ? '✓' : '-';
-            ?>
-                <tr>
-                    <td class="tc"><?= $no + 1 ?></td>
-                    <td class="tc"><?= date('d/m/Y', strtotime($rec['tanggal'])) ?></td>
-                    <td><?= htmlspecialchars($rec['nis']) ?></td>
-                    <td><?= htmlspecialchars($rec['nama_lengkap']) ?></td>
-                    <td class="tc"><?= $rec['kelas'] . ' ' . $rec['jurusan'] ?></td>
-                    <td class="tc"><?= $jam ?></td>
-                    <td class="tc">
-                        <span class="badge" style="background:<?= $ss['bg'] ?>;color:<?= $ss['text'] ?>;border:1px solid <?= $ss['border'] ?>">
-                            <?= $rec['status'] ?>
-                        </span>
-                    </td>
-                    <td class="wrap"><?= htmlspecialchars($rec['keterangan'] ?? '-') ?></td>
-                    <td class="tc" style="color:<?= ($bukti === '✓') ? '#059669' : '#9CA3AF' ?>;font-weight:bold"><?= $bukti ?></td>
-                    <td class="tc">
-                        <span class="badge" style="background:<?= $as['bg'] ?>;color:<?= $as['text'] ?>">
-                            <?= $rec['approval_status'] ?>
-                        </span>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php else: ?>
-        <p style="text-align:center;color:#9CA3AF;padding:16px 0">Tidak ada data absensi untuk filter yang dipilih.</p>
-    <?php endif; ?>
 
     <!-- FOOTER -->
     <div class="footer">

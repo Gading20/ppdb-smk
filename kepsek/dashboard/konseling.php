@@ -295,15 +295,19 @@ function pageUrl($pg)
     <main class="lg:ml-64 min-h-screen">
 
         <!-- Mobile topbar — identik dengan index.php -->
-        <div class="lg:hidden sticky top-0 z-30 glass px-4 py-3 flex items-center justify-between border-b border-amber-200">
+        <div class="lg:hidden bg-white/90 backdrop-blur-lg sticky top-0 z-30 px-4 py-3 flex items-center justify-between border-b border-violet-200">
             <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-50/50">
-                    <i class="fas fa-bars"></i>
+                <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-100" aria-label="Menu">
+                    <i class="fas fa-bars text-lg"></i>
                 </button>
-                <span class="text-sm font-medium">Data Konseling</span>
+                <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 w-auto">
             </div>
-            <img src="../../<?= $_SESSION['kepsek_photo'] ?: 'assets/default/photo-profile.png' ?>"
-                class="h-8 w-8 rounded-full object-cover border border-amber-500/50" alt="Foto">
+            <div class="flex items-center gap-3">
+                <span id="current-time-mobile" class="text-sm font-medium hidden sm:block"></span>
+                <img src="../../<?= $_SESSION['siswa_photo'] ?? 'assets/default/photo-profile.png' ?>"
+                    alt="Profile"
+                    class="h-8 w-8 rounded-full object-cover border border-violet-300">
+            </div>
         </div>
 
         <div class="p-5 md:p-8">

@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body class="min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-100 flex items-center justify-center bg-[url('../assets/default/bg-pattern.png')] bg-repeat">
 
     <!-- Green Gradient Overlay -->
-    
+
 
     <div class="max-w-md w-full mx-4 relative z-10">
 
@@ -178,8 +178,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Footer -->
         <div class="text-center mt-8 text-gray-500 text-sm">
-            <p>&copy; <?= date('Y') ?> DIGITECH UNIVERSITY</p>
+
+            <div class="flex items-center justify-center gap-2">
+                <img src="../../assets/default/logosmk.png" alt="Logo" class="h-5 w-5 object-contain">
+                <p>DIGITECH UNIVERSITY</p>
+            </div>
+
             <p class="mt-1 text-gray-500">Intan Mutiara</p>
+
         </div>
     </div>
 

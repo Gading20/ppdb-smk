@@ -391,7 +391,7 @@ if (isset($_GET['delete'])) {
                 <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
                     <li><a href="../laporan/index.php"
                             class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Presensi</a>
-                    </li>
+                    </li> 
                     <li><a href="../laporan/laporan_pelanggaran.php"
                             class="block p-2 text-gray-600 hover:text-violet-600 hover:bg-violet-100 rounded-lg">Pelanggaran</a>
                     </li>
@@ -419,7 +419,11 @@ if (isset($_GET['delete'])) {
                 <button onclick="toggleSidebar()" class="text-gray-800 p-2 -ml-2 rounded-lg hover:bg-gray-100">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
+<<<<<<< HEAD
                 <img src="../../assets/default/logosmk.png" alt="SMKNU" class="h-8 w-auto">
+=======
+                <img src="../../assets/default/logosmk.png" alt="SMK NURUL ULUM" class="h-8 w-auto">
+>>>>>>> a57b39f (update now)
             </div>
             <div class="flex items-center gap-3">
                 <span id="current-time-mobile" class="text-sm font-medium hidden sm:block"></span>

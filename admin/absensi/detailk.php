@@ -575,10 +575,6 @@ function jenisIcon($j)
                                 class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center gap-2 text-sm text-gray-700 transition-colors">
                                 <i class="fas fa-arrow-left"></i> Kembali ke Daftar
                             </a>
-                            <a href="editk.php?id=<?= $k['id'] ?>"
-                                class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg flex items-center gap-2 text-sm transition-colors">
-                                <i class="fas fa-edit"></i> Edit Konseling
-                            </a>
                         </div>
 
                     </div>

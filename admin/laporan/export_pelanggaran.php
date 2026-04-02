@@ -269,59 +269,6 @@ if ($format === 'excel') {
         $sheet->getStyle("A$rT:H$rT")->applyFromArray($center);
         $rT++;
     }
-
-    // ── Detail ──
-    $rD = $rT + 2;
-    $sheet->mergeCells("A$rD:J$rD");
-    $sheet->setCellValue("A$rD", 'DATA DETAIL PELANGGARAN');
-    $sheet->getStyle("A$rD")->applyFromArray(['font' => ['bold' => true, 'size' => 12]]);
-    $rD += 2;
-
-    foreach (['A' => 'No', 'B' => 'Tanggal', 'C' => 'NIS', 'D' => 'Nama Siswa', 'E' => 'Kelas', 'F' => 'Jenis', 'G' => 'Deskripsi', 'H' => 'Poin', 'I' => 'Total Poin', 'J' => 'Status'] as $col => $hdr) {
-        $sheet->setCellValue("$col$rD", $hdr);
-    }
-    $sheet->getStyle("A$rD:J$rD")->applyFromArray($purpleHdr);
-    $sheet->getRowDimension($rD)->setRowHeight(18);
-    $rD++;
-
-    foreach ($data as $idx => $rec) {
-        $sheet->setCellValue("A$rD", $idx + 1);
-        $sheet->setCellValue("B$rD", date('d/m/Y', strtotime($rec['tanggal'])));
-        $sheet->setCellValue("C$rD", $rec['nis']);
-        $sheet->setCellValue("D$rD", $rec['nama_lengkap']);
-        $sheet->setCellValue("E$rD", $rec['kelas'] . ' ' . $rec['jurusan']);
-        $sheet->setCellValue("F$rD", $rec['jenis_pelanggaran']);
-        $sheet->setCellValue("G$rD", $rec['deskripsi']);
-        $sheet->setCellValue("H$rD", $rec['poin']);
-        $sheet->setCellValue("I$rD", $rec['total_poin']);
-        $sheet->setCellValue("J$rD", $rec['status']);
-        $sheet->getStyle("A$rD:B$rD")->applyFromArray($center);
-        $sheet->getStyle("E$rD:F$rD")->applyFromArray($center);
-        $sheet->getStyle("H$rD:J$rD")->applyFromArray($center);
-        if ($idx % 2 === 0) {
-            $sheet->getStyle("A$rD:J$rD")->applyFromArray([
-                'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'F5F3FF']],
-            ]);
-        }
-        $rD++;
-    }
-
-    // Lebar kolom
-    foreach (['A' => 5, 'B' => 13, 'C' => 14, 'D' => 28, 'E' => 14, 'F' => 10, 'G' => 35, 'H' => 7, 'I' => 10, 'J' => 10] as $col => $w) {
-        $sheet->getColumnDimension($col)->setWidth($w);
-    }
-
-    $rD++;
-    $sheet->mergeCells("A$rD:J$rD");
-    $sheet->setCellValue("A$rD", 'Laporan ini digenerate otomatis oleh Sistem Absensi SMK NURUL ULUM');
-    $sheet->getStyle("A$rD")->applyFromArray(['font' => ['italic' => true, 'size' => 9], 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]]);
-
-    $writer = new Xlsx($spreadsheet);
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="Laporan_Pelanggaran_' . date('Y-m-d') . '.xlsx"');
-    header('Cache-Control: max-age=0');
-    $writer->save('php://output');
-    exit;
 }
 
 // ================================================================
@@ -600,6 +547,30 @@ ob_start();
     <p class="subtitle"><?= htmlspecialchars($subtitle) ?></p>
     <p class="print-date">Diekspor pada: <?= date('d/m/Y H:i') ?></p>
 
+    <!-- TOP 5 SISWA -->
+    <?php if (!empty($top_siswa)): ?>
+        <div class="sec">KESELURUHANSISWA AKUMULASI POIN PELANGGARAN</div>
+        <table class="top-tbl">
+            <tr>
+                <?php foreach ($top_siswa as $idx => $ts):
+                    $color = totalPoinColor((int)$ts['total_poin']);
+                    $rnk   = ['#1', '#2', '#3', '#4', '#5'][$idx];
+                ?>
+                    <td>
+                        <div class="t-rank"><?= $rnk ?></div>
+                        <div class="t-name"><?= htmlspecialchars($ts['nama_lengkap']) ?></div>
+                        <div class="t-kelas"><?= $ts['kelas'] ?> <?= $ts['jurusan'] ?></div>
+                        <div class="t-poin" style="color:<?= $color['hex'] ?>"><?= $ts['total_poin'] ?> <span style="font-size:8px;font-weight:normal;color:#6B7280">poin</span></div>
+                        <div class="t-info"><?= $color['label'] ?> &bull; <?= $ts['jumlah'] ?> kasus</div>
+                    </td>
+                <?php endforeach; ?>
+                <?php for ($i = count($top_siswa); $i < 5; $i++): ?>
+                    <td style="border:1px dashed #E5E7EB;background:#F9FAFB"></td>
+                <?php endfor; ?>
+            </tr>
+        </table>
+    <?php endif; ?>
+
     <!-- RINGKASAN -->
     <div class="sec">RINGKASAN PELANGGARAN</div>
     <table class="sum-tbl">
@@ -676,85 +647,6 @@ ob_start();
             </tr>
         </tbody>
     </table>
-
-    <!-- TOP 5 SISWA -->
-    <?php if (!empty($top_siswa)): ?>
-        <div class="sec">TOP 5 SISWA AKUMULASI POIN PELANGGARAN</div>
-        <table class="top-tbl">
-            <tr>
-                <?php foreach ($top_siswa as $idx => $ts):
-                    $color = totalPoinColor((int)$ts['total_poin']);
-                    $rnk   = ['#1', '#2', '#3', '#4', '#5'][$idx];
-                ?>
-                    <td>
-                        <div class="t-rank"><?= $rnk ?></div>
-                        <div class="t-name"><?= htmlspecialchars($ts['nama_lengkap']) ?></div>
-                        <div class="t-kelas"><?= $ts['kelas'] ?> <?= $ts['jurusan'] ?></div>
-                        <div class="t-poin" style="color:<?= $color['hex'] ?>"><?= $ts['total_poin'] ?> <span style="font-size:8px;font-weight:normal;color:#6B7280">poin</span></div>
-                        <div class="t-info"><?= $color['label'] ?> &bull; <?= $ts['jumlah'] ?> kasus</div>
-                    </td>
-                <?php endforeach; ?>
-                <?php for ($i = count($top_siswa); $i < 5; $i++): ?>
-                    <td style="border:1px dashed #E5E7EB;background:#F9FAFB"></td>
-                <?php endfor; ?>
-            </tr>
-        </table>
-    <?php endif; ?>
-
-    <!-- DETAIL PELANGGARAN -->
-    <div class="sec">DETAIL PELANGGARAN</div>
-    <?php if (count($data) > 0): ?>
-        <table class="dt">
-            <tr>
-                <th style="width:28px">No</th>
-                <th style="width:58px">Tanggal</th>
-                <th style="width:65px">NIS</th>
-                <th>Nama Siswa</th>
-                <th style="width:52px">Kelas</th>
-                <th style="width:44px">Jenis</th>
-                <th>Deskripsi</th>
-                <th style="width:28px">Poin</th>
-                <th style="width:65px">Total Poin</th>
-                <th style="width:48px">Status</th>
-            </tr>
-            <?php foreach ($data as $no => $rec):
-                $js    = $jenisStyle[$rec['jenis_pelanggaran']] ?? ['bg' => '#F3F4F6', 'text' => '#374151', 'border' => '#D1D5DB'];
-                $ss    = $statusStyle[$rec['status']] ?? ['bg' => '#F3F4F6', 'text' => '#374151'];
-                $tp    = min((int)$rec['total_poin'], 100);
-                $color = totalPoinColor((int)$rec['total_poin']);
-            ?>
-                <tr>
-                    <td class="tc"><?= $no + 1 ?></td>
-                    <td class="tc"><?= date('d/m/Y', strtotime($rec['tanggal'])) ?></td>
-                    <td><?= htmlspecialchars($rec['nis']) ?></td>
-                    <td><?= htmlspecialchars($rec['nama_lengkap']) ?></td>
-                    <td class="tc"><?= $rec['kelas'] . ' ' . $rec['jurusan'] ?></td>
-                    <td class="tc">
-                        <span class="badge" style="background:<?= $js['bg'] ?>;color:<?= $js['text'] ?>;border:1px solid <?= $js['border'] ?>">
-                            <?= $rec['jenis_pelanggaran'] ?>
-                        </span>
-                    </td>
-                    <td><?= htmlspecialchars($rec['deskripsi']) ?></td>
-                    <td class="tc" style="font-weight:bold;color:<?= $js['text'] ?>"><?= $rec['poin'] ?></td>
-                    <td class="tc">
-                        <span style="font-weight:bold;color:<?= $color['hex'] ?>"><?= $rec['total_poin'] ?></span>
-                        <div class="bar-wrap">
-                            <div class="bar-fill" style="background:<?= $color['hex'] ?>;width:<?= $tp ?>%"></div>
-                        </div>
-                    </td>
-                    <td class="tc">
-                        <span class="badge" style="background:<?= $ss['bg'] ?>;color:<?= $ss['text'] ?>">
-                            <?= $rec['status'] ?>
-                        </span>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php else: ?>
-        <p style="text-align:center;color:#9CA3AF;padding:16px 0">
-            Tidak ada data pelanggaran untuk filter yang dipilih.
-        </p>
-    <?php endif; ?>
 
     <!-- FOOTER -->
     <div class="footer">
