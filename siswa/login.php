@@ -90,8 +90,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             transition: background-color 5000s ease-in-out 0s;
         }
 
-        body {}
-
         .animated-gradient {
             background: linear-gradient(-45deg, #0891b2, #06b6d4, #0284c7, #0c4a6e);
             background-size: 400% 400%;
