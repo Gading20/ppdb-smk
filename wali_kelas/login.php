@@ -190,9 +190,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Footer -->
         <div class="text-center mt-8 text-gray-500 text-sm">
 
-            <div class="flex items-center justify-center gap-2">
-                <img src="../../assets/default/logosmk.png" alt="Logo" class="h-5 w-5 object-contain">
-                <p>DIGITECH UNIVERSITY</p>
+            <div class="flex items-center justify-center gap-2 font-semibold">
+                <img src="../assets/default/adigitech.png" class="h-5 w-5">
+                <span>DIGITECH UNIVERSITY</span>
             </div>
 
             <p class="mt-1 text-gray-500">Intan Mutiara</p>

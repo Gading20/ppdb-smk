@@ -452,7 +452,7 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
                         </div>
 
                         <div class="w-full sm:w-auto ml-auto mt-2 sm:mt-0">
-                            <button type="submit" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-gray-800 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+                            <button type="submit" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
                                 <i class="fas fa-filter"></i>
                                 <span>Filter</span>
                             </button>
@@ -723,10 +723,10 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
 
                                     $avg_time = '-';
                                     if ($count_with_time > 0) {
-                                        $avg_seconds = $total_seconds / $count_with_time;
-                                        $avg_hours = floor($avg_seconds / 3600);
-                                        $avg_minutes = floor(($avg_seconds % 3600) / 60);
-                                        $avg_time = sprintf('%02d:%02d', $avg_hours, $avg_minutes);
+                                        $avg_seconds  = (int) round($total_seconds / $count_with_time); // ← fix: cast ke int
+                                        $avg_hours    = floor($avg_seconds / 3600);
+                                        $avg_minutes  = floor(($avg_seconds % 3600) / 60);
+                                        $avg_time     = sprintf('%02d:%02d', $avg_hours, $avg_minutes);
                                     }
                                     ?>
                                     <span class="font-medium"><?= $avg_time ?></span>

@@ -161,7 +161,8 @@ $statusStyle = [
 ];
 
 // ================================================================
-// EXCEL EXPORT
+// EXCEL EXPORT — urutan: Header → Data Detail → Ringkasan
+//                        (Aktivitas Konselor dihapus)
 // ================================================================
 if ($format === 'excel') {
     $spreadsheet = new Spreadsheet();
@@ -191,94 +192,10 @@ if ($format === 'excel') {
     $sheet->getRowDimension(1)->setRowHeight(24);
     $sheet->getRowDimension(5)->setRowHeight(8);
 
-    // ── Ringkasan ──
-    $sheet->mergeCells('A6:K6');
-    $sheet->setCellValue('A6', 'RINGKASAN KONSELING');
-    $sheet->getStyle('A6')->applyFromArray(['font' => ['bold' => true, 'size' => 12]]);
-
-    // Header ringkasan jenis
-    foreach (['B8' => 'Jenis Konseling', 'C8' => 'Jumlah', 'D8' => 'Persentase'] as $cell => $val) {
-        $sheet->setCellValue($cell, $val);
-    }
-    $sheet->getStyle('B8:D8')->applyFromArray($purpleHdr);
-
-    // Header ringkasan status
-    foreach (['F8' => 'Status Sesi', 'G8' => 'Jumlah', 'H8' => 'Persentase'] as $cell => $val) {
-        $sheet->setCellValue($cell, $val);
-    }
-    $sheet->getStyle('F8:H8')->applyFromArray($purpleHdr);
-    $sheet->getRowDimension(8)->setRowHeight(18);
-
-    // Data jenis
-    $r = 9;
-    foreach (['Akademik', 'Pribadi', 'Sosial', 'Karir'] as $j) {
-        $cnt = $jenis_counts[$j];
-        $pct = $total_konseling > 0 ? round($cnt / $total_konseling * 100, 1) . '%' : '0%';
-        $sheet->setCellValue("B$r", $j);
-        $sheet->setCellValue("C$r", $cnt);
-        $sheet->setCellValue("D$r", $pct);
-        $sheet->getStyle("C$r:D$r")->applyFromArray($center);
-        $r++;
-    }
-    $sheet->setCellValue("B$r", 'TOTAL');
-    $sheet->setCellValue("C$r", $total_konseling);
-    $sheet->setCellValue("D$r", '100%');
-    $sheet->getStyle("B$r:D$r")->applyFromArray($purpleHdr);
-
-    // Data status
-    $total_status = array_sum($status_counts);
-    $r2 = 9;
-    foreach (['Dijadwalkan', 'Berlangsung', 'Selesai'] as $s) {
-        $cnt = $status_counts[$s];
-        $pct = $total_status > 0 ? round($cnt / $total_status * 100, 1) . '%' : '0%';
-        $sheet->setCellValue("F$r2", $s);
-        $sheet->setCellValue("G$r2", $cnt);
-        $sheet->setCellValue("H$r2", $pct);
-        $sheet->getStyle("G$r2:H$r2")->applyFromArray($center);
-        $r2++;
-    }
-    $sheet->setCellValue("F$r2", 'TOTAL');
-    $sheet->setCellValue("G$r2", $total_status);
-    $sheet->setCellValue("H$r2", '100%');
-    $sheet->getStyle("F$r2:H$r2")->applyFromArray($purpleHdr);
-
-    // ── Top Konselor ──
-    if (!empty($top_konselor)) {
-        $rK = max($r, $r2) + 2;
-        $sheet->mergeCells("A$rK:K$rK");
-        $sheet->setCellValue("A$rK", 'AKTIVITAS KONSELOR');
-        $sheet->getStyle("A$rK")->applyFromArray(['font' => ['bold' => true, 'size' => 12]]);
-        $rK++;
-
-        foreach (['A' => 'No', 'B' => 'Nama Konselor', 'C' => 'Total Sesi', 'D' => 'Selesai', 'E' => '% Penyelesaian'] as $col => $hdr) {
-            $sheet->setCellValue("$col$rK", $hdr);
-        }
-        $sheet->getStyle("A$rK:E$rK")->applyFromArray($purpleHdr);
-        $sheet->getRowDimension($rK)->setRowHeight(18);
-        $rK++;
-
-        foreach ($top_konselor as $idx => $tk) {
-            $pct = $tk['jumlah'] > 0 ? round($tk['selesai'] / $tk['jumlah'] * 100) . '%' : '0%';
-            $sheet->setCellValue("A$rK", $idx + 1);
-            $sheet->setCellValue("B$rK", $tk['konselor']);
-            $sheet->setCellValue("C$rK", $tk['jumlah']);
-            $sheet->setCellValue("D$rK", $tk['selesai']);
-            $sheet->setCellValue("E$rK", $pct);
-            $sheet->getStyle("A$rK")->applyFromArray($center);
-            $sheet->getStyle("C$rK:E$rK")->applyFromArray($center);
-            if ($idx % 2 === 0) {
-                $sheet->getStyle("A$rK:E$rK")->applyFromArray([
-                    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'F5F3FF']],
-                ]);
-            }
-            $rK++;
-        }
-    } else {
-        $rK = max($r, $r2) + 2;
-    }
-
-    // ── Detail Data ──
-    $rD = $rK + 2;
+    // ================================================================
+    // BAGIAN 1 — DATA DETAIL KONSELING (sekarang di atas)
+    // ================================================================
+    $rD = 6;
     $sheet->mergeCells("A$rD:K$rD");
     $sheet->setCellValue("A$rD", 'DATA DETAIL KONSELING');
     $sheet->getStyle("A$rD")->applyFromArray(['font' => ['bold' => true, 'size' => 12]]);
@@ -327,7 +244,63 @@ if ($format === 'excel') {
         $rD++;
     }
 
-    // Lebar kolom
+    // ================================================================
+    // BAGIAN 2 — RINGKASAN KONSELING (sekarang di bawah detail)
+    // ================================================================
+    $rS = $rD + 2;
+    $sheet->mergeCells("A$rS:K$rS");
+    $sheet->setCellValue("A$rS", 'RINGKASAN KONSELING');
+    $sheet->getStyle("A$rS")->applyFromArray(['font' => ['bold' => true, 'size' => 12]]);
+    $rS += 2;
+
+    // Header ringkasan jenis
+    foreach (['B' . $rS => 'Jenis Konseling', 'C' . $rS => 'Jumlah', 'D' . $rS => 'Persentase'] as $cell => $val) {
+        $sheet->setCellValue($cell, $val);
+    }
+    $sheet->getStyle("B$rS:D$rS")->applyFromArray($purpleHdr);
+
+    // Header ringkasan status
+    foreach (['F' . $rS => 'Status Sesi', 'G' . $rS => 'Jumlah', 'H' . $rS => 'Persentase'] as $cell => $val) {
+        $sheet->setCellValue($cell, $val);
+    }
+    $sheet->getStyle("F$rS:H$rS")->applyFromArray($purpleHdr);
+    $sheet->getRowDimension($rS)->setRowHeight(18);
+    $rS++;
+
+    // Data jenis
+    $r = $rS;
+    foreach (['Akademik', 'Pribadi', 'Sosial', 'Karir'] as $j) {
+        $cnt = $jenis_counts[$j];
+        $pct = $total_konseling > 0 ? round($cnt / $total_konseling * 100, 1) . '%' : '0%';
+        $sheet->setCellValue("B$r", $j);
+        $sheet->setCellValue("C$r", $cnt);
+        $sheet->setCellValue("D$r", $pct);
+        $sheet->getStyle("C$r:D$r")->applyFromArray($center);
+        $r++;
+    }
+    $sheet->setCellValue("B$r", 'TOTAL');
+    $sheet->setCellValue("C$r", $total_konseling);
+    $sheet->setCellValue("D$r", '100%');
+    $sheet->getStyle("B$r:D$r")->applyFromArray($purpleHdr);
+
+    // Data status
+    $total_status = array_sum($status_counts);
+    $r2 = $rS;
+    foreach (['Dijadwalkan', 'Berlangsung', 'Selesai'] as $s) {
+        $cnt = $status_counts[$s];
+        $pct = $total_status > 0 ? round($cnt / $total_status * 100, 1) . '%' : '0%';
+        $sheet->setCellValue("F$r2", $s);
+        $sheet->setCellValue("G$r2", $cnt);
+        $sheet->setCellValue("H$r2", $pct);
+        $sheet->getStyle("G$r2:H$r2")->applyFromArray($center);
+        $r2++;
+    }
+    $sheet->setCellValue("F$r2", 'TOTAL');
+    $sheet->setCellValue("G$r2", $total_status);
+    $sheet->setCellValue("H$r2", '100%');
+    $sheet->getStyle("F$r2:H$r2")->applyFromArray($purpleHdr);
+
+    // ── Lebar kolom ──
     foreach (
         [
             'A' => 5,
@@ -346,11 +319,11 @@ if ($format === 'excel') {
         $sheet->getColumnDimension($col)->setWidth($w);
     }
 
-    // Footer
-    $rD++;
-    $sheet->mergeCells("A$rD:K$rD");
-    $sheet->setCellValue("A$rD", 'Laporan ini digenerate otomatis oleh Sistem Absensi SMK NURUL ULUM');
-    $sheet->getStyle("A$rD")->applyFromArray(['font' => ['italic' => true, 'size' => 9], 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]]);
+    // ── Footer ──
+    $rFooter = max($r, $r2) + 2;
+    $sheet->mergeCells("A$rFooter:K$rFooter");
+    $sheet->setCellValue("A$rFooter", 'Laporan ini digenerate otomatis oleh Sistem Absensi SMK NURUL ULUM');
+    $sheet->getStyle("A$rFooter")->applyFromArray(['font' => ['italic' => true, 'size' => 9], 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]]);
 
     $writer = new Xlsx($spreadsheet);
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -623,6 +596,56 @@ ob_start();
     <p class="subtitle"><?= htmlspecialchars($subtitle) ?></p>
     <p class="print-date">Diekspor pada: <?= date('d/m/Y H:i') ?></p>
 
+    <!-- DETAIL KONSELING -->
+    <div class="sec">DETAIL KONSELING</div>
+    <?php if (count($data) > 0): ?>
+        <table class="dt">
+            <tr>
+                <th style="width:25px">No</th>
+                <th style="width:55px">Tanggal</th>
+                <th style="width:60px">NIS</th>
+                <th style="width:80px">Nama Siswa</th>
+                <th style="width:45px">Kelas</th>
+                <th style="width:42px">Jenis</th>
+                <th>Masalah</th>
+                <th>Solusi</th>
+                <th>Tindak Lanjut</th>
+                <th style="width:65px">Konselor</th>
+                <th style="width:52px">Status</th>
+            </tr>
+            <?php foreach ($data as $no => $rec):
+                $js = $jenisStyle[$rec['jenis_konseling']] ?? ['bg' => '#F3F4F6', 'text' => '#374151', 'border' => '#D1D5DB'];
+                $ss = $statusStyle[$rec['status']] ?? ['bg' => '#F3F4F6', 'text' => '#374151'];
+            ?>
+                <tr>
+                    <td class="tc"><?= $no + 1 ?></td>
+                    <td class="tc"><?= date('d/m/Y', strtotime($rec['tanggal'])) ?></td>
+                    <td><?= htmlspecialchars($rec['nis']) ?></td>
+                    <td><?= htmlspecialchars($rec['nama_lengkap']) ?></td>
+                    <td class="tc"><?= $rec['kelas'] . ' ' . $rec['jurusan'] ?></td>
+                    <td class="tc">
+                        <span class="badge" style="background:<?= $js['bg'] ?>;color:<?= $js['text'] ?>;border:1px solid <?= $js['border'] ?>">
+                            <?= $rec['jenis_konseling'] ?>
+                        </span>
+                    </td>
+                    <td class="wrap"><?= htmlspecialchars($rec['masalah'] ?? '-') ?></td>
+                    <td class="wrap"><?= htmlspecialchars($rec['solusi'] ?? '-') ?></td>
+                    <td class="wrap"><?= htmlspecialchars($rec['tindak_lanjut'] ?? '-') ?></td>
+                    <td><?= htmlspecialchars($rec['konselor'] ?? '-') ?></td>
+                    <td class="tc">
+                        <span class="badge" style="background:<?= $ss['bg'] ?>;color:<?= $ss['text'] ?>">
+                            <?= $rec['status'] ?>
+                        </span>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php else: ?>
+        <p style="text-align:center;color:#9CA3AF;padding:16px 0">
+            Tidak ada data konseling untuk filter yang dipilih.
+        </p>
+    <?php endif; ?>
+
     <!-- RINGKASAN -->
     <div class="sec">RINGKASAN KONSELING</div>
     <table class="sum-wrap">
@@ -702,86 +725,6 @@ ob_start();
             </tr>
         </tbody>
     </table>
-
-    <!-- AKTIVITAS KONSELOR -->
-    <?php if (!empty($top_konselor)): ?>
-        <div class="sec">AKTIVITAS KONSELOR</div>
-        <table class="konselor-tbl">
-            <tr>
-                <th style="width:28px">No</th>
-                <th>Nama Konselor</th>
-                <th style="width:65px">Total Sesi</th>
-                <th style="width:55px">Selesai</th>
-                <th style="width:90px">% Penyelesaian</th>
-            </tr>
-            <?php foreach ($top_konselor as $idx => $tk):
-                $pct_s = $tk['jumlah'] > 0 ? round($tk['selesai'] / $tk['jumlah'] * 100) : 0;
-            ?>
-                <tr>
-                    <td class="tc"><?= $idx + 1 ?></td>
-                    <td><?= htmlspecialchars($tk['konselor']) ?></td>
-                    <td class="tc"><?= $tk['jumlah'] ?></td>
-                    <td class="tc" style="color:#065F46;font-weight:bold"><?= $tk['selesai'] ?></td>
-                    <td class="tc">
-                        <span style="color:#5E35B1;font-weight:bold"><?= $pct_s ?>%</span>
-                        <div class="bar-wrap">
-                            <div class="bar-fill" style="width:<?= $pct_s ?>%"></div>
-                        </div>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php endif; ?>
-
-    <!-- DETAIL KONSELING -->
-    <div class="sec">DETAIL KONSELING</div>
-    <?php if (count($data) > 0): ?>
-        <table class="dt">
-            <tr>
-                <th style="width:25px">No</th>
-                <th style="width:55px">Tanggal</th>
-                <th style="width:60px">NIS</th>
-                <th style="width:80px">Nama Siswa</th>
-                <th style="width:45px">Kelas</th>
-                <th style="width:42px">Jenis</th>
-                <th>Masalah</th>
-                <th>Solusi</th>
-                <th>Tindak Lanjut</th>
-                <th style="width:65px">Konselor</th>
-                <th style="width:52px">Status</th>
-            </tr>
-            <?php foreach ($data as $no => $rec):
-                $js = $jenisStyle[$rec['jenis_konseling']] ?? ['bg' => '#F3F4F6', 'text' => '#374151', 'border' => '#D1D5DB'];
-                $ss = $statusStyle[$rec['status']] ?? ['bg' => '#F3F4F6', 'text' => '#374151'];
-            ?>
-                <tr>
-                    <td class="tc"><?= $no + 1 ?></td>
-                    <td class="tc"><?= date('d/m/Y', strtotime($rec['tanggal'])) ?></td>
-                    <td><?= htmlspecialchars($rec['nis']) ?></td>
-                    <td><?= htmlspecialchars($rec['nama_lengkap']) ?></td>
-                    <td class="tc"><?= $rec['kelas'] . ' ' . $rec['jurusan'] ?></td>
-                    <td class="tc">
-                        <span class="badge" style="background:<?= $js['bg'] ?>;color:<?= $js['text'] ?>;border:1px solid <?= $js['border'] ?>">
-                            <?= $rec['jenis_konseling'] ?>
-                        </span>
-                    </td>
-                    <td class="wrap"><?= htmlspecialchars($rec['masalah'] ?? '-') ?></td>
-                    <td class="wrap"><?= htmlspecialchars($rec['solusi'] ?? '-') ?></td>
-                    <td class="wrap"><?= htmlspecialchars($rec['tindak_lanjut'] ?? '-') ?></td>
-                    <td><?= htmlspecialchars($rec['konselor'] ?? '-') ?></td>
-                    <td class="tc">
-                        <span class="badge" style="background:<?= $ss['bg'] ?>;color:<?= $ss['text'] ?>">
-                            <?= $rec['status'] ?>
-                        </span>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php else: ?>
-        <p style="text-align:center;color:#9CA3AF;padding:16px 0">
-            Tidak ada data konseling untuk filter yang dipilih.
-        </p>
-    <?php endif; ?>
 
     <!-- FOOTER -->
     <div class="footer">

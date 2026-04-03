@@ -466,14 +466,22 @@ $jenis_colors = [
                         <p class="text-gray-500 text-sm md:text-base">Statistik dan rekapitulasi data pelanggaran siswa</p>
                     </div>
                     <div class="flex gap-3">
-                        <a href="export_pelanggaran.php?format=pdf<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
+                        <?php
+                        // Hapus parameter 'format' dari query string yang ada
+                        parse_str($_SERVER['QUERY_STRING'] ?? '', $params);
+                        unset($params['format']);
+                        $cleanQuery = http_build_query($params);
+                        $separator = $cleanQuery ? '&' . $cleanQuery : '';
+                        ?>
+                        <a href="export_pelanggaran.php?format=pdf<?= $separator ?>"
                             class="px-3 py-2 sm:px-4 sm:py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
                             <i class="fas fa-file-pdf"></i>
                             <span class="hidden sm:inline">Cetak PDF</span>
                         </a>
-                        <a href="export_pelanggaran.php?format=excel<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
+                        <a href="export_pelanggaran.php?format=excel<?= $separator ?>"
                             class="px-3 py-2 sm:px-4 sm:py-2 text-white bg-green-600 hover:bg-green-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
-                            <i class="fas fa-file-excel"></i> <span class="hidden sm:inline">Export Excel</span>
+                            <i class="fas fa-file-excel"></i>
+                            <span class="hidden sm:inline">Export Excel</span>
                         </a>
                     </div>
                 </header>
