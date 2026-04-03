@@ -75,30 +75,7 @@ foreach ($status_stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
         $status_counts[$row['status']] = (int)$row['count'];
 }
 
-// 3. TOP 5 SISWA
-$top_where  = "WHERE p.tanggal BETWEEN :start_date AND :end_date";
-$top_params = ['start_date' => $start_date, 'end_date' => $end_date];
-if ($kelas) {
-    $top_where .= " AND s.kelas = :kelas";
-    $top_params['kelas']   = $kelas;
-}
-if ($jurusan) {
-    $top_where .= " AND s.jurusan = :jurusan";
-    $top_params['jurusan'] = $jurusan;
-}
-
-$top_stmt = $conn->prepare(
-    "SELECT s.id, s.nama_lengkap, s.nis, s.kelas, s.jurusan,
-            COALESCE(SUM(p.poin), 0) AS total_poin, COUNT(p.id) AS jumlah
-     FROM siswa s JOIN pelanggaran p ON p.siswa_id = s.id
-     $top_where
-     GROUP BY s.id, s.nama_lengkap, s.nis, s.kelas, s.jurusan
-     ORDER BY total_poin DESC LIMIT 5"
-);
-$top_stmt->execute($top_params);
-$top_siswa = $top_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// 4. DETAIL DATA
+// 3. DETAIL DATA
 $detail_stmt = $conn->prepare(
     "SELECT p.id, p.tanggal, p.jenis_pelanggaran, p.deskripsi,
             p.poin, p.tindakan, p.status,
@@ -109,7 +86,7 @@ $detail_stmt = $conn->prepare(
 $detail_stmt->execute($base_params);
 $data = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 5. SUBTITLE
+// 4. SUBTITLE
 $subtitle = "Periode: " . date('d/m/Y', strtotime($start_date)) . " - " . date('d/m/Y', strtotime($end_date));
 if ($kelas)    $subtitle .= " | Kelas: $kelas";
 if ($jurusan)  $subtitle .= " | Jurusan: $jurusan";
@@ -162,8 +139,12 @@ if ($format === 'excel') {
     ];
     $center = ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]];
 
+    // Kolom sampai K (11 kolom)
+    $maxCol = 'K';
+
     // ── Header blok ──
-    foreach (['A1:J1', 'A2:J2', 'A3:J3', 'A4:J4'] as $m) $sheet->mergeCells($m);
+    foreach (["A1:{$maxCol}1", "A2:{$maxCol}2", "A3:{$maxCol}3", "A4:{$maxCol}4"] as $m)
+        $sheet->mergeCells($m);
     $sheet->setCellValue('A1', 'LAPORAN PELANGGARAN SISWA');
     $sheet->setCellValue('A2', 'SMK NURUL ULUM');
     $sheet->setCellValue('A3', $subtitle);
@@ -175,46 +156,82 @@ if ($format === 'excel') {
     $sheet->getRowDimension(1)->setRowHeight(24);
     $sheet->getRowDimension(5)->setRowHeight(8);
 
-    // ── SECTION 1: Keseluruhan Siswa Akumulasi Poin (DITAMPILKAN LEBIH DULU) ──
-    $rT = 6;
-    $sheet->mergeCells("A$rT:J$rT");
-    $sheet->setCellValue("A$rT", 'KESELURUHAN SISWA AKUMULASI POIN PELANGGARAN');
-    $sheet->getStyle("A$rT")->applyFromArray(['font' => ['bold' => true, 'size' => 12]]);
-    $rT++;
-    foreach (['A' => 'Rank', 'B' => 'NIS', 'C' => 'Nama Siswa', 'D' => 'Kelas', 'E' => 'Jurusan', 'F' => 'Jumlah Kasus', 'G' => 'Total Poin', 'H' => 'Kategori'] as $col => $hdr)
-        $sheet->setCellValue("$col$rT", $hdr);
-    $sheet->getStyle("A$rT:H$rT")->applyFromArray($purpleHdr);
-    $sheet->getRowDimension($rT)->setRowHeight(18);
-    $rT++;
-    foreach ($top_siswa as $idx => $ts) {
-        $color = totalPoinColor((int)$ts['total_poin']);
-        $sheet->setCellValue("A$rT", '#' . ($idx + 1));
-        $sheet->setCellValue("B$rT", $ts['nis']);
-        $sheet->setCellValue("C$rT", $ts['nama_lengkap']);
-        $sheet->setCellValue("D$rT", $ts['kelas']);
-        $sheet->setCellValue("E$rT", $ts['jurusan']);
-        $sheet->setCellValue("F$rT", $ts['jumlah']);
-        $sheet->setCellValue("G$rT", $ts['total_poin']);
-        $sheet->setCellValue("H$rT", $color['label']);
-        $sheet->getStyle("A$rT:H$rT")->applyFromArray($center);
-        $rT++;
+    // ================================================================
+    // SECTION 1 — DETAIL PELANGGARAN
+    // ================================================================
+    $rD = 6;
+    $sheet->mergeCells("A$rD:{$maxCol}$rD");
+    $sheet->setCellValue("A$rD", 'DETAIL PELANGGARAN');
+    $sheet->getStyle("A$rD")->applyFromArray(['font' => ['bold' => true, 'size' => 12]]);
+    $rD += 2;
+
+    // Header kolom detail
+    $detailCols = [
+        'A' => 'No',
+        'B' => 'Tanggal',
+        'C' => 'NIS',
+        'D' => 'Nama Siswa',
+        'E' => 'Kelas',
+        'F' => 'Jenis',
+        'G' => 'Deskripsi',
+        'H' => 'Poin',
+        'I' => 'Tindakan',
+        'J' => 'Status',
+        'K' => 'Total Poin',
+    ];
+    foreach ($detailCols as $col => $hdr)
+        $sheet->setCellValue("$col$rD", $hdr);
+    $sheet->getStyle("A$rD:{$maxCol}$rD")->applyFromArray($purpleHdr);
+    $sheet->getRowDimension($rD)->setRowHeight(18);
+    $rD++;
+
+    foreach ($data as $idx => $rec) {
+        $color = totalPoinColor((int)$rec['total_poin']);
+        $sheet->setCellValue("A$rD", $idx + 1);
+        $sheet->setCellValue("B$rD", date('d/m/Y', strtotime($rec['tanggal'])));
+        $sheet->setCellValue("C$rD", $rec['nis']);
+        $sheet->setCellValue("D$rD", $rec['nama_lengkap']);
+        $sheet->setCellValue("E$rD", $rec['kelas'] . ' ' . $rec['jurusan']);
+        $sheet->setCellValue("F$rD", $rec['jenis_pelanggaran']);
+        $sheet->setCellValue("G$rD", $rec['deskripsi'] ?? '-');
+        $sheet->setCellValue("H$rD", $rec['poin']);
+        $sheet->setCellValue("I$rD", $rec['tindakan'] ?? '-');
+        $sheet->setCellValue("J$rD", $rec['status']);
+        $sheet->setCellValue("K$rD", $rec['total_poin']);
+        $sheet->getStyle("A$rD:B$rD")->applyFromArray($center);
+        $sheet->getStyle("E$rD:F$rD")->applyFromArray($center);
+        $sheet->getStyle("H$rD:H$rD")->applyFromArray($center);
+        $sheet->getStyle("J$rD:K$rD")->applyFromArray($center);
+        if ($idx % 2 === 0) {
+            $sheet->getStyle("A$rD:{$maxCol}$rD")->applyFromArray([
+                'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'F5F3FF']],
+            ]);
+        }
+        $rD++;
     }
 
-    // ── SECTION 2: Ringkasan (SETELAH Keseluruhan Siswa) ──
-    $rS = $rT + 1;
-    $sheet->mergeCells("A$rS:J$rS");
+    // ================================================================
+    // SECTION 2 — RINGKASAN PELANGGARAN
+    // ================================================================
+    $rS = $rD + 2;
+    $sheet->mergeCells("A$rS:{$maxCol}$rS");
     $sheet->setCellValue("A$rS", 'RINGKASAN PELANGGARAN');
     $sheet->getStyle("A$rS")->applyFromArray(['font' => ['bold' => true, 'size' => 12]]);
 
     $rSH = $rS + 2;
+
+    // Header ringkasan jenis
     foreach (['B' => 'Jenis', 'C' => 'Jumlah', 'D' => '% Kasus'] as $col => $val)
         $sheet->setCellValue("$col$rSH", $val);
-    foreach (['F' => 'Status', 'G' => 'Jumlah'] as $col => $val)
-        $sheet->setCellValue("$col$rSH", $val);
     $sheet->getStyle("B$rSH:D$rSH")->applyFromArray($purpleHdr);
-    $sheet->getStyle("F$rSH:G$rSH")->applyFromArray($purpleHdr);
+
+    // Header ringkasan status
+    foreach (['F' => 'Status', 'G' => 'Jumlah', 'H' => 'Persentase'] as $col => $val)
+        $sheet->setCellValue("$col$rSH", $val);
+    $sheet->getStyle("F$rSH:H$rSH")->applyFromArray($purpleHdr);
     $sheet->getRowDimension($rSH)->setRowHeight(18);
 
+    // Data jenis
     $r = $rSH + 1;
     foreach (['Ringan', 'Sedang', 'Berat'] as $j) {
         $cnt = $jenis_counts[$j];
@@ -230,22 +247,48 @@ if ($format === 'excel') {
     $sheet->setCellValue("D$r", '100%');
     $sheet->getStyle("B$r:D$r")->applyFromArray($purpleHdr);
 
+    // Data status
+    $total_status = array_sum($status_counts);
     $r2 = $rSH + 1;
     foreach (['Pending', 'Proses', 'Selesai'] as $s) {
+        $cnt = $status_counts[$s];
+        $pct = $total_status > 0 ? round($cnt / $total_status * 100, 1) . '%' : '0%';
         $sheet->setCellValue("F$r2", $s);
-        $sheet->setCellValue("G$r2", $status_counts[$s]);
-        $sheet->getStyle("G$r2")->applyFromArray($center);
+        $sheet->setCellValue("G$r2", $cnt);
+        $sheet->setCellValue("H$r2", $pct);
+        $sheet->getStyle("G$r2:H$r2")->applyFromArray($center);
         $r2++;
     }
     $sheet->setCellValue("F$r2", 'TOTAL');
-    $sheet->setCellValue("G$r2", array_sum($status_counts));
-    $sheet->getStyle("F$r2:G$r2")->applyFromArray($purpleHdr);
+    $sheet->setCellValue("G$r2", $total_status);
+    $sheet->setCellValue("H$r2", '100%');
+    $sheet->getStyle("F$r2:H$r2")->applyFromArray($purpleHdr);
 
-    // ── Auto size kolom ──
-    foreach (range('A', 'J') as $col)
-        $sheet->getColumnDimension($col)->setAutoSize(true);
+    // ── Footer ──
+    $rFooter = max($r, $r2) + 2;
+    $sheet->mergeCells("A$rFooter:{$maxCol}$rFooter");
+    $sheet->setCellValue("A$rFooter", 'Laporan ini digenerate otomatis oleh Sistem Absensi SMK NURUL ULUM');
+    $sheet->getStyle("A$rFooter")->applyFromArray(['font' => ['italic' => true, 'size' => 9], 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]]);
 
-    // ── Kirim header HTTP & stream file ──
+    // ── Lebar kolom ──
+    foreach (
+        [
+            'A' => 5,
+            'B' => 13,
+            'C' => 14,
+            'D' => 28,
+            'E' => 14,
+            'F' => 12,
+            'G' => 35,
+            'H' => 8,
+            'I' => 30,
+            'J' => 13,
+            'K' => 12,
+        ] as $col => $w
+    ) {
+        $sheet->getColumnDimension($col)->setWidth($w);
+    }
+
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     header('Content-Disposition: attachment; filename="Laporan_Pelanggaran_' . date('Y-m-d') . '.xlsx"');
     header('Cache-Control: max-age=0');
@@ -290,7 +333,7 @@ if ($format === 'excel') {
         <style>
             @page {
                 margin: 18mm 14mm 20mm 14mm;
-                size: A4 portrait;
+                size: A4 landscape;
             }
 
             * {
@@ -299,7 +342,7 @@ if ($format === 'excel') {
 
             body {
                 font-family: Helvetica, Arial, sans-serif;
-                font-size: 11px;
+                font-size: 10px;
                 color: #1F2937;
                 margin: 0;
                 padding: 0;
@@ -336,40 +379,84 @@ if ($format === 'excel') {
             }
 
             .title-cell h1 {
-                font-size: 17px;
+                font-size: 16px;
                 font-weight: bold;
                 color: #5E35B1;
                 margin: 0 0 3px;
             }
 
             .title-cell h2 {
-                font-size: 12px;
+                font-size: 11px;
                 color: #374151;
                 margin: 0;
             }
 
             .subtitle {
                 text-align: center;
-                font-size: 10px;
+                font-size: 9px;
                 color: #6B7280;
                 margin: 5px 0 2px;
             }
 
             .print-date {
                 text-align: right;
-                font-size: 9px;
+                font-size: 8px;
                 color: #9CA3AF;
                 font-style: italic;
                 margin-bottom: 10px;
             }
 
             .sec {
-                font-size: 12px;
+                font-size: 11px;
                 font-weight: bold;
                 color: #5E35B1;
                 border-bottom: 2px solid #EDE9FE;
                 padding-bottom: 3px;
                 margin: 13px 0 7px;
+            }
+
+            .dt {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 9px;
+                margin: 4px 0;
+            }
+
+            .dt th,
+            .dt td {
+                border: 1px solid #E5E7EB;
+                padding: 4px 5px;
+            }
+
+            .dt th {
+                background: #5E35B1;
+                color: #fff;
+                font-weight: bold;
+                text-align: center;
+                font-size: 9px;
+            }
+
+            .dt tr:nth-child(even) td {
+                background: #F5F3FF;
+            }
+
+            .dt tr.tot td {
+                background: #5E35B1 !important;
+                color: #fff;
+                font-weight: bold;
+            }
+
+            .tc {
+                text-align: center;
+            }
+
+            .badge {
+                display: inline-block;
+                padding: 2px 6px;
+                border-radius: 10px;
+                font-size: 8px;
+                font-weight: bold;
+                white-space: nowrap;
             }
 
             .sum-tbl {
@@ -386,93 +473,9 @@ if ($format === 'excel') {
                 border: none;
             }
 
-            .dt {
-                width: 100%;
-                border-collapse: collapse;
-                font-size: 10px;
-                margin: 4px 0;
-            }
-
-            .dt th,
-            .dt td {
-                border: 1px solid #E5E7EB;
-                padding: 5px 6px;
-            }
-
-            .dt th {
-                background: #5E35B1;
-                color: #fff;
-                font-weight: bold;
-                text-align: center;
-                font-size: 10px;
-            }
-
-            .dt tr:nth-child(even) td {
-                background: #FAFAFA;
-            }
-
-            .dt tr.tot td {
-                background: #5E35B1 !important;
-                color: #fff;
-                font-weight: bold;
-            }
-
-            .tc {
-                text-align: center;
-            }
-
-            .badge {
-                display: inline-block;
-                padding: 2px 7px;
-                border-radius: 10px;
-                font-size: 9px;
-                font-weight: bold;
-                white-space: nowrap;
-            }
-
-            .top-tbl {
-                width: 100%;
-                border-collapse: separate;
-                border-spacing: 5px;
-            }
-
-            .top-tbl td {
-                border: 1px solid #E5E7EB;
-                border-radius: 6px;
-                padding: 7px 4px;
-                text-align: center;
-                background: #FAFAFA;
-                vertical-align: top;
-                width: 20%;
-            }
-
-            .t-rank {
-                font-size: 10px;
-                font-weight: bold;
-                color: #5E35B1;
-            }
-
-            .t-name {
-                font-size: 9px;
-                font-weight: bold;
-                margin: 3px 0 1px;
-                line-height: 1.3;
-            }
-
-            .t-kelas {
-                font-size: 8px;
-                color: #6B7280;
-            }
-
-            .t-poin {
-                font-size: 12px;
-                font-weight: bold;
-                margin-top: 4px;
-            }
-
-            .t-info {
-                font-size: 8px;
-                color: #6B7280;
+            .wrap {
+                word-wrap: break-word;
+                white-space: normal;
             }
 
             .footer {
@@ -508,31 +511,60 @@ if ($format === 'excel') {
         <p class="subtitle"><?= htmlspecialchars($subtitle) ?></p>
         <p class="print-date">Diekspor pada: <?= date('d/m/Y H:i') ?></p>
 
-        <!-- KESELURUHAN SISWA AKUMULASI POIN (DITAMPILKAN LEBIH DULU) -->
-        <?php if (!empty($top_siswa)): ?>
-            <div class="sec">KESELURUHAN SISWA AKUMULASI POIN PELANGGARAN</div>
-            <table class="top-tbl">
+        <!-- DETAIL PELANGGARAN -->
+        <div class="sec">DETAIL PELANGGARAN</div>
+        <?php if (count($data) > 0): ?>
+            <table class="dt">
                 <tr>
-                    <?php foreach ($top_siswa as $idx => $ts):
-                        $color = totalPoinColor((int)$ts['total_poin']);
-                        $rnk   = ['#1', '#2', '#3', '#4', '#5'][$idx];
-                    ?>
-                        <td>
-                            <div class="t-rank"><?= $rnk ?></div>
-                            <div class="t-name"><?= htmlspecialchars($ts['nama_lengkap']) ?></div>
-                            <div class="t-kelas"><?= $ts['kelas'] ?> <?= $ts['jurusan'] ?></div>
-                            <div class="t-poin" style="color:<?= $color['hex'] ?>"><?= $ts['total_poin'] ?> <span style="font-size:8px;font-weight:normal;color:#6B7280">poin</span></div>
-                            <div class="t-info"><?= $color['label'] ?> &bull; <?= $ts['jumlah'] ?> kasus</div>
-                        </td>
-                    <?php endforeach; ?>
-                    <?php for ($i = count($top_siswa); $i < 5; $i++): ?>
-                        <td style="border:1px dashed #E5E7EB;background:#F9FAFB"></td>
-                    <?php endfor; ?>
+                    <th style="width:22px">No</th>
+                    <th style="width:52px">Tanggal</th>
+                    <th style="width:58px">NIS</th>
+                    <th style="width:90px">Nama Siswa</th>
+                    <th style="width:42px">Kelas</th>
+                    <th style="width:40px">Jenis</th>
+                    <th>Deskripsi</th>
+                    <th style="width:30px">Poin</th>
+                    <th>Tindakan</th>
+                    <th style="width:48px">Status</th>
+                    <th style="width:52px">Total Poin</th>
                 </tr>
+                <?php foreach ($data as $no => $rec):
+                    $js = $jenisStyle[$rec['jenis_pelanggaran']] ?? ['bg' => '#F3F4F6', 'text' => '#374151', 'border' => '#D1D5DB'];
+                    $ss = $statusStyle[$rec['status']]           ?? ['bg' => '#F3F4F6', 'text' => '#374151'];
+                    $pc = totalPoinColor((int)$rec['total_poin']);
+                ?>
+                    <tr>
+                        <td class="tc"><?= $no + 1 ?></td>
+                        <td class="tc"><?= date('d/m/Y', strtotime($rec['tanggal'])) ?></td>
+                        <td><?= htmlspecialchars($rec['nis']) ?></td>
+                        <td><?= htmlspecialchars($rec['nama_lengkap']) ?></td>
+                        <td class="tc"><?= $rec['kelas'] . ' ' . $rec['jurusan'] ?></td>
+                        <td class="tc">
+                            <span class="badge" style="background:<?= $js['bg'] ?>;color:<?= $js['text'] ?>;border:1px solid <?= $js['border'] ?>">
+                                <?= $rec['jenis_pelanggaran'] ?>
+                            </span>
+                        </td>
+                        <td class="wrap"><?= htmlspecialchars($rec['deskripsi'] ?? '-') ?></td>
+                        <td class="tc"><strong><?= $rec['poin'] ?></strong></td>
+                        <td class="wrap"><?= htmlspecialchars($rec['tindakan'] ?? '-') ?></td>
+                        <td class="tc">
+                            <span class="badge" style="background:<?= $ss['bg'] ?>;color:<?= $ss['text'] ?>">
+                                <?= $rec['status'] ?>
+                            </span>
+                        </td>
+                        <td class="tc" style="font-weight:bold;color:<?= $pc['hex'] ?>">
+                            <?= $rec['total_poin'] ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             </table>
+        <?php else: ?>
+            <p style="text-align:center;color:#9CA3AF;padding:16px 0">
+                Tidak ada data pelanggaran untuk filter yang dipilih.
+            </p>
         <?php endif; ?>
 
-        <!-- RINGKASAN (DI BAWAH KESELURUHAN SISWA) -->
+        <!-- RINGKASAN -->
         <div class="sec">RINGKASAN PELANGGARAN</div>
         <table class="sum-tbl">
             <tbody>
@@ -615,7 +647,7 @@ if ($format === 'excel') {
     $html = ob_get_clean();
 
     $dompdf->loadHtml($html);
-    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->setPaper('A4', 'landscape');
     $dompdf->render();
 
     $canvas = $dompdf->getCanvas();
@@ -624,7 +656,14 @@ if ($format === 'excel') {
         $font  = $fontMetrics->getFont("Helvetica");
         $size  = 9;
         $width = $fontMetrics->getTextWidth($text, $font, $size);
-        $canvas->text(($canvas->get_width() - $width) / 2, $canvas->get_height() - 26, $text, $font, $size, [0.5, 0.5, 0.5]);
+        $canvas->text(
+            ($canvas->get_width() - $width) / 2,
+            $canvas->get_height() - 26,
+            $text,
+            $font,
+            $size,
+            [0.5, 0.5, 0.5]
+        );
     });
 
     $dompdf->stream("Laporan_Pelanggaran_" . date('Y-m-d') . ".pdf", ["Attachment" => true]);
