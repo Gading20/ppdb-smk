@@ -397,7 +397,7 @@ function pageUrl($pg)
                                     class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-800
                                            focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-100 transition">
                                     <option value="">Semua Jurusan</option>
-                                    <?php foreach (['RPL', 'DKV', 'AK', 'BR', 'MP'] as $j): ?>
+                                    <?php foreach (['TKJ', 'MP', 'AKL', 'TSM', 'TKR'] as $j): ?>
                                         <option value="<?= $j ?>" <?= $jurusan_filter === $j ? 'selected' : '' ?>><?= $j ?></option>
                                     <?php endforeach; ?>
                                 </select>
