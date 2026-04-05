@@ -19,7 +19,9 @@ $jurusan = $_GET['jurusan'] ?? '';
 $siswa_id = $_GET['siswa_id'] ?? '';
 $status = $_GET['status'] ?? '';
 
-// Prepare base query for attendance data
+// =============================================
+// QUERY UTAMA: Summary per siswa (untuk chart)
+// =============================================
 $sql = "SELECT s.id as siswa_id, s.nama_lengkap, s.nis, s.kelas, s.jurusan, 
         COUNT(CASE WHEN a.status = 'Hadir' THEN 1 END) as hadir,
         COUNT(CASE WHEN a.status = 'Sakit' THEN 1 END) as sakit,
@@ -31,14 +33,14 @@ $sql = "SELECT s.id as siswa_id, s.nama_lengkap, s.nis, s.kelas, s.jurusan,
         LEFT JOIN absensi a ON s.id = a.siswa_id 
             AND a.tanggal BETWEEN :start_date AND :end_date 
             AND a.approval_status = 'Approved'
-        GROUP BY s.id, s.nama_lengkap, s.nis, s.kelas, s.jurusan";
+        WHERE 1=1";
 
 $params = [
     'start_date' => $start_date,
-    'end_date' => $end_date
+    'end_date'   => $end_date
 ];
 
-// Apply additional filters
+// Apply filters ke WHERE (sebelum GROUP BY)
 if ($kelas) {
     $sql .= " AND s.kelas = :kelas";
     $params['kelas'] = $kelas;
@@ -50,194 +52,265 @@ if ($jurusan) {
 }
 
 if ($siswa_id) {
-    $sql .= " AND a.siswa_id = :siswa_id";
+    $sql .= " AND s.id = :siswa_id";
     $params['siswa_id'] = $siswa_id;
 }
 
+// GROUP BY dulu
+$sql .= " GROUP BY s.id, s.nama_lengkap, s.nis, s.kelas, s.jurusan";
+
+// Filter status pakai HAVING (setelah GROUP BY)
 if ($status) {
-    $sql .= " AND a.status = :status";
+    $sql .= " HAVING SUM(CASE WHEN a.status = :status THEN 1 ELSE 0 END) > 0";
     $params['status'] = $status;
 }
 
-// Get summary statistics by status
-$summary_sql = "SELECT status, COUNT(*) as count 
+// =============================================
+// QUERY SUMMARY: Hitung total per status
+// =============================================
+$summary_sql = "SELECT a.status, COUNT(*) as count 
                 FROM absensi a 
                 JOIN siswa s ON a.siswa_id = s.id
                 WHERE a.tanggal BETWEEN :start_date AND :end_date
                 AND a.approval_status = 'Approved'";
 
-// Apply the same filters to summary
+$summary_params = [
+    'start_date' => $start_date,
+    'end_date'   => $end_date
+];
+
 if ($kelas) {
     $summary_sql .= " AND s.kelas = :kelas";
+    $summary_params['kelas'] = $kelas;
 }
 
 if ($jurusan) {
     $summary_sql .= " AND s.jurusan = :jurusan";
+    $summary_params['jurusan'] = $jurusan;
 }
 
 if ($siswa_id) {
     $summary_sql .= " AND a.siswa_id = :siswa_id";
+    $summary_params['siswa_id'] = $siswa_id;
 }
 
 if ($status) {
     $summary_sql .= " AND a.status = :status";
+    $summary_params['status'] = $status;
 }
 
-$summary_sql .= " GROUP BY status";
+$summary_sql .= " GROUP BY a.status";
 
 $summary_stmt = $conn->prepare($summary_sql);
-$summary_stmt->execute($params);
+$summary_stmt->execute($summary_params);
 $summary_data = $summary_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Initialize status counts
 $status_counts = [
-    'Hadir' => 0,
-    'Sakit' => 0,
-    'Izin' => 0,
+    'Hadir'     => 0,
+    'Sakit'     => 0,
+    'Izin'      => 0,
     'Terlambat' => 0,
-    'Alpha' => 0
+    'Alpha'     => 0
 ];
 
-// Populate with actual counts
 foreach ($summary_data as $row) {
-    $status_counts[$row['status']] = $row['count'];
+    if (isset($status_counts[$row['status']])) {
+        $status_counts[$row['status']] = $row['count'];
+    }
 }
 
-// Calculate total
 $total_absensi = array_sum($status_counts);
 
-// Get daily statistics for chart
+// =============================================
+// QUERY DAILY: Untuk chart trend harian
+// =============================================
 $daily_sql = "SELECT DATE(a.tanggal) as date, a.status, COUNT(*) as count
                FROM absensi a 
                JOIN siswa s ON a.siswa_id = s.id
                WHERE a.tanggal BETWEEN :start_date AND :end_date
                AND a.approval_status = 'Approved'";
 
-// Apply filters to daily stats
+$daily_params = [
+    'start_date' => $start_date,
+    'end_date'   => $end_date
+];
+
 if ($kelas) {
     $daily_sql .= " AND s.kelas = :kelas";
+    $daily_params['kelas'] = $kelas;
 }
 
 if ($jurusan) {
     $daily_sql .= " AND s.jurusan = :jurusan";
+    $daily_params['jurusan'] = $jurusan;
 }
 
 if ($siswa_id) {
     $daily_sql .= " AND a.siswa_id = :siswa_id";
+    $daily_params['siswa_id'] = $siswa_id;
 }
 
 if ($status) {
     $daily_sql .= " AND a.status = :status";
+    $daily_params['status'] = $status;
 }
 
-$daily_sql .= " GROUP BY DATE(a.tanggal), a.status
-                ORDER BY DATE(a.tanggal)";
+$daily_sql .= " GROUP BY DATE(a.tanggal), a.status ORDER BY DATE(a.tanggal)";
 
 $daily_stmt = $conn->prepare($daily_sql);
-$daily_stmt->execute($params);
+$daily_stmt->execute($daily_params);
 $daily_data = $daily_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Prepare data for daily chart
-$chart_dates = [];
+$chart_dates    = [];
 $chart_statuses = [];
-$chart_data = [];
+$chart_data     = [];
 
-// Process daily data for the chart
 foreach ($daily_data as $row) {
-    $date = date('d M', strtotime($row['date']));
-    $status = $row['status'];
-    $count = $row['count'];
+    $date_label = date('d M', strtotime($row['date']));
+    $s          = $row['status'];
+    $count      = $row['count'];
 
-    if (!in_array($date, $chart_dates)) {
-        $chart_dates[] = $date;
+    if (!in_array($date_label, $chart_dates)) {
+        $chart_dates[] = $date_label;
     }
-
-    if (!in_array($status, $chart_statuses)) {
-        $chart_statuses[] = $status;
+    if (!in_array($s, $chart_statuses)) {
+        $chart_statuses[] = $s;
     }
-
-    if (!isset($chart_data[$status])) {
-        $chart_data[$status] = [];
+    if (!isset($chart_data[$s])) {
+        $chart_data[$s] = [];
     }
-
-    $chart_data[$status][$date] = $count;
+    $chart_data[$s][$date_label] = $count;
 }
 
-// Sort statuses for consistent colors
 sort($chart_statuses);
 
-// Get list of all students for the dropdown filter
-$student_sql = "SELECT id, nis, nama_lengkap, kelas, jurusan FROM siswa ORDER BY nama_lengkap";
+// =============================================
+// DAFTAR SISWA untuk dropdown filter
+// =============================================
+$student_sql  = "SELECT id, nis, nama_lengkap, kelas, jurusan FROM siswa ORDER BY nama_lengkap";
 $student_stmt = $conn->query($student_sql);
 $student_list = $student_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Get detailed attendance data with pagination
-$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+// =============================================
+// PAGINATION & SORTING
+// =============================================
+$page          = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $items_per_page = 20;
-$offset = ($page - 1) * $items_per_page;
+$offset        = ($page - 1) * $items_per_page;
 
-// Add sorting
 $sort_column = $_GET['sort'] ?? 'tanggal';
-$sort_order = $_GET['order'] ?? 'DESC';
+$sort_order  = $_GET['order'] ?? 'DESC';
 
-// Validate sort column
 $valid_columns = ['tanggal', 'nama_lengkap', 'nis', 'kelas', 'jurusan', 'status'];
-$sort_column = in_array($sort_column, $valid_columns) ? $sort_column : 'tanggal';
+$sort_column   = in_array($sort_column, $valid_columns) ? $sort_column : 'tanggal';
 
-// Add table prefix for sorting
-$sort_prefix = ($sort_column == 'tanggal' || $sort_column == 'status') ? 'a.' : 's.';
+// Tentukan prefix tabel untuk sorting
+$sort_prefix = in_array($sort_column, ['tanggal', 'status']) ? 'a.' : 's.';
 
-// Add sorting to the SQL query - Fixed to use columns from GROUP BY
-if ($sort_column == 'tanggal') {
-    $sql .= " ORDER BY latest_date " . ($sort_order === 'ASC' ? 'ASC' : 'DESC');
-} else if ($sort_column == 'status') {
-    // For status sorting, we need to use a different approach
-    // Since status is aggregated, order by one of the status counts
-    $sql .= " ORDER BY " . strtolower($status_filter ?: 'hadir') . " " . ($sort_order === 'ASC' ? 'ASC' : 'DESC');
-} else {
-    // For other columns, they're already in the GROUP BY
-    $sql .= " ORDER BY " . $sort_prefix . "$sort_column " . ($sort_order === 'ASC' ? 'ASC' : 'DESC');
+// =============================================
+// QUERY DETAIL: Tabel data kehadiran
+// =============================================
+$detail_sql = "SELECT a.id, a.tanggal, a.jam_masuk, a.status, a.approval_status, 
+               s.id as siswa_id, s.nama_lengkap, s.nis, s.kelas, s.jurusan, s.foto_profil 
+               FROM absensi a
+               JOIN siswa s ON a.siswa_id = s.id 
+               WHERE a.tanggal BETWEEN :start_date AND :end_date
+               AND a.approval_status = 'Approved'";
+
+$detail_params = [
+    'start_date' => $start_date,
+    'end_date'   => $end_date
+];
+
+if ($kelas) {
+    $detail_sql .= " AND s.kelas = :kelas";
+    $detail_params['kelas'] = $kelas;
 }
 
-// Add pagination
-$sql .= " LIMIT :offset, :limit";
-
-// Get total count for pagination
-$count_sql = str_replace("SELECT a.*, s.nama_lengkap, s.nis, s.kelas, s.jurusan", "SELECT COUNT(*) as total", $sql);
-$count_sql = preg_replace("/LIMIT :offset, :limit/", "", $count_sql);
-
-$count_stmt = $conn->prepare($count_sql);
-foreach ($params as $key => $value) {
-    $count_stmt->bindValue(':' . $key, $value);
+if ($jurusan) {
+    $detail_sql .= " AND s.jurusan = :jurusan";
+    $detail_params['jurusan'] = $jurusan;
 }
-$count_stmt->execute();
-$total_items = $count_stmt->fetchColumn();
-$total_pages = ceil($total_items / $items_per_page);
 
-// Execute query for detailed data
-$stmt = $conn->prepare($sql);
-foreach ($params as $key => $value) {
-    $stmt->bindValue(':' . $key, $value);
+if ($siswa_id) {
+    $detail_sql .= " AND a.siswa_id = :siswa_id";
+    $detail_params['siswa_id'] = $siswa_id;
 }
-$stmt->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
-$stmt->bindValue(':limit', (int) $items_per_page, PDO::PARAM_INT);
-$stmt->execute();
-$attendance_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Helper function to build URLs for pagination and sorting
+if ($status) {
+    $detail_sql .= " AND a.status = :status";
+    $detail_params['status'] = $status;
+}
+
+// Sorting
+$detail_sql .= " ORDER BY " . $sort_prefix . $sort_column . " " . ($sort_order === 'ASC' ? 'ASC' : 'DESC');
+
+// =============================================
+// QUERY COUNT: Total untuk pagination
+// =============================================
+$detail_count_sql = "SELECT COUNT(*) as total FROM absensi a 
+                     JOIN siswa s ON a.siswa_id = s.id 
+                     WHERE a.tanggal BETWEEN :start_date AND :end_date
+                     AND a.approval_status = 'Approved'";
+
+$detail_count_params = [
+    'start_date' => $start_date,
+    'end_date'   => $end_date
+];
+
+if ($kelas) {
+    $detail_count_sql .= " AND s.kelas = :kelas";
+    $detail_count_params['kelas'] = $kelas;
+}
+
+if ($jurusan) {
+    $detail_count_sql .= " AND s.jurusan = :jurusan";
+    $detail_count_params['jurusan'] = $jurusan;
+}
+
+if ($siswa_id) {
+    $detail_count_sql .= " AND a.siswa_id = :siswa_id";
+    $detail_count_params['siswa_id'] = $siswa_id;
+}
+
+if ($status) {
+    $detail_count_sql .= " AND a.status = :status";
+    $detail_count_params['status'] = $status;
+}
+
+$detail_count_stmt = $conn->prepare($detail_count_sql);
+$detail_count_stmt->execute($detail_count_params);
+$total_detail_items = $detail_count_stmt->fetchColumn();
+$total_pages        = ceil($total_detail_items / $items_per_page);
+
+// Tambahkan LIMIT untuk detail query
+$detail_sql .= " LIMIT :offset, :limit";
+
+$detail_stmt = $conn->prepare($detail_sql);
+
+// Bind semua parameter detail
+foreach ($detail_params as $key => $value) {
+    $detail_stmt->bindValue(':' . $key, $value);
+}
+$detail_stmt->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
+$detail_stmt->bindValue(':limit', (int) $items_per_page, PDO::PARAM_INT);
+$detail_stmt->execute();
+$detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// =============================================
+// HELPER FUNCTIONS
+// =============================================
 function buildUrl($page = null, $sort = null, $order = null)
 {
     $params = $_GET;
-    if ($page !== null)
-        $params['page'] = $page;
-    if ($sort !== null)
-        $params['sort'] = $sort;
-    if ($order !== null)
-        $params['order'] = $order;
+    if ($page !== null) $params['page'] = $page;
+    if ($sort !== null) $params['sort'] = $sort;
+    if ($order !== null) $params['order'] = $order;
     return '?' . http_build_query($params);
 }
 
-// Helper function for sorting icons
 function getSortIcon($column, $current_sort, $current_order)
 {
     if ($column !== $current_sort) {
@@ -248,120 +321,14 @@ function getSortIcon($column, $current_sort, $current_order)
         : '<i class="fas fa-sort-down text-violet-600"></i>';
 }
 
-// Generate chart colors for statuses
+// Warna per status untuk chart
 $status_colors = [
-    'Hadir' => '#10B981',     // green
-    'Sakit' => '#EAB308',     // yellow
-    'Izin' => '#8B5CF6',      // purple
-    'Terlambat' => '#F97316', // orange
-    'Alpha' => '#EF4444'      // red
+    'Hadir'     => '#10B981',
+    'Sakit'     => '#EAB308',
+    'Izin'      => '#8B5CF6',
+    'Terlambat' => '#F97316',
+    'Alpha'     => '#EF4444'
 ];
-
-// Get detailed attendance data with pagination - using a separate query for the detail table
-$detail_sql = "SELECT a.id, a.tanggal, a.jam_masuk, a.status, a.approval_status, 
-               s.id as siswa_id, s.nama_lengkap, s.nis, s.kelas, s.jurusan, s.foto_profil 
-               FROM absensi a
-               JOIN siswa s ON a.siswa_id = s.id 
-               WHERE a.tanggal BETWEEN :start_date AND :end_date
-               AND a.approval_status = 'Approved'";
-
-// Apply filters to detail query
-if ($kelas) {
-    $detail_sql .= " AND s.kelas = :kelas";
-}
-
-if ($jurusan) {
-    $detail_sql .= " AND s.jurusan = :jurusan";
-}
-
-if ($siswa_id) {
-    $detail_sql .= " AND a.siswa_id = :siswa_id";
-}
-
-if ($status) {
-    $detail_sql .= " AND a.status = :status";
-}
-
-// Add sorting
-$detail_sql .= " ORDER BY " . $sort_prefix . "$sort_column " . ($sort_order === 'ASC' ? 'ASC' : 'DESC');
-
-// Add pagination
-$detail_sql .= " LIMIT :offset, :limit";
-
-// Get total count for pagination (for the detail table)
-$detail_count_sql = "SELECT COUNT(*) as total FROM absensi a 
-                     JOIN siswa s ON a.siswa_id = s.id 
-                     WHERE a.tanggal BETWEEN :start_date AND :end_date
-                     AND a.approval_status = 'Approved'";
-
-// Apply filters to count query
-if ($kelas) {
-    $detail_count_sql .= " AND s.kelas = :kelas";
-}
-
-if ($jurusan) {
-    $detail_count_sql .= " AND s.jurusan = :jurusan";
-}
-
-if ($siswa_id) {
-    $detail_count_sql .= " AND a.siswa_id = :siswa_id";
-}
-
-if ($status) {
-    $detail_count_sql .= " AND a.status = :status";
-}
-
-$detail_count_stmt = $conn->prepare($detail_count_sql);
-// Bind parameters separately to avoid issues
-$detail_count_stmt->bindParam(':start_date', $start_date);
-$detail_count_stmt->bindParam(':end_date', $end_date);
-
-if ($kelas) {
-    $detail_count_stmt->bindParam(':kelas', $kelas);
-}
-
-if ($jurusan) {
-    $detail_count_stmt->bindParam(':jurusan', $jurusan);
-}
-
-if ($siswa_id) {
-    $detail_count_stmt->bindParam(':siswa_id', $siswa_id);
-}
-
-if ($status) {
-    $detail_count_stmt->bindParam(':status', $status);
-}
-
-$detail_count_stmt->execute();
-$total_detail_items = $detail_count_stmt->fetchColumn();
-$total_pages = ceil($total_detail_items / $items_per_page);
-
-// Execute query for detailed data
-$detail_stmt = $conn->prepare($detail_sql);
-// Bind parameters the same way for detail query
-$detail_stmt->bindParam(':start_date', $start_date);
-$detail_stmt->bindParam(':end_date', $end_date);
-
-if ($kelas) {
-    $detail_stmt->bindParam(':kelas', $kelas);
-}
-
-if ($jurusan) {
-    $detail_stmt->bindParam(':jurusan', $jurusan);
-}
-
-if ($siswa_id) {
-    $detail_stmt->bindParam(':siswa_id', $siswa_id);
-}
-
-if ($status) {
-    $detail_stmt->bindParam(':status', $status);
-}
-
-$detail_stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-$detail_stmt->bindParam(':limit', $items_per_page, PDO::PARAM_INT);
-$detail_stmt->execute();
-$detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -390,7 +357,6 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
             background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
         }
 
-        /* Status badge styles */
         .status-hadir {
             background: rgba(16, 185, 129, 0.1);
             color: #10B981;
@@ -421,7 +387,6 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
-        /* Animate fade in elements */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -438,7 +403,6 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
             animation: fadeIn 0.3s ease forwards;
         }
 
-        /* Mobile responsive styles */
         .sidebar-transition {
             transition: transform 0.3s ease-in-out;
         }
@@ -448,7 +412,6 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
             transition: opacity 0.3s ease-in-out;
         }
 
-        /* Hide scrollbar */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -458,13 +421,11 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
             scrollbar-width: none;
         }
 
-        /* Responsive table styles */
         .table-container {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Responsive pagination */
         @media (max-width: 640px) {
             .pagination-compact .page-number {
                 display: none;
@@ -482,7 +443,7 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body class="min-h-screen text-gray-800 bg-fixed">
-    <!-- Mobile Overlay - only visible when sidebar is open on mobile -->
+    <!-- Mobile Overlay -->
     <div id="mobile-overlay" class="fixed inset-0 bg-white/40 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
     <!-- Side Navigation -->
@@ -496,7 +457,6 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                     <p class="text-xs text-gray-500">Sistem Absensi</p>
                 </div>
             </div>
-            <!-- Close sidebar button - only visible on mobile -->
             <button class="text-gray-600 hover:text-gray-800 lg:hidden" onclick="toggleSidebar()">
                 <i class="fas fa-times text-xl"></i>
             </button>
@@ -515,7 +475,6 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                     <span>Monitoring Siswa</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
-
                 <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
                     <li>
                         <a href="../absensi/index.php"
@@ -549,7 +508,6 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                     <span>Laporan</span>
                     <i class="fas fa-chevron-down ml-auto text-sm"></i>
                 </button>
-
                 <ul class="ml-8 mt-2 hidden group-hover:block transition-all duration-300">
                     <li>
                         <a href="../laporan/index.php"
@@ -599,7 +557,6 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="flex items-center gap-3">
                 <span id="current-time-mobile" class="text-sm font-medium hidden sm:block"></span>
                 <?php
-                // Use admin photo from session if available
                 $photo_path = $_SESSION['admin_photo'] ?? 'assets/default/avatar.png';
                 ?>
                 <img src="../../<?= $photo_path ?>" alt="Profile"
@@ -613,23 +570,22 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <header class="flex flex-wrap justify-between items-center mb-6 gap-4">
                     <div>
                         <h1 class="text-xl md:text-2xl font-bold">Laporan Absensi</h1>
-                        <p class="text-gray-500 text-sm md:text-base">Statistik dan rekapitulasi data kehadiran siswa
-                        </p>
+                        <p class="text-gray-500 text-sm md:text-base">Statistik dan rekapitulasi data kehadiran siswa</p>
                     </div>
                     <div class="flex gap-3">
-                        <a href="export_absensi.php?format=pdf<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
+                        <a href="export_absensi.php?format=pdf<?= isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
                             class="px-3 py-2 sm:px-4 sm:py-2 bg-red-600 text-white hover:bg-red-700 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
                             <i class="fas fa-file-pdf"></i> <span class="hidden sm:inline">Export PDF</span>
                         </a>
                     </div>
                 </header>
 
-                <!-- Filter Section - Made responsive -->
+                <!-- Filter Section -->
                 <div class="glass-effect rounded-xl p-4 sm:p-6 mb-6">
                     <h3 class="font-semibold text-lg mb-4">Filter Laporan</h3>
                     <form method="GET" id="filterForm" class="space-y-6">
                         <div class="grid grid-cols-1 gap-4">
-                            <!-- Date Range Section -->
+                            <!-- Date Range -->
                             <div class="bg-gray-50/30 rounded-lg p-4">
                                 <h4 class="text-sm font-medium mb-3 text-violet-500">
                                     <i class="fas fa-calendar-alt mr-2"></i> Periode Waktu
@@ -637,20 +593,20 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div>
                                         <label class="text-xs text-gray-500 block mb-1">Tanggal Mulai</label>
-                                        <input type="date" name="start_date" value="<?= $start_date ?>"
+                                        <input type="date" name="start_date" value="<?= htmlspecialchars($start_date) ?>"
                                             class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800">
                                     </div>
                                     <div>
                                         <label class="text-xs text-gray-500 block mb-1">Tanggal Akhir</label>
-                                        <input type="date" name="end_date" value="<?= $end_date ?>"
+                                        <input type="date" name="end_date" value="<?= htmlspecialchars($end_date) ?>"
                                             class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800">
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Additional Filters - Now in a responsive grid -->
+                            <!-- Additional Filters -->
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                <!-- Class & Major Filter -->
+                                <!-- Kelas & Jurusan -->
                                 <div class="bg-gray-50/30 rounded-lg p-4">
                                     <h4 class="text-sm font-medium mb-3 text-violet-500">
                                         <i class="fas fa-school mr-2"></i> Kelas & Jurusan
@@ -661,12 +617,9 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <select name="kelas"
                                                 class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800">
                                                 <option value="">Semua Kelas</option>
-                                                <option value="10" <?= $kelas === '10' ? 'selected' : '' ?>>Kelas 10
-                                                </option>
-                                                <option value="11" <?= $kelas === '11' ? 'selected' : '' ?>>Kelas 11
-                                                </option>
-                                                <option value="12" <?= $kelas === '12' ? 'selected' : '' ?>>Kelas 12
-                                                </option>
+                                                <option value="10" <?= $kelas === '10' ? 'selected' : '' ?>>Kelas 10</option>
+                                                <option value="11" <?= $kelas === '11' ? 'selected' : '' ?>>Kelas 11</option>
+                                                <option value="12" <?= $kelas === '12' ? 'selected' : '' ?>>Kelas 12</option>
                                             </select>
                                         </div>
                                         <div>
@@ -674,22 +627,17 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <select name="jurusan"
                                                 class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800">
                                                 <option value="">Semua Jurusan</option>
-                                                <option value="TKJ" <?= $jurusan === 'TKJ' ? 'selected' : '' ?>>TKJ
-                                                </option>
-                                                <option value="MP" <?= $jurusan === 'MP' ? 'selected' : '' ?>>MP
-                                                </option>
-                                                <option value="AKL" <?= $jurusan === 'AKL' ? 'selected' : '' ?>>AKL
-                                                </option>
-                                                <option value="TSM" <?= $jurusan === 'TSM' ? 'selected' : '' ?>>TSM
-                                                </option>
-                                                <option value="TKR" <?= $jurusan === 'TKR' ? 'selected' : '' ?>>TKR
-                                                </option>
+                                                <option value="TKJ" <?= $jurusan === 'TKJ' ? 'selected' : '' ?>>TKJ</option>
+                                                <option value="MP" <?= $jurusan === 'MP'  ? 'selected' : '' ?>>MP</option>
+                                                <option value="AKL" <?= $jurusan === 'AKL' ? 'selected' : '' ?>>AKL</option>
+                                                <option value="TSM" <?= $jurusan === 'TSM' ? 'selected' : '' ?>>TSM</option>
+                                                <option value="TKR" <?= $jurusan === 'TKR' ? 'selected' : '' ?>>TKR</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Status Filter -->
+                                <!-- Status -->
                                 <div class="bg-gray-50/30 rounded-lg p-4">
                                     <h4 class="text-sm font-medium mb-3 text-violet-500">
                                         <i class="fas fa-filter mr-2"></i> Status Kehadiran
@@ -699,20 +647,16 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <select name="status"
                                             class="w-full bg-gray-50/50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800">
                                             <option value="">Semua Status</option>
-                                            <option value="Hadir" <?= $status === 'Hadir' ? 'selected' : '' ?>>Hadir
-                                            </option>
-                                            <option value="Sakit" <?= $status === 'Sakit' ? 'selected' : '' ?>>Sakit
-                                            </option>
-                                            <option value="Izin" <?= $status === 'Izin' ? 'selected' : '' ?>>Izin</option>
-                                            <option value="Terlambat" <?= $status === 'Terlambat' ? 'selected' : '' ?>>
-                                                Terlambat</option>
-                                            <option value="Alpha" <?= $status === 'Alpha' ? 'selected' : '' ?>>Alpha
-                                            </option>
+                                            <option value="Hadir" <?= $status === 'Hadir'     ? 'selected' : '' ?>>Hadir</option>
+                                            <option value="Sakit" <?= $status === 'Sakit'     ? 'selected' : '' ?>>Sakit</option>
+                                            <option value="Izin" <?= $status === 'Izin'      ? 'selected' : '' ?>>Izin</option>
+                                            <option value="Terlambat" <?= $status === 'Terlambat' ? 'selected' : '' ?>>Terlambat</option>
+                                            <option value="Alpha" <?= $status === 'Alpha'     ? 'selected' : '' ?>>Alpha</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <!-- Student Selection -->
+                                <!-- Siswa -->
                                 <div class="bg-gray-50/30 rounded-lg p-4">
                                     <h4 class="text-sm font-medium mb-3 text-violet-500">
                                         <i class="fas fa-user-graduate mr-2"></i> Siswa
@@ -724,8 +668,7 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <option value="">Semua Siswa</option>
                                             <?php foreach ($student_list as $student): ?>
                                                 <option value="<?= $student['id'] ?>" <?= $siswa_id == $student['id'] ? 'selected' : '' ?>>
-                                                    <?= htmlspecialchars($student['nama_lengkap']) ?>
-                                                    (<?= $student['nis'] ?>)
+                                                    <?= htmlspecialchars($student['nama_lengkap']) ?> (<?= htmlspecialchars($student['nis']) ?>)
                                                 </option>
                                             <?php endforeach; ?>
                                         </select>
@@ -734,33 +677,38 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
 
-                        <div
-                            class="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-300">
+                        <div class="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-300">
                             <div class="w-full sm:w-auto">
-                                <?php if (!empty($_GET) && (isset($_GET['start_date']) || isset($_GET['end_date']) || isset($_GET['kelas']) || isset($_GET['jurusan']) || isset($_GET['siswa_id']) || isset($_GET['status']))): ?>
+                                <?php if (!empty($_GET) && (isset($_GET['start_date']) || isset($_GET['kelas']) || isset($_GET['jurusan']) || isset($_GET['siswa_id']) || isset($_GET['status']))): ?>
                                     <button type="button" onclick="resetFilters()"
-                                        class="w-full sm:w-auto px-4 py-2 border border-gray-300 hover:border-gray-300 rounded-lg text-sm text-gray-500 hover:text-gray-800 transition-colors">
+                                        class="w-full sm:w-auto px-4 py-2 border border-gray-300 hover:border-gray-400 rounded-lg text-sm text-gray-500 hover:text-gray-800 transition-colors">
                                         <i class="fas fa-redo mr-2"></i> Reset Filter
                                     </button>
                                 <?php endif; ?>
                             </div>
                             <button type="submit"
-                                class="w-full sm:w-auto px-5 py-2 text-white bg-purple-600 hover:bg-purple-700 text-gray-800 rounded-lg text-sm transition-colors">
+                                class="w-full sm:w-auto px-5 py-2 text-white bg-purple-600 hover:bg-purple-700 rounded-lg text-sm transition-colors">
                                 <i class="fas fa-filter mr-2"></i> Terapkan Filter
                             </button>
                         </div>
                     </form>
                 </div>
 
-
-
-                <!-- Data Table - Made responsive with horizontal scrolling -->
+                <!-- Data Table -->
                 <div class="glass-effect rounded-xl overflow-hidden">
-                    <div class="p-4 sm:p-6 border-b border-gray-800">
+                    <div class="p-4 sm:p-6 border-b border-gray-200">
                         <h3 class="font-semibold text-lg">Data Detail Kehadiran</h3>
                         <p class="text-sm text-gray-500 mt-1">
-                            Periode: <?= date('d F Y', strtotime($start_date)) ?> -
-                            <?= date('d F Y', strtotime($end_date)) ?>
+                            Periode: <?= date('d F Y', strtotime($start_date)) ?> - <?= date('d F Y', strtotime($end_date)) ?>
+                            <?php if ($status): ?>
+                                &nbsp;|&nbsp; Status: <span class="font-medium text-violet-600"><?= htmlspecialchars($status) ?></span>
+                            <?php endif; ?>
+                            <?php if ($kelas): ?>
+                                &nbsp;|&nbsp; Kelas: <span class="font-medium text-violet-600"><?= htmlspecialchars($kelas) ?></span>
+                            <?php endif; ?>
+                            <?php if ($jurusan): ?>
+                                &nbsp;|&nbsp; Jurusan: <span class="font-medium text-violet-600"><?= htmlspecialchars($jurusan) ?></span>
+                            <?php endif; ?>
                         </p>
                     </div>
 
@@ -772,45 +720,40 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <th class="px-6 py-3 text-xs font-medium">
                                             <a href="<?= buildUrl(null, 'tanggal', $sort_column == 'tanggal' && $sort_order == 'ASC' ? 'DESC' : 'ASC') ?>"
                                                 class="flex items-center gap-1 hover:text-gray-800">
-                                                Tanggal
-                                                <?= getSortIcon('tanggal', $sort_column, $sort_order) ?>
+                                                Tanggal <?= getSortIcon('tanggal', $sort_column, $sort_order) ?>
                                             </a>
                                         </th>
                                         <th class="px-6 py-3 text-xs font-medium">
                                             <a href="<?= buildUrl(null, 'nis', $sort_column == 'nis' && $sort_order == 'ASC' ? 'DESC' : 'ASC') ?>"
                                                 class="flex items-center gap-1 hover:text-gray-800">
-                                                NIS
-                                                <?= getSortIcon('nis', $sort_column, $sort_order) ?>
+                                                NIS <?= getSortIcon('nis', $sort_column, $sort_order) ?>
                                             </a>
                                         </th>
                                         <th class="px-6 py-3 text-xs font-medium">
                                             <a href="<?= buildUrl(null, 'nama_lengkap', $sort_column == 'nama_lengkap' && $sort_order == 'ASC' ? 'DESC' : 'ASC') ?>"
                                                 class="flex items-center gap-1 hover:text-gray-800">
-                                                Nama Siswa
-                                                <?= getSortIcon('nama_lengkap', $sort_column, $sort_order) ?>
+                                                Nama Siswa <?= getSortIcon('nama_lengkap', $sort_column, $sort_order) ?>
                                             </a>
                                         </th>
                                         <th class="px-6 py-3 text-xs font-medium">
                                             <a href="<?= buildUrl(null, 'kelas', $sort_column == 'kelas' && $sort_order == 'ASC' ? 'DESC' : 'ASC') ?>"
                                                 class="flex items-center gap-1 hover:text-gray-800">
-                                                Kelas
-                                                <?= getSortIcon('kelas', $sort_column, $sort_order) ?>
+                                                Kelas <?= getSortIcon('kelas', $sort_column, $sort_order) ?>
                                             </a>
                                         </th>
                                         <th class="px-6 py-3 text-xs font-medium">Jam Masuk</th>
                                         <th class="px-6 py-3 text-xs font-medium">
                                             <a href="<?= buildUrl(null, 'status', $sort_column == 'status' && $sort_order == 'ASC' ? 'DESC' : 'ASC') ?>"
                                                 class="flex items-center gap-1 hover:text-gray-800">
-                                                Status
-                                                <?= getSortIcon('status', $sort_column, $sort_order) ?>
+                                                Status <?= getSortIcon('status', $sort_column, $sort_order) ?>
                                             </a>
                                         </th>
                                         <th class="px-6 py-3 text-xs font-medium text-center">Detail</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-gray-800">
+                                <tbody class="divide-y divide-gray-100">
                                     <?php foreach ($detail_records as $data): ?>
-                                        <tr class="hover:bg-purple-900/5 transition-colors">
+                                        <tr class="hover:bg-purple-50/30 transition-colors">
                                             <td class="px-6 py-4 text-sm">
                                                 <?= date('d/m/Y', strtotime($data['tanggal'])) ?>
                                             </td>
@@ -824,7 +767,7 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 text-sm">
-                                                <?= $data['kelas'] ?> <?= $data['jurusan'] ?>
+                                                <?= htmlspecialchars($data['kelas']) ?> <?= htmlspecialchars($data['jurusan']) ?>
                                             </td>
                                             <td class="px-6 py-4 text-sm">
                                                 <?= (!empty($data['jam_masuk']) && $data['jam_masuk'] !== '00:00:00')
@@ -832,14 +775,13 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                                                     : '-' ?>
                                             </td>
                                             <td class="px-6 py-4">
-                                                <span
-                                                    class="px-3 py-1 rounded-full text-xs status-<?= strtolower($data['status']) ?>">
-                                                    <?= $data['status'] ?>
+                                                <span class="px-3 py-1 rounded-full text-xs status-<?= strtolower($data['status']) ?>">
+                                                    <?= htmlspecialchars($data['status']) ?>
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 text-center">
                                                 <a href="../absensi/detail.php?id=<?= $data['id'] ?>"
-                                                    class="text-blue-400 hover:text-blue-300">
+                                                    class="text-blue-500 hover:text-blue-700">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             </td>
@@ -849,13 +791,12 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                             </table>
                         </div>
 
-                        <!-- Responsive Pagination -->
-                        <div
-                            class="p-4 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <!-- Pagination -->
+                        <div class="p-4 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
                             <p class="text-sm text-gray-500 order-2 sm:order-1">
                                 Menampilkan <?= min($offset + 1, $total_detail_items) ?> -
-                                <?= min($offset + $items_per_page, $total_detail_items) ?> dari <?= $total_detail_items ?>
-                                data
+                                <?= min($offset + $items_per_page, $total_detail_items) ?> dari
+                                <?= $total_detail_items ?> data
                             </p>
                             <div class="flex space-x-1 order-1 sm:order-2 pagination-compact">
                                 <?php if ($page > 1): ?>
@@ -870,27 +811,22 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php endif; ?>
 
                                 <?php
-                                // Calculate the range of pages to show
-                                $range = 2;
+                                $range      = 2;
                                 $start_page = max($page - $range, 1);
-                                $end_page = min($page + $range, $total_pages);
+                                $end_page   = min($page + $range, $total_pages);
 
-                                // Display ellipses if needed
                                 if ($start_page > 1) {
                                     echo '<span class="px-2 sm:px-3 py-1.5 text-gray-500 flex items-center justify-center">...</span>';
                                 }
 
-                                // Display page numbers
                                 for ($i = $start_page; $i <= $end_page; $i++) {
                                     $is_current = $i == $page;
                                     $class = $is_current
-                                        ? 'px-2 sm:px-3 py-1.5 bg-purple-600 rounded text-gray-800 text-sm flex items-center justify-center min-w-[32px] current-page page-number'
+                                        ? 'px-2 sm:px-3 py-1.5 bg-purple-600 text-white rounded text-sm flex items-center justify-center min-w-[32px] current-page page-number'
                                         : 'px-2 sm:px-3 py-1.5 bg-gray-50 rounded hover:bg-gray-100 text-sm flex items-center justify-center min-w-[32px] page-number';
-
                                     echo '<a href="' . buildUrl($i) . '" class="' . $class . '">' . $i . '</a>';
                                 }
 
-                                // Display ellipses if needed
                                 if ($end_page < $total_pages) {
                                     echo '<span class="px-2 sm:px-3 py-1.5 text-gray-500 flex items-center justify-center">...</span>';
                                 }
@@ -908,272 +844,172 @@ $detail_records = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php endif; ?>
                             </div>
                         </div>
+
                     <?php else: ?>
                         <div class="p-10 text-center">
-                            <i class="fas fa-search text-5xl text-gray-600 mb-4"></i>
+                            <i class="fas fa-search text-5xl text-gray-400 mb-4"></i>
                             <p class="text-gray-500">Tidak ada data yang ditemukan untuk filter yang dipilih</p>
                             <button onclick="resetFilters()"
-                                class="mt-4 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm transition-colors">
+                                class="mt-4 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm transition-colors">
                                 <i class="fas fa-redo mr-2"></i> Reset Filter
                             </button>
                         </div>
                     <?php endif; ?>
                 </div>
 
-                <!-- Mobile action buttons - Fixed at bottom -->
+                <!-- Mobile FAB -->
                 <div class="fixed bottom-4 right-4 lg:hidden flex flex-col gap-2">
-                    <a href="export_absensi.php?format=excel<?= isset($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
-                        class="flex items-center justify-center w-12 h-12 bg-green-600 hover:bg-green-700 rounded-full shadow-lg transition-colors">
+                    <a href="export_absensi.php?format=excel<?= isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] ? '&' . $_SERVER['QUERY_STRING'] : '' ?>"
+                        class="flex items-center justify-center w-12 h-12 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg transition-colors">
                         <i class="fas fa-file-excel text-lg"></i>
                     </a>
                 </div>
             </div>
+        </div>
     </main>
 
     <script src="<?= str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) ?>assets/js/diome.js"></script>
     <script>
-        // Initialize charts with responsive options
         document.addEventListener('DOMContentLoaded', function() {
-            // Responsive chart options
-            const chartResponsiveOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: window.innerWidth > 640, // Hide legend on small screens
-                        position: window.innerWidth < 768 ? 'bottom' : 'top',
-                        labels: {
-                            boxWidth: window.innerWidth < 768 ? 8 : 12,
-                            font: {
-                                size: window.innerWidth < 768 ? 10 : 11
+
+            const isMobile = window.innerWidth < 768;
+
+            // ---- Pie Chart ----
+            const pieCtx = document.getElementById('statusPieChart');
+            if (pieCtx) {
+                new Chart(pieCtx.getContext('2d'), {
+                    type: 'pie',
+                    data: {
+                        labels: ['Hadir', 'Terlambat', 'Sakit', 'Izin', 'Alpha'],
+                        datasets: [{
+                            data: [
+                                <?= $status_counts['Hadir'] ?>,
+                                <?= $status_counts['Terlambat'] ?>,
+                                <?= $status_counts['Sakit'] ?>,
+                                <?= $status_counts['Izin'] ?>,
+                                <?= $status_counts['Alpha'] ?>
+                            ],
+                            backgroundColor: ['#10B981', '#F97316', '#EAB308', '#8B5CF6', '#EF4444'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '60%',
+                        plugins: {
+                            legend: {
+                                display: !isMobile,
+                                position: 'right'
                             }
                         }
-                    },
-                    tooltip: {
-                        titleFont: {
-                            size: window.innerWidth < 768 ? 10 : 12
-                        },
-                        bodyFont: {
-                            size: window.innerWidth < 768 ? 10 : 12
-                        },
-                        padding: window.innerWidth < 768 ? 8 : 12
                     }
-                },
-                scales: {
-                    y: {
-                        ticks: {
-                            font: {
-                                size: window.innerWidth < 768 ? 9 : 10
-                            }
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            font: {
-                                size: window.innerWidth < 768 ? 9 : 10
-                            },
-                            maxRotation: window.innerWidth < 768 ? 45 : 0,
-                            minRotation: window.innerWidth < 768 ? 45 : 0
-                        }
-                    }
-                }
-            };
+                });
+            }
 
-            // Pie chart data
-            const pieData = {
-                labels: ['Hadir', 'Terlambat', 'Sakit', 'Izin', 'Alpha'],
-                datasets: [{
-                    data: [
-                        <?= $status_counts['Hadir'] ?>,
-                        <?= $status_counts['Terlambat'] ?>,
-                        <?= $status_counts['Sakit'] ?>,
-                        <?= $status_counts['Izin'] ?>,
-                        <?= $status_counts['Alpha'] ?>
-                    ],
-                    backgroundColor: [
-                        '#10B981', // green
-                        '#F97316', // orange
-                        '#EAB308', // yellow
-                        '#8B5CF6', // purple
-                        '#EF4444' // red
-                    ],
-                    borderWidth: 0
-                }]
-            };
+            // ---- Trend Line Chart ----
+            const trendCtx = document.getElementById('trendLineChart');
+            if (trendCtx) {
+                const chartDates = <?= json_encode($chart_dates) ?>;
+                const chartData = <?= json_encode($chart_data) ?>;
+                const chartStatuses = <?= json_encode($chart_statuses) ?>;
+                const statusColors = <?= json_encode($status_colors) ?>;
 
-            // Create responsive pie chart
-            const pieCtx = document.getElementById('statusPieChart').getContext('2d');
-            const pieOptions = {
-                ...chartResponsiveOptions,
-                plugins: {
-                    ...chartResponsiveOptions.plugins,
-                    legend: {
-                        ...chartResponsiveOptions.plugins.legend,
-                        position: 'right',
-                        align: 'center',
-                        display: window.innerWidth >= 1024, // Only show on larger screens
-                    }
-                },
-                cutout: '60%'
-            };
-
-            new Chart(pieCtx, {
-                type: 'pie',
-                data: pieData,
-                options: pieOptions
-            });
-
-            // Trend chart data
-            const chartDates = <?= json_encode($chart_dates) ?>;
-            const chartData = <?= json_encode($chart_data) ?>;
-            const chartStatuses = <?= json_encode($chart_statuses) ?>;
-
-            // Create datasets for each status
-            const datasets = chartStatuses.map(status => {
-                const color = <?= json_encode($status_colors) ?>[status] || '#6B7280';
-                const data = chartDates.map(date => chartData[status]?.[date] || 0);
-
-                return {
-                    label: status,
-                    data: data,
-                    borderColor: color,
-                    backgroundColor: color.replace(')', ', 0.1)').replace('#', 'rgba('),
-                    tension: 0.4,
-                    fill: false,
-                    pointBackgroundColor: color,
-                    pointRadius: window.innerWidth < 768 ? 2 : 4,
-                    pointHoverRadius: window.innerWidth < 768 ? 4 : 6,
-                    borderWidth: window.innerWidth < 768 ? 2 : 3,
-                };
-            });
-
-            // Create responsive trend chart
-            const trendCtx = document.getElementById('trendLineChart').getContext('2d');
-            const trendOptions = {
-                ...chartResponsiveOptions,
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
-                }
-            };
-
-            new Chart(trendCtx, {
-                type: 'line',
-                data: {
-                    labels: chartDates,
-                    datasets: datasets
-                },
-                options: trendOptions
-            });
-
-            // Update charts on resize
-            window.addEventListener('resize', function() {
-                // Destroy and recreate charts when window size changes
-                Chart.instances.forEach(instance => {
-                    instance.destroy();
+                const datasets = chartStatuses.map(function(s) {
+                    const color = statusColors[s] || '#6B7280';
+                    return {
+                        label: s,
+                        data: chartDates.map(function(d) {
+                            return chartData[s] && chartData[s][d] ? chartData[s][d] : 0;
+                        }),
+                        borderColor: color,
+                        backgroundColor: color + '22',
+                        tension: 0.4,
+                        fill: false,
+                        pointBackgroundColor: color,
+                        pointRadius: isMobile ? 2 : 4,
+                        pointHoverRadius: isMobile ? 4 : 6,
+                        borderWidth: isMobile ? 2 : 3
+                    };
                 });
 
-                // Re-initialize charts with updated responsive settings
-                // You'd need to recreate the charts here, but for simplicity we'll reload the page
-                if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
-                this.resizeTimeout = setTimeout(() => {
-                    initializeCharts();
-                }, 500);
-            });
-
-            function initializeCharts() {
-                // Re-create charts with updated responsive options
-                // This would repeat the chart creation code above
-                // For brevity, we're omitting the actual implementation
+                new Chart(trendCtx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: chartDates,
+                        datasets: datasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        },
+                        plugins: {
+                            legend: {
+                                display: !isMobile,
+                                position: 'top'
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    maxRotation: isMobile ? 45 : 0,
+                                    minRotation: isMobile ? 45 : 0
+                                }
+                            }
+                        }
+                    }
+                });
             }
         });
 
-        // Reset all filters
         function resetFilters() {
             window.location.href = 'index.php';
         }
 
-        // Mobile sidebar toggle function
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('mobile-overlay');
+            const isHidden = sidebar.classList.contains('-translate-x-full');
 
-            if (sidebar.classList.contains('-translate-x-full')) {
-                // Open sidebar
+            if (isHidden) {
                 sidebar.classList.remove('-translate-x-full');
                 overlay.classList.remove('hidden');
                 document.body.classList.add('overflow-hidden');
             } else {
-                // Close sidebar
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('hidden');
                 document.body.classList.remove('overflow-hidden');
             }
         }
 
-        // Update time for mobile view
         function updateMobileTime() {
-            const mobileTimeElement = document.getElementById('current-time-mobile');
-            if (mobileTimeElement) {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('id-ID', {
+            const el = document.getElementById('current-time-mobile');
+            if (el) {
+                el.textContent = new Date().toLocaleTimeString('id-ID', {
                     hour: '2-digit',
                     minute: '2-digit',
                     hour12: false
                 });
-                mobileTimeElement.textContent = timeString;
             }
         }
 
-        // Add mobile time updater
-        setInterval(updateMobileTime, 60000); // Update every minute
-        updateMobileTime(); // Initial call
+        setInterval(updateMobileTime, 60000);
+        updateMobileTime();
 
-        // Make sure sidebar closes when pressing escape key
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                // Close sidebar on mobile
-                if (window.innerWidth < 1024) {
-                    const sidebar = document.getElementById('sidebar');
-                    if (!sidebar.classList.contains('-translate-x-full')) {
-                        toggleSidebar();
-                    }
-                }
+            if (e.key === 'Escape' && window.innerWidth < 1024) {
+                const sidebar = document.getElementById('sidebar');
+                if (!sidebar.classList.contains('-translate-x-full')) toggleSidebar();
             }
         });
 
-        // Fix viewport height issues on mobile browsers
-        function setMobileHeight() {
-            const vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-        }
-
-        window.addEventListener('resize', setMobileHeight);
-        setMobileHeight();
-
-        // Optimize filter form for smaller screens
-        document.addEventListener('DOMContentLoaded', function() {
-            // Better touch targets for mobile
-            if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-                document.querySelectorAll('select, input, button').forEach(el => {
-                    el.classList.add('touch-target');
-                });
-            }
-
-            // Auto-submit select filters on change for mobile
-            const selectFilters = document.querySelectorAll('select[name="kelas"], select[name="jurusan"], select[name="status"], select[name="siswa_id"]');
-            if (window.innerWidth < 768) {
-                selectFilters.forEach(select => {
-                    select.addEventListener('change', function() {
-                        // Only auto-submit if the user has explicitly changed a value
-                        if (this.dataset.changed) {
-                            document.getElementById('filterForm').submit();
-                        }
-                        this.dataset.changed = "true";
-                    });
-                });
-            }
-        });
+        (function setVH() {
+            document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+            window.addEventListener('resize', setVH);
+        })();
     </script>
 </body>
 
