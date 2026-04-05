@@ -472,11 +472,11 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'success') {
                                     <select name="jurusan"
                                         class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-violet-500">
                                         <option value="">Semua Jurusan</option>
-                                        <option value="RPL" <?= $jurusan_filter === 'RPL' ? 'selected' : '' ?>>RPL</option>
-                                        <option value="DKV" <?= $jurusan_filter === 'DKV' ? 'selected' : '' ?>>DKV</option>
-                                        <option value="AK" <?= $jurusan_filter === 'AK' ? 'selected' : '' ?>>AK</option>
-                                        <option value="BR" <?= $jurusan_filter === 'BR' ? 'selected' : '' ?>>BR</option>
+                                        <option value="TKJ" <?= $jurusan_filter === 'TKJ' ? 'selected' : '' ?>>TKJ</option>
                                         <option value="MP" <?= $jurusan_filter === 'MP' ? 'selected' : '' ?>>MP</option>
+                                        <option value="AKL" <?= $jurusan_filter === 'AKL' ? 'selected' : '' ?>>AKL</option>
+                                        <option value="TSM" <?= $jurusan_filter === 'TSM' ? 'selected' : '' ?>>TSM</option>
+                                        <option value="TKR" <?= $jurusan_filter === 'TKR' ? 'selected' : '' ?>>TKR</option>
                                     </select>
                                     <?php if ($jurusan_filter): ?>
                                         <button type="button" onclick="clearField('jurusan')"
