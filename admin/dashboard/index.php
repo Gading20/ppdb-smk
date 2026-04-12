@@ -128,7 +128,7 @@ $stmt = $conn->query($sql);
 $weeklyStats = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Get notifications
-$sql = "SELECT a.id, s.nama_lengkap, s.foto_profil, a.status, a.created_at, a.bukti_foto, a.keterangan
+$sql = "SELECT a.id, s.nama_lengkap, s.foto_profil, a.status, a.created_at, a.keterangan
         FROM absensi a
         JOIN siswa s ON a.siswa_id = s.id
         WHERE a.approval_status = 'Pending'
@@ -445,10 +445,6 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
                                             <?php if ($notif['keterangan']): ?>
                                                 <p class="text-sm text-gray-500 mt-1">
                                                     "<?= htmlspecialchars($notif['keterangan']) ?>"</p>
-                                            <?php endif; ?>
-                                            <?php if ($notif['bukti_foto']): ?>
-                                                <img src="../../<?= $notif['bukti_foto'] ?>"
-                                                    class="mt-2 rounded-lg w-full h-32 object-cover" alt="Bukti">
                                             <?php endif; ?>
                                             <div class="flex gap-2 mt-3">
                                                 <button onclick="handleAbsence(<?= $notif['id'] ?>, 'approve', this)"
