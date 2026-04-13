@@ -20,9 +20,6 @@ if (!isset($_SESSION['admin_id'])) {
 
 // ──────────────────────────────────────────────
 // PARAMETER FILTER
-// Kolom tabel absensi: id, siswa_id, tanggal, jam_masuk, status,
-//   keterangan, bukti_foto, bukti_file, approval_status,
-//   created_at, updated_at
 // ──────────────────────────────────────────────
 $default_start_date = date('Y-m-01');
 $default_end_date   = date('Y-m-t');
@@ -44,11 +41,11 @@ $base_params = ['start_date' => $start_date, 'end_date' => $end_date];
 
 if ($kelas) {
     $base_where .= " AND s.kelas = :kelas";
-    $base_params['kelas']    = $kelas;
+    $base_params['kelas'] = $kelas;
 }
 if ($jurusan) {
     $base_where .= " AND s.jurusan = :jurusan";
-    $base_params['jurusan']  = $jurusan;
+    $base_params['jurusan'] = $jurusan;
 }
 if ($siswa_id) {
     $base_where .= " AND a.siswa_id = :siswa_id";
@@ -56,13 +53,12 @@ if ($siswa_id) {
 }
 if ($status) {
     $base_where .= " AND a.status = :status";
-    $base_params['status']   = $status;
+    $base_params['status'] = $status;
 }
 if ($approval_status) {
     $base_where .= " AND a.approval_status = :approval_status";
     $base_params['approval_status'] = $approval_status;
 } else {
-    // Default hanya Approved
     $base_where .= " AND a.approval_status = 'Approved'";
 }
 
@@ -79,17 +75,17 @@ foreach ($sc_stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
 }
 $total_absensi = array_sum($status_counts);
 
-// ── 2. APPROVAL COUNTS (semua data tanpa filter approval) ─────────────────
+// ── 2. APPROVAL COUNTS ────────────────────────────────────────────────────
 $apv_sql    = "FROM absensi a JOIN siswa s ON a.siswa_id = s.id
                WHERE a.tanggal BETWEEN :start_date AND :end_date";
 $apv_params = ['start_date' => $start_date, 'end_date' => $end_date];
 if ($kelas) {
     $apv_sql .= " AND s.kelas = :kelas";
-    $apv_params['kelas']    = $kelas;
+    $apv_params['kelas'] = $kelas;
 }
 if ($jurusan) {
     $apv_sql .= " AND s.jurusan = :jurusan";
-    $apv_params['jurusan']  = $jurusan;
+    $apv_params['jurusan'] = $jurusan;
 }
 if ($siswa_id) {
     $apv_sql .= " AND a.siswa_id = :siswa_id";
@@ -97,10 +93,12 @@ if ($siswa_id) {
 }
 if ($status) {
     $apv_sql .= " AND a.status = :status";
-    $apv_params['status']   = $status;
+    $apv_params['status'] = $status;
 }
 
-$apv_stmt = $conn->prepare("SELECT a.approval_status, COUNT(*) as count $apv_sql GROUP BY a.approval_status");
+$apv_stmt = $conn->prepare(
+    "SELECT a.approval_status, COUNT(*) as count $apv_sql GROUP BY a.approval_status"
+);
 $apv_stmt->execute($apv_params);
 $approval_counts = ['Approved' => 0, 'Pending' => 0, 'Rejected' => 0];
 foreach ($apv_stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
@@ -108,8 +106,9 @@ foreach ($apv_stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
         $approval_counts[$row['approval_status']] = (int)$row['count'];
     }
 }
+$total_apv = array_sum($approval_counts);
 
-// ── 3. REKAP PER SISWA (Top 10 Alpha & Terlambat) ────────────────────────
+// ── 3. REKAP TOP SISWA ────────────────────────────────────────────────────
 $rekap_stmt = $conn->prepare(
     "SELECT s.nama_lengkap, s.nis, s.kelas, s.jurusan,
             COUNT(CASE WHEN a.status = 'Hadir'     THEN 1 END) as hadir,
@@ -126,19 +125,7 @@ $rekap_stmt = $conn->prepare(
 $rekap_stmt->execute($base_params);
 $top_rekap = $rekap_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// ── 4. DETAIL DATA ────────────────────────────────────────────────────────
-$detail_stmt = $conn->prepare(
-    "SELECT a.id, a.tanggal, a.jam_masuk, a.status,
-            a.keterangan, a.bukti_foto, a.bukti_file,
-            a.approval_status, a.created_at,
-            s.nama_lengkap, s.nis, s.kelas, s.jurusan
-     $base_where
-     ORDER BY a.tanggal DESC, s.nama_lengkap ASC"
-);
-$detail_stmt->execute($base_params);
-$data = $detail_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// ── 5. SUBTITLE ───────────────────────────────────────────────────────────
+// ── 4. SUBTITLE ───────────────────────────────────────────────────────────
 $subtitle = "Periode: " . date('d/m/Y', strtotime($start_date))
     . " – " . date('d/m/Y', strtotime($end_date));
 if ($kelas)           $subtitle .= " | Kelas: $kelas";
@@ -167,33 +154,62 @@ $approvalStyle = [
 ];
 
 // ================================================================
-// EXCEL EXPORT
+// EXCEL EXPORT  ← FIX: tambahkan stream + exit di sini
 // ================================================================
 if ($format === 'excel') {
+    // Bersihkan buffer output agar tidak ada karakter sebelum header
+    if (ob_get_level()) {
+        ob_end_clean();
+    }
+
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
     $sheet->setTitle('Laporan Absensi');
-    $spreadsheet->getProperties()->setCreator('SMK NURUL ULUM')->setTitle('Laporan Absensi');
+    $spreadsheet->getProperties()
+        ->setCreator('SMK NURUL ULUM')
+        ->setTitle('Laporan Absensi');
 
-    $green = '059669';
-    $white = 'FFFFFF';
+    $green    = '059669';
+    $white    = 'FFFFFF';
     $greenHdr = [
         'font'      => ['bold' => true, 'color' => ['rgb' => $white], 'size' => 11],
-        'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER],
-        'fill'      => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => $green]],
+        'alignment' => [
+            'horizontal' => Alignment::HORIZONTAL_CENTER,
+            'vertical'   => Alignment::VERTICAL_CENTER,
+        ],
+        'fill' => [
+            'fillType'   => Fill::FILL_SOLID,
+            'startColor' => ['rgb' => $green],
+        ],
     ];
     $center = ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]];
 
     // ── Header blok ──
-    foreach (['A1:K1', 'A2:K2', 'A3:K3', 'A4:K4'] as $m) $sheet->mergeCells($m);
+    foreach (['A1:K1', 'A2:K2', 'A3:K3', 'A4:K4'] as $m) {
+        $sheet->mergeCells($m);
+    }
     $sheet->setCellValue('A1', 'LAPORAN ABSENSI SISWA');
     $sheet->setCellValue('A2', 'SMK NURUL ULUM');
     $sheet->setCellValue('A3', $subtitle);
     $sheet->setCellValue('A4', 'Diekspor pada: ' . date('d/m/Y H:i'));
-    $sheet->getStyle('A1')->applyFromArray(['font' => ['bold' => true, 'size' => 16], 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER], 'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'D1FAE5']]]);
-    $sheet->getStyle('A2')->applyFromArray(['font' => ['bold' => true, 'size' => 13], 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]]);
-    $sheet->getStyle('A3')->applyFromArray(['font' => ['bold' => true, 'size' => 10], 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]]);
-    $sheet->getStyle('A4')->applyFromArray(['font' => ['italic' => true, 'size' => 9], 'alignment' => ['horizontal' => Alignment::HORIZONTAL_RIGHT]]);
+
+    $sheet->getStyle('A1')->applyFromArray([
+        'font'      => ['bold' => true, 'size' => 16],
+        'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+        'fill'      => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'D1FAE5']],
+    ]);
+    $sheet->getStyle('A2')->applyFromArray([
+        'font'      => ['bold' => true, 'size' => 13],
+        'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+    ]);
+    $sheet->getStyle('A3')->applyFromArray([
+        'font'      => ['bold' => true, 'size' => 10],
+        'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+    ]);
+    $sheet->getStyle('A4')->applyFromArray([
+        'font'      => ['italic' => true, 'size' => 9],
+        'alignment' => ['horizontal' => Alignment::HORIZONTAL_RIGHT],
+    ]);
     $sheet->getRowDimension(1)->setRowHeight(24);
     $sheet->getRowDimension(5)->setRowHeight(8);
 
@@ -202,9 +218,14 @@ if ($format === 'excel') {
     $sheet->setCellValue('A6', 'RINGKASAN KEHADIRAN');
     $sheet->getStyle('A6')->applyFromArray(['font' => ['bold' => true, 'size' => 12]]);
 
-    foreach (['B8' => 'Status', 'C8' => 'Jumlah', 'D8' => 'Persentase'] as $c => $v) $sheet->setCellValue($c, $v);
+    foreach (['B8' => 'Status', 'C8' => 'Jumlah', 'D8' => 'Persentase'] as $c => $v) {
+        $sheet->setCellValue($c, $v);
+    }
     $sheet->getStyle('B8:D8')->applyFromArray($greenHdr);
-    foreach (['F8' => 'Approval', 'G8' => 'Jumlah', 'H8' => 'Persentase'] as $c => $v) $sheet->setCellValue($c, $v);
+
+    foreach (['F8' => 'Approval', 'G8' => 'Jumlah', 'H8' => 'Persentase'] as $c => $v) {
+        $sheet->setCellValue($c, $v);
+    }
     $sheet->getStyle('F8:H8')->applyFromArray($greenHdr);
     $sheet->getRowDimension(8)->setRowHeight(18);
 
@@ -223,7 +244,6 @@ if ($format === 'excel') {
     $sheet->setCellValue("D$r", '100%');
     $sheet->getStyle("B$r:D$r")->applyFromArray($greenHdr);
 
-    $total_apv = array_sum($approval_counts);
     $r2 = 9;
     foreach (['Approved', 'Pending', 'Rejected'] as $apv) {
         $cnt = $approval_counts[$apv];
@@ -240,17 +260,32 @@ if ($format === 'excel') {
     $sheet->getStyle("F$r2:H$r2")->applyFromArray($greenHdr);
 
     // ── Rekap Top Siswa ──
+    $rK = max($r, $r2) + 2;
     if (!empty($top_rekap)) {
-        $rK = max($r, $r2) + 2;
-        $sheet->mergeCells("A$rK:K$rK");
+        $sheet->mergeCells("A$rK:J$rK");
         $sheet->setCellValue("A$rK", 'REKAP KEHADIRAN SISWA (TOP 10 ALPHA & TERLAMBAT)');
         $sheet->getStyle("A$rK")->applyFromArray(['font' => ['bold' => true, 'size' => 12]]);
         $rK++;
-        foreach (['A' => 'No', 'B' => 'NIS', 'C' => 'Nama Siswa', 'D' => 'Kelas', 'E' => 'Hadir', 'F' => 'Sakit', 'G' => 'Izin', 'H' => 'Terlambat', 'I' => 'Alpha', 'J' => 'Total'] as $col => $hdr)
+
+        $hdrs = [
+            'A' => 'No',
+            'B' => 'NIS',
+            'C' => 'Nama Siswa',
+            'D' => 'Kelas',
+            'E' => 'Hadir',
+            'F' => 'Sakit',
+            'G' => 'Izin',
+            'H' => 'Terlambat',
+            'I' => 'Alpha',
+            'J' => 'Total',
+        ];
+        foreach ($hdrs as $col => $hdr) {
             $sheet->setCellValue("$col$rK", $hdr);
+        }
         $sheet->getStyle("A$rK:J$rK")->applyFromArray($greenHdr);
         $sheet->getRowDimension($rK)->setRowHeight(18);
         $rK++;
+
         foreach ($top_rekap as $idx => $tk) {
             $sheet->setCellValue("A$rK", $idx + 1);
             $sheet->setCellValue("B$rK", $tk['nis']);
@@ -264,38 +299,70 @@ if ($format === 'excel') {
             $sheet->setCellValue("J$rK", $tk['total']);
             $sheet->getStyle("A$rK")->applyFromArray($center);
             $sheet->getStyle("D$rK:J$rK")->applyFromArray($center);
-            if ($idx % 2 === 0) $sheet->getStyle("A$rK:J$rK")->applyFromArray(['fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'ECFDF5']]]);
+            if ($idx % 2 === 0) {
+                $sheet->getStyle("A$rK:J$rK")->applyFromArray([
+                    'fill' => [
+                        'fillType'   => Fill::FILL_SOLID,
+                        'startColor' => ['rgb' => 'ECFDF5'],
+                    ],
+                ]);
+            }
             $rK++;
         }
-    } else {
-        $rK = max($r, $r2) + 2;
     }
+
+    // ── Lebar kolom otomatis ──
+    foreach (range('A', 'K') as $col) {
+        $sheet->getColumnDimension($col)->setAutoSize(true);
+    }
+
+    // ── FIX: Stream ke browser lalu exit ──
+    $filename = "Laporan_Absensi_" . date('Y-m-d') . ".xlsx";
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    header('Cache-Control: max-age=0');
+    header('Pragma: public');
+
+    $writer = new Xlsx($spreadsheet);
+    $writer->save('php://output');
+    exit(); // ← WAJIB: hentikan eksekusi setelah Excel dikirim
 }
 
 // ================================================================
 // PDF EXPORT
 // ================================================================
+
+// Bersihkan buffer sebelum generate PDF
+if (ob_get_level()) {
+    ob_end_clean();
+}
+
 $options = new Options();
 $options->set('isHtml5ParserEnabled', true);
 $options->set('isRemoteEnabled', true);
 $options->set('defaultFont', 'Helvetica');
-$options->set('chroot', $_SERVER['DOCUMENT_ROOT']);
+// FIX: Hapus chroot agar tidak error di shared hosting
+// $options->set('chroot', $_SERVER['DOCUMENT_ROOT']);
+
 $dompdf = new Dompdf($options);
 
-$logoData = '';
-foreach (
-    [
-        $_SERVER['DOCUMENT_ROOT'] . '/assets/default/logosmk.png',
-        dirname(dirname(dirname(__FILE__))) . '/assets/default/logosmk.png',
-    ] as $p
-) {
-    if (file_exists($p)) {
-        $logoData = 'data:image/png;base64,' . base64_encode(file_get_contents($p));
+// ── FIX: Cari logo dengan path yang lebih robust ──
+$logoData   = '';
+$scriptDir  = dirname(__FILE__); // direktori file ini
+$logoPaths  = [
+    $scriptDir . '/../../assets/default/logosmk.png',
+    dirname(dirname($scriptDir)) . '/assets/default/logosmk.png',
+    $_SERVER['DOCUMENT_ROOT'] . '/assets/default/logosmk.png',
+];
+foreach ($logoPaths as $p) {
+    $realPath = realpath($p);
+    if ($realPath && file_exists($realPath)) {
+        $logoData = 'data:image/png;base64,' . base64_encode(file_get_contents($realPath));
         break;
     }
 }
 
-// Hitung metrik PDF
+// ── Hitung metrik PDF ──
 $hadir_terlambat  = $status_counts['Hadir'] + $status_counts['Terlambat'];
 $tidak_hadir      = $status_counts['Alpha'] + $status_counts['Sakit'] + $status_counts['Izin'];
 $kehadiran_pct    = $total_absensi > 0 ? round($hadir_terlambat / $total_absensi * 100, 1) : 0;
@@ -303,7 +370,6 @@ $tdkhadir_pct     = $total_absensi > 0 ? round($tidak_hadir     / $total_absensi
 $uniq_stmt        = $conn->prepare("SELECT COUNT(DISTINCT a.siswa_id) $base_where");
 $uniq_stmt->execute($base_params);
 $total_siswa_unik = $uniq_stmt->fetchColumn();
-$total_apv        = array_sum($approval_counts);
 
 ob_start();
 ?>
@@ -557,7 +623,6 @@ ob_start();
     <table class="sum-wrap">
         <tbody>
             <tr>
-
                 <!-- Kiri: Per Status -->
                 <td>
                     <table class="dt">
@@ -575,7 +640,12 @@ ob_start();
                             $ss  = $statusStyle[$st];
                         ?>
                             <tr>
-                                <td><span class="badge" style="background:<?= $ss['bg'] ?>;color:<?= $ss['text'] ?>;border:1px solid <?= $ss['border'] ?>"><?= $st ?></span></td>
+                                <td>
+                                    <span class="badge"
+                                        style="background:<?= $ss['bg'] ?>;color:<?= $ss['text'] ?>;border:1px solid <?= $ss['border'] ?>">
+                                        <?= $st ?>
+                                    </span>
+                                </td>
                                 <td class="tc"><?= $cnt ?></td>
                                 <td class="tc"><?= $pct ?></td>
                             </tr>
@@ -626,7 +696,12 @@ ob_start();
                             $as  = $approvalStyle[$apv];
                         ?>
                             <tr>
-                                <td><span class="badge" style="background:<?= $as['bg'] ?>;color:<?= $as['text'] ?>"><?= $apv ?></span></td>
+                                <td>
+                                    <span class="badge"
+                                        style="background:<?= $as['bg'] ?>;color:<?= $as['text'] ?>">
+                                        <?= $apv ?>
+                                    </span>
+                                </td>
                                 <td class="tc"><?= $cnt ?></td>
                                 <td class="tc"><?= $pct ?></td>
                             </tr>
@@ -638,7 +713,6 @@ ob_start();
                         </tr>
                     </table>
                 </td>
-
             </tr>
         </tbody>
     </table>
@@ -649,7 +723,9 @@ ob_start();
         <br>
         <p>___________________________</p>
         <p><strong>Admin SMK NURUL ULUM</strong></p>
-        <p style="margin-top:8px;font-style:italic">Laporan ini digenerate otomatis oleh Sistem Absensi SMK NURUL ULUM</p>
+        <p style="margin-top:8px;font-style:italic">
+            Laporan ini digenerate otomatis oleh Sistem Absensi SMK NURUL ULUM
+        </p>
     </div>
 
 </body>
@@ -657,18 +733,28 @@ ob_start();
 </html>
 <?php
 $html = ob_get_clean();
+
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
 
+// ── Nomor halaman ──
 $canvas = $dompdf->getCanvas();
 $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
     $text  = "Halaman $pageNumber dari $pageCount";
     $font  = $fontMetrics->getFont("Helvetica");
     $size  = 9;
     $width = $fontMetrics->getTextWidth($text, $font, $size);
-    $canvas->text(($canvas->get_width() - $width) / 2, $canvas->get_height() - 26, $text, $font, $size, [0.5, 0.5, 0.5]);
+    $canvas->text(
+        ($canvas->get_width() - $width) / 2,
+        $canvas->get_height() - 26,
+        $text,
+        $font,
+        $size,
+        [0.5, 0.5, 0.5]
+    );
 });
 
-$dompdf->stream("Laporan_Absensi_" . date('Y-m-d') . ".pdf", ["Attachment" => true]);
-exit;
+$filename = "Laporan_Absensi_" . date('Y-m-d') . ".pdf";
+$dompdf->stream($filename, ["Attachment" => true]);
+exit();
