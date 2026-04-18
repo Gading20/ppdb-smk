@@ -502,7 +502,7 @@ if ($format === 'excel') {
                     </td>
                     <td class="title-cell">
                         <h1>LAPORAN PELANGGARAN SISWA</h1>
-                        <h2>SMK NURUL ULUM</h2>
+                        <h2>SMK NURUL ULUM LEBAKSIU</h2>
                     </td>
                     <td style="width:65px"></td>
                 </tr>
@@ -636,8 +636,8 @@ if ($format === 'excel') {
             <p>Lebaksiu, <?= date('d F Y') ?></p>
             <br>
             <p>___________________________</p>
-            <p><strong>Admin SMK NURUL ULUM</strong></p>
-            <p style="margin-top:8px;font-style:italic">Laporan ini digenerate otomatis oleh Sistem Absensi SMK NURUL ULUM</p>
+            <p><strong>Admin SMK NURUL ULUM LEBAKSIU</strong></p>
+            <p style="margin-top:8px;font-style:italic">Laporan ini digenerate otomatis oleh Sistem Absensi SMK NURUL ULUM LEBAKSIU</p>
         </div>
 
     </body>

@@ -835,8 +835,8 @@ $jenis_colors = [
                 <?php if (count($top_siswa) > 0): ?>
                     <div class="glass-effect rounded-xl p-4 sm:p-6 mb-6">
                         <h3 class="font-semibold text-lg mb-4">
-                            <i class="fas fa-trophy text-amber-600 mr-2"></i>
-                            Top 5 Siswa Akumulasi Poin Pelanggaran
+                            <i class="text-amber-600 mr-2"></i>
+                            Top Siswa Akumulasi Poin Pelanggaran
                         </h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                             <?php foreach ($top_siswa as $idx => $ts):

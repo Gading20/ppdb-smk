@@ -577,11 +577,6 @@ elseif (isset($_GET['delete']) && $_GET['delete'] == 'error')
                                                 <?= getSortIcon('nis', $sort_column, $sort_order) ?></a>
                                         </th>
                                         <th class="px-4 py-3 text-xs font-medium">
-                                            <a href="<?= buildSortUrl('nama_lengkap') ?>"
-                                                class="flex items-center gap-1 hover:text-gray-800">Nama
-                                                <?= getSortIcon('nama_lengkap', $sort_column, $sort_order) ?></a>
-                                        </th>
-                                        <th class="px-4 py-3 text-xs font-medium">
                                             <a href="<?= buildSortUrl('kelas') ?>"
                                                 class="flex items-center gap-1 hover:text-gray-800">Kelas
                                                 <?= getSortIcon('kelas', $sort_column, $sort_order) ?></a>
@@ -618,14 +613,6 @@ elseif (isset($_GET['delete']) && $_GET['delete'] == 'error')
                                     ?>
                                         <tr class="hover:bg-purple-900/5 transition-colors animate-fade-in">
                                             <td class="px-4 py-4 text-sm"><?= htmlspecialchars($p['nis']) ?></td>
-                                            <td class="px-4 py-4">
-                                                <div class="flex items-center">
-                                                    <img src="../../<?= $p['foto_profil'] ?: 'assets/default/avatar.png' ?>"
-                                                        alt="Profile"
-                                                        class="w-8 h-8 rounded-full object-cover mr-3 flex-shrink-0">
-                                                    <span class="text-sm"><?= htmlspecialchars($p['nama_lengkap']) ?></span>
-                                                </div>
-                                            </td>
                                             <td class="px-4 py-4 text-sm"><?= $p['kelas'] ?> <?= $p['jurusan'] ?></td>
                                             <td class="px-4 py-4 text-sm"><?= date('d/m/Y', strtotime($p['tanggal'])) ?></td>
                                             <td class="px-4 py-4">
