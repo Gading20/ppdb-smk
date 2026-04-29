@@ -424,8 +424,6 @@ $status_colors = [
             </div>
         </div>
     </div>
-
-    <script src="<?= str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) ?>assets/js/diome.js"></script>
     <script>
         // Chart initialization with responsive options
         const donutData = {

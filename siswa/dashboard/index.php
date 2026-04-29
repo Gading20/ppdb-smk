@@ -801,8 +801,6 @@ foreach ($attendance_stats as $st) {
             </form>
         </div>
     </div>
-
-    <script src="<?= str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) ?>assets/js/diome.js"></script>
     <script>
         // ════════════════════════════════════════════════════════════════════════════
         // KONSTANTA SEKOLAH — ✅ FIX: disinkronkan dari satu variabel PHP

@@ -377,8 +377,6 @@ $default_jam = date('H:i');
             </div>
         </div>
     </main>
-
-    <script src="<?= str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) ?>assets/js/diome.js"></script>
     <script>
         function toggleTimeInput() {
             const status = document.getElementById('status').value;

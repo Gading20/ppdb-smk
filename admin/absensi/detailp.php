@@ -432,8 +432,6 @@ $poin_color = $poin >= 50 ? 'red' : ($poin >= 25 ? 'orange' : 'yellow');
             </div>
         </div>
     </div>
-
-    <script src="<?= str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) ?>assets/js/diome.js"></script>
     <script>
         function confirmDelete() {
             document.getElementById('deleteModal').classList.remove('hidden');

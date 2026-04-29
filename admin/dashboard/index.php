@@ -28,7 +28,7 @@ $sql = "SELECT SUM(poin) as total_poin FROM pelanggaran";
 $total_poin = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total_poin'] ?? 0;
 
 // Statistik per jenis pelanggaran
-$sql = "SELECT jenis_pelanggaran, COUNT(*) as jumlah 
+$sql = "SELECT jenis_pelanggaran, COUNT(*) as jumlah
         FROM pelanggaran 
         GROUP BY jenis_pelanggaran";
 $stmt = $conn->query($sql);
@@ -820,8 +820,6 @@ $total_students = $conn->query($sql)->fetch(PDO::FETCH_ASSOC)['total'];
             </div><!-- end max-w-7xl -->
         </div><!-- end p-4 -->
     </main>
-
-    <script src="<?= str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) ?>assets/js/diome.js"></script>
     <script>
         // ============================================================
         // WEEKLY ATTENDANCE CHART

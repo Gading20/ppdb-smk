@@ -782,8 +782,6 @@ $kelas_colors = [
             </form>
         </div>
     </div>
-
-    <script src="<?= str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) ?>assets/js/diome.js"></script>
     <script>
         function confirmDelete(id, nama) {
             document.getElementById('deleteId').value = id;

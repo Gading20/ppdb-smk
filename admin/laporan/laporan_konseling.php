@@ -735,8 +735,6 @@ $jenis_colors = [
             </div>
         </div>
     </main>
-
-    <script src="<?= str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) ?>assets/js/diome.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const isMobile = window.innerWidth < 768;

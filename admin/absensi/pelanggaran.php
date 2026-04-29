@@ -788,8 +788,6 @@ elseif (isset($_GET['delete']) && $_GET['delete'] == 'error')
             </div>
         </div>
     </div>
-
-    <script src="<?= str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) ?>assets/js/diome.js"></script>
     <script>
         function confirmDelete(id) {
             document.getElementById('deleteId').value = id;

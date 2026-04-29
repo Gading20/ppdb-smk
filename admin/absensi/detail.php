@@ -504,8 +504,6 @@ $approval_color = $approval_colors[$absensi['approval_status']] ?? 'gray';
             </div>
         </div>
     </div>
-
-    <script src="<?= str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) ?>assets/js/diome.js"></script>
     <script>
         // Add confirmation modal functions
         function confirmDelete() {

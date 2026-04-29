@@ -453,8 +453,6 @@ $siswa_list = $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </main>
-
-    <script src="<?= str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) ?>assets/js/diome.js"></script>
     <script>
         // Toggle time input visibility based on selected status
         function toggleTimeVisibility() {

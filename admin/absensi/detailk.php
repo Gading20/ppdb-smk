@@ -616,8 +616,6 @@ function jenisIcon($j)
     <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden no-print">
         <div id="toast-inner" class="px-5 py-3 rounded-lg text-sm font-medium shadow-lg flex items-center gap-2"></div>
     </div>
-
-    <script src="<?= str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) ?>assets/js/diome.js"></script>
     <script>
         // ── Inline status update ──
         async function updateStatus(select, id) {

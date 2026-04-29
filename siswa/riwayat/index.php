@@ -748,8 +748,6 @@ $attendance_percentage = $total_days > 0 ? round(($present_days / $total_days) *
             <img id="previewImage" src="" alt="Preview" class="w-full rounded-lg">
         </div>
     </div>
-
-    <script src="<?= str_repeat('../', substr_count($_SERVER['PHP_SELF'], '/') - 1) ?>assets/js/diome.js"></script>
     <script>
         // Image preview functionality
         function showImagePreview(src) {
