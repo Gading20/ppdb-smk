@@ -51,9 +51,9 @@ $attendance_percentage = 100;
 // ═══════════════════════════════════════════════════════════════════════════════
 // KOORDINAT SEKOLAH  ← satu sumber kebenaran, dipakai PHP & JS
 // ═══════════════════════════════════════════════════════════════════════════════
-$school_lat  = -7.041549;   // lintang sekolah (sesuaikan)
-$school_lng  = 109.145435;  // bujur sekolah   (sesuaikan)
-$max_radius  = 200;       // meter
+$school_lat  = -7.0416;   // lintang sekolah (sesuaikan)
+$school_lng  = 109.1460;  // bujur sekolah   (sesuaikan)
+$max_radius  = 50;       // meter
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // POST: Submit Attendance
